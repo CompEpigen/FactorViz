@@ -1,0 +1,27 @@
+Package: FactorViz
+Title: Visualization app for methylome decomposition experiments 
+Description: The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by MeDeCom and similar deconvolution tools
+Maintainer: Pavlo Lutsik <pavlo.lutsik@dkfz.de>
+Authors@R: c(
+   person ( "Pavlo", "Lutsik", email="p.lutsik@mx.uni-saarland.de", role = c("cre") )
+ )
+Date: 2017-05-16
+Version: 0.1
+Depends:
+    R (>= 3.2.0),
+    shiny,
+    shinyURL,
+    ggplot2,
+    gplots,
+    RColorBrewer,
+    grid,
+    gridExtra,
+    DT,
+    MeDeCom
+Suggests:
+    RnBeads,
+    rGREAT,
+    R.matlab
+VignetteBuilder: knitr
+License: GPL-3
+RoxygenNote: 5.0.1
