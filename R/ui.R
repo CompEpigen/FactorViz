@@ -132,11 +132,8 @@ getFactorVizUI<-function(){
 													),
 													
 													conditionalPanel(' input.panel === "Performance" ',	
-															
 															uiOutput("performanceModeSelector"),
-															checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE),
-															checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE),
-															checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE)
+															uiOutput("include_type")
 													
 													),
 													
@@ -217,17 +214,13 @@ getFactorVizUI<-function(){
 													
 													
 													conditionalPanel('input.panel === "LMCs" ',	
-															
-															selectInput('componentPlotType', 'Plot type', 
-																	c("dendrogram","matching plot", "distance to center", "extremality", "heatmap", "mds plot", "similarity graph", "histogram", "scatterplot all","scatterplot matching","scatterplot avg matching", "locus plot"), 
-																	selected=1)
-													
+														uiOutput('plot_t_LMC')
 													),
 													
 													conditionalPanel('input.panel === "LMCs" && (input.componentPlotType === "heatmap" || input.componentPlotType === "mds plot" || input.componentPlotType === "dendrogram"  || input.componentPlotType == "similarity graph" ) ',
-															
-															checkboxInput("cgVarSubset", "Select top-variable CpGs:", value=FALSE)
-													
+															if (repomode){
+																checkboxInput("cgVarSubset", "Select top-variable CpGs:", value=FALSE)
+															}
 													),
 													
 													
