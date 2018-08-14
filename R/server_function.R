@@ -46,7 +46,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				} else {
 					plot_t=c("dendrogram", "heatmap")
 				} 
-				if (input$K>2){
+				if (!is.null(input$k) && input$K>2){
 					plot_t=c(plot_t, "mds")
 				}		
 				selectInput('componentPlotType', 'Plot type', 
@@ -466,7 +466,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				print(results)
 				print("...............................MeDeComSet_ende...........................")
 				for(name in names(FactorViz:::ANALYSIS_META_INFO[["analysis_params"]])){
-					print(name)
+					#print(name)
 					display_name<-FactorViz:::ANALYSIS_META_INFO[["analysis_params"]][name]
 					#cat(sprintf("NAME %s", name), file='/tmp/output.shiny.test.out', append=TRUE)
 #					if(name %in% names(getRuns()[[input$analysisrun]])){
@@ -509,7 +509,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					if(length(val)==0){
 						val=""
 					}
-					if(val!=""){
+					if(length(val)>1){
+						output[[name]]<-c(display_name, paste(val, collapse=", "))
+					}else if(length(val)==1 && val!=""){
 						output[[name]]<-c(display_name, paste(val, collapse=", "))
 					}
 				}
@@ -631,10 +633,18 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			})
 	
 	output$componentSelector<-renderUI({
-				comps<-c(1:input$K, NA)
-				#cat(file = stderr(), comps, 'Hello\n')
-				names(comps)<-c(as.character(1:input$K), "sum best matching")
-				#cat(file = stderr(), names, 'Hello\n')
+				if (!is.null(input$K)){
+					comps<-c(1:input$K, NA)
+					#cat(file = stderr(), comps, 'Hello\n')
+					names(comps)<-c(as.character(1:input$K), "sum best matching")
+					#cat(file = stderr(), names, 'Hello\n')
+				}
+				else {
+					comps<-c(1, NA)
+					#cat(file = stderr(), comps, 'Hello\n')
+					names(comps)<-c("1", "sum best matching")
+					#cat(file = stderr(), names, 'Hello\n')
+				}
 				selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
 				#input$panel=="Proportions"
 			})
@@ -718,8 +728,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 				rprofiles<-c(NA)
 				rprofile_names<-c("best_matching")
-				
-				if(!is.null(getTrueT)){ 
+				if(!is.null(getTrueT())){ 
 					rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
 					rprofile_names_add<-colnames(getTrueT())
 					if(is.null(rprofile_names_add)){
@@ -846,7 +855,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	output$compareRunSelector<-renderUI({
 				#wellPanel(
 				runs<-names(getRuns())
-				names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
+				if (!is.null(runs)){
+					names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
+				}
 				selectInput('analysisrun_ref', '', runs, selectize=TRUE, width="750px", selected=1)
 				#)		
 			})
@@ -903,12 +914,16 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			})
 	
 	output$dmCGComponentSelector<-renderUI({
-				
-				
-				cmp_choices=as.list(as.character(1:as.integer(input$K)))
-				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
-				
-				names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
+				if (!is.null(input$K)){
+					cmp_choices=as.list(as.character(1:as.integer(input$K)))
+					#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+					names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
+				}else{
+					cmp_choices=as.list(c("1"))
+					#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+					names(cmp_choices)=c("1")#, "All")
+				}
+						
 				
 				list(
 					selectizeInput("componentGroup1", "Select LMCs:", 
