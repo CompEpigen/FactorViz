@@ -637,16 +637,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	
 	output$minLambdaSelector<-renderUI({
 				lambda_list<-sort(dataset()@parameters$lambdas)
-				if (!is.null(input$lambdaMax)){
-					lambda_list<-lambda_list[lambda_list<=input$lambdaMax]
-				}
 				selectInput('lambdaMin', 'Minimum lambda:', lambda_list, selected=lambda_list[which.min(lambda_list)])
 			})
 	output$maxLambdaSelector<-renderUI({
 				lambda_list<-sort(dataset()@parameters$lambdas)
-				if (!is.null(input$lambdaMin)){
-					lambda_list<-lambda_list[lambda_list>=input$lambdaMin]
-				}
 				selectInput('lambdaMax', 'Maximum lambda:', lambda_list, selected=lambda_list[which.max(lambda_list)])
 			})
 	
