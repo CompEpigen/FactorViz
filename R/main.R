@@ -34,7 +34,7 @@ startFactorViz<-function(object, input.data=NULL) {
 						gene_annot_object<<-NULL
 						prepared_annotation<<-list("cat_list"=NULL, "cat_inf_vs"=NULL, "features"=NULL, settings=NULL)
 					}
-					cat(file = stderr(), prepared_annotation[["cat_list"]], 'Hello\n')
+					
 					gene_sets_object<<-NULL
 				}else if(is.character(object)){
 					repo_dir_list<<-object

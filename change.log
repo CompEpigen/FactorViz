@@ -13,6 +13,7 @@ all reference related output hidden using repomode as flag
 
 ui.R{
 	removed plot option which were not there in plotLMC
+	removed startification plot and correlation plot from proportions section as the plot is not handled in medecom
 }
 ???????????????????????????????Questions
 server_function.R{

@@ -53,6 +53,19 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				choices=plot_t,
 				selected=input$componentPlotType)
 		})
+	output$propPlotType<-renderUI({
+		if(repomode){
+			#plot_t=c("heatmap", "barplot", "lineplot", "scatterplot", "stratification plot", "correlations")
+			plot_t=c("heatmap", "barplot", "lineplot", "scatterplot")
+		}
+		else{
+			plot_t=c("heatmap", "barplot")
+		}
+		selectInput('propPlotType', 'Plot type', 
+			plot_t,
+			selected=1)
+		})
+		
 	output$analysisList<-renderUI({
 				withProgress(message="Preparing list of available analyses...",
 						{
@@ -383,7 +396,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	getGeneAnnot<-reactive(quote({
 						gene_annot_object
 					}),quoted=TRUE)
-	cat(file = stderr(), prepared_annotation[["cat_list"]], 'Hello\n')
+	#cat(file = stderr(), prepared_annotation[["cat_list"]], 'Hello\n')
 	getCGcategories<-reactive(quote({
 						
 						if(repomode){
@@ -572,8 +585,13 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			})
 	
 	output$propMatrixSelector<-renderUI({
+				if (is.null(input$propPlotType)){
+					propPlotType=""
+				}else{
+					propPlotType=input$propPlotType
+				}
 				
-				if(input$propPlotType=="scatterplot"){
+				if(propPlotType=="scatterplot"){
 					prop_mats<-c("regression")
 					labl<-"Reference proportions:"
 				}else{
@@ -772,8 +790,8 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					h=sprintf("%dpx", h0*nrow)
 					w=sprintf("%dpx", h0*ncol)
 				}else if(input$componentPlotType=="locus plot"){
-					h=500
-					w=1000
+					h="500px"
+					w="1000px"
 				}else{
 					h0=300
 					w0=300
@@ -793,11 +811,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	#}
 
 	output$metaanalysisPanel<-renderUI({
-					
+		if(FALSE){
 				w=500
 				h=500
 				if(input$analysisType=="compare LMCs"){
-					
 					#list(plotOutput('metaPlot',
 					list(plotOutput('comparisonPlot',
 								height = if(input$comparativePlotType=="dendrogram") h else 1.2*h,
@@ -849,8 +866,13 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					}
 				
 				}
-				
-			})
+			
+			}
+			else{
+				str1 <- paste("<h4>PAGE UNDER CONSTRUCTION<h4>")
+				HTML(str1)
+			}	
+		})
 	
 	output$compareRunSelector<-renderUI({
 				#wellPanel(
@@ -1412,8 +1434,18 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		lambda <- lambdas[ll]
 
 		Aref<-getTrueA()
-
-		if(input$componentPlotType=="MDS" || input$propPlotType == "heatmap"){
+		if (is.null(input$componentPlotType)){
+			componentPlotType=FALSE
+		}else {
+			componentPlotType=input$componentPlotType
+		}
+		if (is.null(input$propPlotType)){
+			propPlotType=FALSE
+		}else {
+			propPlotType=input$propPlotType
+		}
+		
+		if(componentPlotType=="MDS" || propPlotType == "heatmap"){
 			if(input$mdsDataCat!="none"){
 				pheno.data<-getPhenoData()
 				data.ch<-pheno.data[[input$mdsDataCat]]
@@ -1911,7 +1943,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 		ann_hypo<-getCGAnnot()[ind_hypo,,drop=FALSE]
 		ann_hyper<-getCGAnnot()[ind_hyper,,drop=FALSE]
-						
+		#print(meth_diff[hyper_cgs])			
 		ann_hypo<-cbind(data.frame(ID=rownames(ann_hypo), Diff=meth_diff[hypo_cgs]), ann_hypo)
 		ann_hyper<-cbind(data.frame(ID=rownames(ann_hyper), Diff=meth_diff[hyper_cgs]), ann_hyper)
 		
