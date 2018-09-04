@@ -118,14 +118,14 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		return(dataset())
 	}
 	
-	dataset_ref <- reactive(quote({
-					if(repomode){
-						results<-readRDS(file.path(getRuns()[[input$analysisrun_ref]][["run.dir"]], "collected.results.as.medecomset.RDS"))
-					}else{
-						results<-medecom_ref_object
-					}
-						results
-					}),quoted=TRUE)
+	# dataset_ref <- reactive(quote({
+	# 				if(repomode){
+	# 					results<-readRDS(file.path(getRuns()[[input$analysisrun_ref]][["run.dir"]], "collected.results.as.medecomset.RDS"))
+	# 				}else{
+	# 					results<-medecom_ref_object
+	# 				}
+	# 					results
+	# 				}),quoted=TRUE)
 	
 	if(!is.null(runPart) && runPart=="dataset"){
 		return(dataset())
@@ -181,10 +181,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 						dataset()@parameters$sample_subset
 					}), quoted=TRUE)
 	
-	getRefSampleSubset<-reactive(quote({
-						dataset_ref()@parameters$sample_subset
-					}), quoted=TRUE)
-	
+	# getRefSampleSubset<-reactive(quote({
+	# 					dataset_ref()@parameters$sample_subset
+	# 				}), quoted=TRUE)
+	# 
 	getRegressionA <-reactive(quote({
 						
 						gr<-as.integer(input$cg_group)
@@ -202,37 +202,37 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					}),quoted=TRUE)
 	
 	
-	getRefCmpRegressionA <-reactive(quote({
-						
-						if("analysisrun_ref" %in% names(input)){
-							#isolate({
-								gr<-as.integer(input$cg_group)
-								cat("--------------------------------groups" , gr, "---------------------------------------------")
-								meth.data<-getMethData()
-								trueT<-getTrueT()
-								sample_subset<-getSampleSubset()
-								
-								ll_ref<-as.integer(input$lambda_ref)
-								#cat(sprintf("TRUEA THERE %s\n", as.character(!is.null(trueA))), file='/tmp/output.shiny.test.out')
-															
-								ind<-getCGsubset()
-								
-								ind_ref<-getCGsubsetRef()
-								
-								ind_common<-intersect(ind, ind_ref)
-								
-								cg_map<-match(ind_common,ind)
-								cg_map_ref<-match(ind_common,ind_ref)
-								
-								regrA<-MeDeCom:::factorize.regr(
-										meth.data[ind[cg_map],sample_subset], 
-										dataset_ref()@outputs[[input$K_ref]]$T[[gr,ll_ref]][cg_map_ref,as.integer(input$component_ref)])[["A"]]
-								rownames(regrA)<-as.character(1:nrow(regrA))
-								regrA	
-							#})
-						}
-						
-					}),quoted=TRUE)
+	# getRefCmpRegressionA <-reactive(quote({
+	# 					
+	# 					if("analysisrun_ref" %in% names(input)){
+	# 						#isolate({
+	# 							gr<-as.integer(input$cg_group)
+	# 							cat("--------------------------------groups" , gr, "---------------------------------------------")
+	# 							meth.data<-getMethData()
+	# 							trueT<-getTrueT()
+	# 							sample_subset<-getSampleSubset()
+	# 							
+	# 							ll_ref<-as.integer(input$lambda_ref)
+	# 							#cat(sprintf("TRUEA THERE %s\n", as.character(!is.null(trueA))), file='/tmp/output.shiny.test.out')
+	# 														
+	# 							ind<-getCGsubset()
+	# 							
+	# 							ind_ref<-getCGsubsetRef()
+	# 							
+	# 							ind_common<-intersect(ind, ind_ref)
+	# 							
+	# 							cg_map<-match(ind_common,ind)
+	# 							cg_map_ref<-match(ind_common,ind_ref)
+	# 							
+	# 							regrA<-MeDeCom:::factorize.regr(
+	# 									meth.data[ind[cg_map],sample_subset], 
+	# 									dataset_ref()@outputs[[input$K_ref]]$T[[gr,ll_ref]][cg_map_ref,as.integer(input$component_ref)])[["A"]]
+	# 							rownames(regrA)<-as.character(1:nrow(regrA))
+	# 							regrA	
+	# 						#})
+	# 					}
+	# 					
+	# 				}),quoted=TRUE)
 	
 	getAhouseman2012 <- reactive(quote({
 						#cat(sprintf("trueA PRESENT %s\n", as.character(getRuns()[[input$analysisrun]][["proportion.info.present"]])),file='/tmp/output.shiny.test.out')
@@ -338,9 +338,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 							dataset()@parameters$cg_subset_lists[[as.integer(input$cg_group)]]
 					}),quoted=TRUE)
 	
-	getCGsubsetRef<-reactive(quote({
-							dataset_ref()@parameters$cg_subset_lists[[as.integer(input$cg_group_ref)]]
-					}),quoted=TRUE)
+	# getCGsubsetRef<-reactive(quote({
+	# 						dataset_ref()@parameters$cg_subset_lists[[as.integer(input$cg_group_ref)]]
+	# 				}),quoted=TRUE)
 	
 	getGeneSets<-reactive(quote({
 						
@@ -535,30 +535,30 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('cg_group', 'Technical CpG subset:', GROUPS, selectize=TRUE)
 			})
 	
-	output$groupSelectorRef<-renderUI({
-				#results<-readRDS(file.path(getRuns()[[input$analysisrun]][["run.dir"]], "collected.results.RDS"))
-				results<-dataset_ref()
-				#results <-MeDeComSet(outputs=results$outputs, parameters=results$parameters, dataset_info=list(m=100, n=100))
-				
-				
-				#cat(sprintf("VAR EXISTS %s", "cg_subsets" %in% names(getRuns()[[input$analysisrun]])),file='/tmp/output.shiny.test.out')
-				
-				gr_lists<-results@parameters$cg_subsets
-				
-				GROUPS<-1:length(gr_lists)
-				if(is.null(names(gr_lists))){
-					names(GROUPS)<-sapply(gr_lists, paste, collapse="_")
-				}else{
-					names(GROUPS)<-names(gr_lists)
-				}
-				
-#				for(gr in GROUPS){
-				#cat(sprintf("GROUP PATHS %s", .libPaths()),file='/tmp/output.shiny.test.out')
-				#cat(sprintf("GROUP %d, NAME %s\n", gr, names(GROUPS[gr])) ,file='/tmp/output.shiny.test.out', append=TRUE)
-#				}
-				
-				selectInput('cg_group_ref', 'Technical CpG subset:', GROUPS, selectize=TRUE)
-			})
+# 	output$groupSelectorRef<-renderUI({
+# 				#results<-readRDS(file.path(getRuns()[[input$analysisrun]][["run.dir"]], "collected.results.RDS"))
+# 				results<-dataset_ref()
+# 				#results <-MeDeComSet(outputs=results$outputs, parameters=results$parameters, dataset_info=list(m=100, n=100))
+# 				
+# 				
+# 				#cat(sprintf("VAR EXISTS %s", "cg_subsets" %in% names(getRuns()[[input$analysisrun]])),file='/tmp/output.shiny.test.out')
+# 				
+# 				gr_lists<-results@parameters$cg_subsets
+# 				
+# 				GROUPS<-1:length(gr_lists)
+# 				if(is.null(names(gr_lists))){
+# 					names(GROUPS)<-sapply(gr_lists, paste, collapse="_")
+# 				}else{
+# 					names(GROUPS)<-names(gr_lists)
+# 				}
+# 				
+# #				for(gr in GROUPS){
+# 				#cat(sprintf("GROUP PATHS %s", .libPaths()),file='/tmp/output.shiny.test.out')
+# 				#cat(sprintf("GROUP %d, NAME %s\n", gr, names(GROUPS[gr])) ,file='/tmp/output.shiny.test.out', append=TRUE)
+# #				}
+# 				
+# 				selectInput('cg_group_ref', 'Technical CpG subset:', GROUPS, selectize=TRUE)
+# 			})
 	
 	
 	output$Kselector<-renderUI({
@@ -567,10 +567,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('K', 'Number of LMCs (k)', Ks, selectize=TRUE)
 			})
 	
-	output$Kselector_ref<-renderUI({
-				Ks<-dataset_ref()@parameters$Ks
-				selectInput('K_ref', 'Number of LMCs (reference)', Ks, selectize=TRUE)
-			})
+	# output$Kselector_ref<-renderUI({
+	# 			Ks<-dataset_ref()@parameters$Ks
+	# 			selectInput('K_ref', 'Number of LMCs (reference)', Ks, selectize=TRUE)
+	# 		})
 	
 	
 	output$performanceModeSelector<-renderUI({
@@ -612,13 +612,13 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('lambda', 'Lambda value', LAMBDA.IDS)
 			})
 	
-	output$lambdaSelector_ref<-renderUI({
-				LAMBDAS<-dataset_ref()@parameters$lambdas
-				LAMBDA.IDS<-1:length(dataset_ref()@parameters$lambdas)
-				names(LAMBDA.IDS)<-as.character(LAMBDAS)
-				selectInput('lambda_ref', 'Lambda value (reference)', LAMBDA.IDS)
-			})
-	
+	# output$lambdaSelector_ref<-renderUI({
+	# 			LAMBDAS<-dataset_ref()@parameters$lambdas
+	# 			LAMBDA.IDS<-1:length(dataset_ref()@parameters$lambdas)
+	# 			names(LAMBDA.IDS)<-as.character(LAMBDAS)
+	# 			selectInput('lambda_ref', 'Lambda value (reference)', LAMBDA.IDS)
+	# 		})
+	# 
 	output$minKselector<-renderUI({
 				selectInput('minK', 'Minimum k:', dataset()@parameters$Ks)
 			})
@@ -639,21 +639,20 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('lambdaMax', 'Maximum lambda:', lambda_list, selected=lambda_list[which.max(lambda_list)])
 			})
 	
-	output$componentSelector<-renderUI({
-				comps<-c(1:input$K, NA)
-				names(comps)<-c(as.character(1:input$K), "sum best matching")
-				selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
-				#input$panel=="Proportions"
-			})
+	# output$componentSelector<-renderUI({
+	# 			comps<-c(1:input$K, NA)
+	# 			names(comps)<-c(as.character(1:input$K), "sum best matching")
+	# 			selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
+	# 		
+	# 		})
 	
-	output$componentSelectorRef<-renderUI({
-				comps<-c(1:input$K_ref)
-				#names(comps)<-c(as.character(1:input$K), "sum best matching")
-				selectInput('component_ref', 'LMC (ref analysis):', comps, selectize=TRUE, multiple=TRUE, selected=isolate({
-									if("component_ref" %in% names(input))as.character(input$component_ref) else 1
-								}))
-				#input$panel=="Proportions"
-			})
+	# output$componentSelectorRef<-renderUI({
+	# 			comps<-c(1:input$K_ref)
+	# 			#names(comps)<-c(as.character(1:input$K), "sum best matching")
+	# 			selectInput('component_ref', 'LMC (ref analysis):', comps, selectize=TRUE, multiple=TRUE, selected=isolate({
+	# 								if("component_ref" %in% names(input))as.character(input$component_ref) else 1
+	# 							}))
+	# 		})
 	
 	
 	output$pointColorSelector<-renderUI({
@@ -728,24 +727,24 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	output$refProfileSelector<-renderUI({
-				
-				rprofiles<-c(NA)
-				rprofile_names<-c("best_matching")
-				
-				if(!is.null(getTrueT)){ 
-					rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
-					rprofile_names_add<-colnames(getTrueT())
-					if(is.null(rprofile_names_add)){
-						rprofile_names_add<-as.character(1:ncol(getTrueT()))
-					}
-					rprofile_names<-c(rprofile_names, rprofile_names)
-				}
-				names(rprofiles)<-rprofile_names
-				
-				selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE, multiple=TRUE)
-				
-			})
+	# output$refProfileSelector<-renderUI({
+	# 			
+	# 			rprofiles<-c(NA)
+	# 			rprofile_names<-c("best_matching")
+	# 			
+	# 			if(!is.null(getTrueT)){ 
+	# 				rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
+	# 				rprofile_names_add<-colnames(getTrueT())
+	# 				if(is.null(rprofile_names_add)){
+	# 					rprofile_names_add<-as.character(1:ncol(getTrueT()))
+	# 				}
+	# 				rprofile_names<-c(rprofile_names, rprofile_names)
+	# 			}
+	# 			names(rprofiles)<-rprofile_names
+	# 			
+	# 			selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE, multiple=TRUE)
+	# 			
+	# 		})
 	
 	output$performancePanel<-renderUI({
 				
@@ -857,13 +856,13 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	output$compareRunSelector<-renderUI({
-				#wellPanel(
-				runs<-names(getRuns())
-				names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
-				selectInput('analysisrun_ref', '', runs, selectize=TRUE, width="750px", selected=1)
-				#)		
-			})
+	# output$compareRunSelector<-renderUI({
+	# 			#wellPanel(
+	# 			runs<-names(getRuns())
+	# 			names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
+	# 			selectInput('analysisrun_ref', '', runs, selectize=TRUE, width="750px", selected=1)
+	# 			#)		
+	# 		})
 
 	output$topSDcgsSelector<-renderUI({
 			
@@ -879,26 +878,26 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 						value=length(ind), step=500, round=0)
 			})
 	
-	output$topSDcgsSelectorCompare<-renderUI({
-				
-				gr<-as.integer(input$cg_group)
-#				ind<-readRDS(sprintf("%s/cg_group_%d.RDS", 
-#								getRuns()[[input$analysisrun]][["run.dir"]], 
-#								#dataset()$groups[gr]
-#								gr
-#						))
-				ind<-getCGsubset()
-#				ind_ref<-readRDS(sprintf("%s/cg_group_%d.RDS", 
-#								getRuns()[[input$analysisrun_ref]][["run.dir"]], 
-#								#dataset()$groups[gr]
-#								gr
-#						))
-				ind_ref<-getCGsubsetRef()
-				ind_common<-intersect(ind, ind_ref)
-				
-				sliderInput('topSDcpgsCompare', 'Select top SD cgs', min=100, max=length(ind),
-						value=length(ind), step=100, round=0)
-			})
+# 	output$topSDcgsSelectorCompare<-renderUI({
+# 				
+# 				gr<-as.integer(input$cg_group)
+# #				ind<-readRDS(sprintf("%s/cg_group_%d.RDS", 
+# #								getRuns()[[input$analysisrun]][["run.dir"]], 
+# #								#dataset()$groups[gr]
+# #								gr
+# #						))
+# 				ind<-getCGsubset()
+# #				ind_ref<-readRDS(sprintf("%s/cg_group_%d.RDS", 
+# #								getRuns()[[input$analysisrun_ref]][["run.dir"]], 
+# #								#dataset()$groups[gr]
+# #								gr
+# #						))
+# 				ind_ref<-getCGsubsetRef()
+# 				ind_common<-intersect(ind, ind_ref)
+# 				
+# 				sliderInput('topSDcpgsCompare', 'Select top SD cgs', min=100, max=length(ind),
+# 						value=length(ind), step=100, round=0)
+# 			})
 	
 	output$analysisTokensInput<-renderUI({
 				
@@ -916,22 +915,22 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	output$dmCGComponentSelector<-renderUI({
-				
-				
-				cmp_choices=as.list(as.character(1:as.integer(input$K)))
-				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
-				
-				names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
-				
-				list(
-					selectizeInput("componentGroup1", "Select LMCs:", 
-						choices=cmp_choices, selected=1, multiple = TRUE),
-					selectizeInput("componentGroup2", "Select LMCs to compare:", 
-						choices=cmp_choices, selected=2,multiple = TRUE)
-					)
-				
-			})
+	# output$dmCGComponentSelector<-renderUI({
+	# 			
+	# 			
+	# 			cmp_choices=as.list(as.character(1:as.integer(input$K)))
+	# 			#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+	# 			
+	# 			names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
+	# 			
+	# 			list(
+	# 				selectizeInput("componentGroup1", "Select LMCs:", 
+	# 					choices=cmp_choices, selected=1, multiple = TRUE),
+	# 				selectizeInput("componentGroup2", "Select LMCs to compare:", 
+	# 					choices=cmp_choices, selected=2,multiple = TRUE)
+	# 				)
+	# 			
+	# 		})
 	
 	output$GREAToptionsSelector<-renderUI({
 				
@@ -1311,8 +1310,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				sample.characteristic = data.ch , 
 				scatter.matching = scatter.matching, 
 				scatter.smooth = TRUE, 
-				scatter.cg.feature = NULL,
-				locus.parameters = locus_params)
+				scatter.cg.feature = NULL
+				#locus.parameters = locus_params
+				)
 	}
 	
 	
@@ -1506,21 +1506,21 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			
 			samps<-1:ncol(mdd)
 									
-			if("refThat" %in% input$compareMatrices){
-				#results<-dataset()
-				print(input$K_ref)
-
-			#hier noch aendern das man nicht auf input_ref zugreift
-				That<-dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
-				
-				colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))
-				if(input$correlationCentered){
-					mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
-				}else{
-					mdd<-cbind(mdd,That)
-				}
-				
-			}
+			# if("refThat" %in% input$compareMatrices){
+			# 	#results<-dataset()
+			# 	print(input$K_ref)
+			# 
+			# #hier noch aendern das man nicht auf input_ref zugreift
+			# 	That<-dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
+			# 	
+			# 	colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))
+			# 	if(input$correlationCentered){
+			# 		mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
+			# 	}else{
+			# 		mdd<-cbind(mdd,That)
+			# 	}
+			# 	
+			# }
 			
 			if("refD" %in% input$compareMatrices){
 				D<-getRefMethData()[cg_subset_ref,sample_subset_ref][cg_map_ref,]
