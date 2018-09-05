@@ -1704,6 +1704,8 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		#		
 		dump("dataSet", file='/tmp/dataSet.RDump')
 		
+       # browser()
+        
 		fit<-lm(theModel,  data=dataSet)
 	}
 	
@@ -1712,7 +1714,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		results<-dataset()
 		K <-input$K
 	#finds out the index of k in Ks
-		Ks<-results$Ks
+		Ks<-results@parameters$Ks
 		index <- NULL
 	for (i in 1:length(Ks)){
 		if(Ks[i]==K){
@@ -1776,6 +1778,8 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			}}
 		N_COL_BINS<-10
 		
+        browser()
+        
 		heatmap.2(#x=1:length(Kvals),y=1:length(lls),
 				-log10(pval_matrix),
 				cellnote=matrix(as.character(round(-log10(pval_matrix),3)),ncol=ncol(pval_matrix)),
