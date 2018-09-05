@@ -1,5 +1,5 @@
 FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, dataset=NULL, session=NULL, runPart=NULL) {
-	
+
 	if(!(exists("runPart") && !is.null(runPart))){
 		values<-reactiveValues(change=FALSE)
 	}else{
@@ -40,6 +40,32 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				session$sendCustomMessage(type='updateSelections', data)
 			#	updateSelectInput(session, 'beverage', selected=data$beverage)
 			}), quoted=TRUE)
+	output$plot_t_LMC<-renderUI({
+				if(repomode){
+					plot_t=c("dendrogram", "distance to center", "extremality", "heatmap", "similarity graph", "scatterplot all","scatterplot matching","scatterplot avg matching")
+				} else {
+					plot_t=c("dendrogram", "heatmap")
+				} 
+				if (!is.null(input$k) && input$K>2){
+					plot_t=c(plot_t, "mds")
+				}		
+				selectInput('componentPlotType', 'Plot type', 
+				choices=plot_t,
+				selected=input$componentPlotType)
+		})
+	output$propPlotType<-renderUI({
+		if(repomode){
+			#plot_t=c("heatmap", "barplot", "lineplot", "scatterplot", "stratification plot", "correlations")
+			plot_t=c("heatmap", "barplot", "lineplot", "scatterplot")
+		}
+		else{
+			plot_t=c("heatmap", "barplot")
+		}
+		selectInput('propPlotType', 'Plot type', 
+			plot_t,
+			selected=1)
+		})
+		
 	output$analysisList<-renderUI({
 				withProgress(message="Preparing list of available analyses...",
 						{
@@ -118,14 +144,14 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		return(dataset())
 	}
 	
-	# dataset_ref <- reactive(quote({
-	# 				if(repomode){
-	# 					results<-readRDS(file.path(getRuns()[[input$analysisrun_ref]][["run.dir"]], "collected.results.as.medecomset.RDS"))
-	# 				}else{
-	# 					results<-medecom_ref_object
-	# 				}
-	# 					results
-	# 				}),quoted=TRUE)
+	#dataset_ref <- reactive(quote({
+	#				if(repomode){
+	#					results<-readRDS(file.path(getRuns()[[input$analysisrun_ref]][["run.dir"]], "collected.results.as.medecomset.RDS"))
+	#				}else{
+	#					results<-medecom_ref_object
+	#				}
+	#					results
+	#				}),quoted=TRUE)
 	
 	if(!is.null(runPart) && runPart=="dataset"){
 		return(dataset())
@@ -181,10 +207,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 						dataset()@parameters$sample_subset
 					}), quoted=TRUE)
 	
-	# getRefSampleSubset<-reactive(quote({
-	# 					dataset_ref()@parameters$sample_subset
-	# 				}), quoted=TRUE)
-	# 
+	#getRefSampleSubset<-reactive(quote({
+	#					dataset_ref()@parameters$sample_subset
+	#				}), quoted=TRUE)
+	
 	getRegressionA <-reactive(quote({
 						
 						gr<-as.integer(input$cg_group)
@@ -202,37 +228,37 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					}),quoted=TRUE)
 	
 	
-	# getRefCmpRegressionA <-reactive(quote({
-	# 					
-	# 					if("analysisrun_ref" %in% names(input)){
-	# 						#isolate({
-	# 							gr<-as.integer(input$cg_group)
-	# 							cat("--------------------------------groups" , gr, "---------------------------------------------")
-	# 							meth.data<-getMethData()
-	# 							trueT<-getTrueT()
-	# 							sample_subset<-getSampleSubset()
-	# 							
-	# 							ll_ref<-as.integer(input$lambda_ref)
-	# 							#cat(sprintf("TRUEA THERE %s\n", as.character(!is.null(trueA))), file='/tmp/output.shiny.test.out')
-	# 														
-	# 							ind<-getCGsubset()
-	# 							
-	# 							ind_ref<-getCGsubsetRef()
-	# 							
-	# 							ind_common<-intersect(ind, ind_ref)
-	# 							
-	# 							cg_map<-match(ind_common,ind)
-	# 							cg_map_ref<-match(ind_common,ind_ref)
-	# 							
-	# 							regrA<-MeDeCom:::factorize.regr(
-	# 									meth.data[ind[cg_map],sample_subset], 
-	# 									dataset_ref()@outputs[[input$K_ref]]$T[[gr,ll_ref]][cg_map_ref,as.integer(input$component_ref)])[["A"]]
-	# 							rownames(regrA)<-as.character(1:nrow(regrA))
-	# 							regrA	
-	# 						#})
-	# 					}
-	# 					
-	# 				}),quoted=TRUE)
+	#getRefCmpRegressionA <-reactive(quote({
+	#					
+	#					if("analysisrun_ref" %in% names(input)){
+	#						#isolate({
+	#							gr<-as.integer(input$cg_group)
+	#							cat("--------------------------------groups" , gr, "---------------------------------------------")
+	#							meth.data<-getMethData()
+	#							trueT<-getTrueT()
+	#							sample_subset<-getSampleSubset()
+	#							
+	#							ll_ref<-as.integer(input$lambda_ref)
+	#							#cat(sprintf("TRUEA THERE %s\n", as.character(!is.null(trueA))), file='/tmp/output.shiny.test.out')
+	#														
+	#							ind<-getCGsubset()
+	#							
+	#							ind_ref<-getCGsubsetRef()
+	#							
+	#							ind_common<-intersect(ind, ind_ref)
+	#							
+	#							cg_map<-match(ind_common,ind)
+	#							cg_map_ref<-match(ind_common,ind_ref)
+	#							
+	#							regrA<-MeDeCom:::factorize.regr(
+	#									meth.data[ind[cg_map],sample_subset], 
+	#									dataset_ref()@outputs[[input$K_ref]]$T[[gr,ll_ref]][cg_map_ref,as.integer(input$component_ref)])[["A"]]
+	#							rownames(regrA)<-as.character(1:nrow(regrA))
+	#							regrA	
+	#						#})
+	#					}
+						
+	#				}),quoted=TRUE)
 	
 	getAhouseman2012 <- reactive(quote({
 						#cat(sprintf("trueA PRESENT %s\n", as.character(getRuns()[[input$analysisrun]][["proportion.info.present"]])),file='/tmp/output.shiny.test.out')
@@ -338,9 +364,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 							dataset()@parameters$cg_subset_lists[[as.integer(input$cg_group)]]
 					}),quoted=TRUE)
 	
-	# getCGsubsetRef<-reactive(quote({
-	# 						dataset_ref()@parameters$cg_subset_lists[[as.integer(input$cg_group_ref)]]
-	# 				}),quoted=TRUE)
+	#getCGsubsetRef<-reactive(quote({
+	#						dataset_ref()@parameters$cg_subset_lists[[as.integer(input$cg_group_ref)]]
+	#				}),quoted=TRUE)
 	
 	getGeneSets<-reactive(quote({
 						
@@ -370,7 +396,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	getGeneAnnot<-reactive(quote({
 						gene_annot_object
 					}),quoted=TRUE)
-	
+	#cat(file = stderr(), prepared_annotation[["cat_list"]], 'Hello\n')
 	getCGcategories<-reactive(quote({
 						
 						if(repomode){
@@ -453,7 +479,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				print(results)
 				print("...............................MeDeComSet_ende...........................")
 				for(name in names(FactorViz:::ANALYSIS_META_INFO[["analysis_params"]])){
-					print(name)
+					#print(name)
 					display_name<-FactorViz:::ANALYSIS_META_INFO[["analysis_params"]][name]
 					#cat(sprintf("NAME %s", name), file='/tmp/output.shiny.test.out', append=TRUE)
 #					if(name %in% names(getRuns()[[input$analysisrun]])){
@@ -496,7 +522,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					if(length(val)==0){
 						val=""
 					}
-					if(val!=""){
+					if(length(val)>1){
+						output[[name]]<-c(display_name, paste(val, collapse=", "))
+					}else if(length(val)==1 && val!=""){
 						output[[name]]<-c(display_name, paste(val, collapse=", "))
 					}
 				}
@@ -535,30 +563,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('cg_group', 'Technical CpG subset:', GROUPS, selectize=TRUE)
 			})
 	
-# 	output$groupSelectorRef<-renderUI({
-# 				#results<-readRDS(file.path(getRuns()[[input$analysisrun]][["run.dir"]], "collected.results.RDS"))
-# 				results<-dataset_ref()
-# 				#results <-MeDeComSet(outputs=results$outputs, parameters=results$parameters, dataset_info=list(m=100, n=100))
-# 				
-# 				
-# 				#cat(sprintf("VAR EXISTS %s", "cg_subsets" %in% names(getRuns()[[input$analysisrun]])),file='/tmp/output.shiny.test.out')
-# 				
-# 				gr_lists<-results@parameters$cg_subsets
-# 				
-# 				GROUPS<-1:length(gr_lists)
-# 				if(is.null(names(gr_lists))){
-# 					names(GROUPS)<-sapply(gr_lists, paste, collapse="_")
-# 				}else{
-# 					names(GROUPS)<-names(gr_lists)
-# 				}
-# 				
-# #				for(gr in GROUPS){
-# 				#cat(sprintf("GROUP PATHS %s", .libPaths()),file='/tmp/output.shiny.test.out')
-# 				#cat(sprintf("GROUP %d, NAME %s\n", gr, names(GROUPS[gr])) ,file='/tmp/output.shiny.test.out', append=TRUE)
-# #				}
-# 				
-# 				selectInput('cg_group_ref', 'Technical CpG subset:', GROUPS, selectize=TRUE)
-# 			})
+
 	
 	
 	output$Kselector<-renderUI({
@@ -567,19 +572,26 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('K', 'Number of LMCs (k)', Ks, selectize=TRUE)
 			})
 	
-	# output$Kselector_ref<-renderUI({
-	# 			Ks<-dataset_ref()@parameters$Ks
-	# 			selectInput('K_ref', 'Number of LMCs (reference)', Ks, selectize=TRUE)
-	# 		})
-	
-	
+
+	output$include_type<-renderUI({
+				if (repomode){
+				checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE)
+				checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE)
+				checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE)
+				}
+			})	
 	output$performanceModeSelector<-renderUI({
 				selectInput('performanceMode', 'Show results as:', c("lineplots","table"), selectize=TRUE)
 			})
 	
 	output$propMatrixSelector<-renderUI({
+				if (is.null(input$propPlotType)){
+					propPlotType=""
+				}else{
+					propPlotType=input$propPlotType
+				}
 				
-				if(input$propPlotType=="scatterplot"){
+				if(propPlotType=="scatterplot"){
 					prop_mats<-c("regression")
 					labl<-"Reference proportions:"
 				}else{
@@ -612,13 +624,8 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				selectInput('lambda', 'Lambda value', LAMBDA.IDS)
 			})
 	
-	# output$lambdaSelector_ref<-renderUI({
-	# 			LAMBDAS<-dataset_ref()@parameters$lambdas
-	# 			LAMBDA.IDS<-1:length(dataset_ref()@parameters$lambdas)
-	# 			names(LAMBDA.IDS)<-as.character(LAMBDAS)
-	# 			selectInput('lambda_ref', 'Lambda value (reference)', LAMBDA.IDS)
-	# 		})
-	# 
+
+	
 	output$minKselector<-renderUI({
 				selectInput('minK', 'Minimum k:', dataset()@parameters$Ks)
 			})
@@ -632,27 +639,29 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				lambda_list<-sort(dataset()@parameters$lambdas)
 				selectInput('lambdaMin', 'Minimum lambda:', lambda_list, selected=lambda_list[which.min(lambda_list)])
 			})
-	
-	
 	output$maxLambdaSelector<-renderUI({
 				lambda_list<-sort(dataset()@parameters$lambdas)
 				selectInput('lambdaMax', 'Maximum lambda:', lambda_list, selected=lambda_list[which.max(lambda_list)])
 			})
 	
-	# output$componentSelector<-renderUI({
-	# 			comps<-c(1:input$K, NA)
-	# 			names(comps)<-c(as.character(1:input$K), "sum best matching")
-	# 			selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
-	# 		
-	# 		})
+	output$componentSelector<-renderUI({
+				if (!is.null(input$K)){
+					comps<-c(1:input$K, NA)
+					#cat(file = stderr(), comps, 'Hello\n')
+					names(comps)<-c(as.character(1:input$K), "sum best matching")
+					#cat(file = stderr(), names, 'Hello\n')
+				}
+				else {
+					comps<-c(1, NA)
+					#cat(file = stderr(), comps, 'Hello\n')
+					names(comps)<-c("1", "sum best matching")
+					#cat(file = stderr(), names, 'Hello\n')
+				}
+				selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
+				#input$panel=="Proportions"
+			})
 	
-	# output$componentSelectorRef<-renderUI({
-	# 			comps<-c(1:input$K_ref)
-	# 			#names(comps)<-c(as.character(1:input$K), "sum best matching")
-	# 			selectInput('component_ref', 'LMC (ref analysis):', comps, selectize=TRUE, multiple=TRUE, selected=isolate({
-	# 								if("component_ref" %in% names(input))as.character(input$component_ref) else 1
-	# 							}))
-	# 		})
+
 	
 	
 	output$pointColorSelector<-renderUI({
@@ -727,24 +736,23 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	# output$refProfileSelector<-renderUI({
-	# 			
-	# 			rprofiles<-c(NA)
-	# 			rprofile_names<-c("best_matching")
-	# 			
-	# 			if(!is.null(getTrueT)){ 
-	# 				rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
-	# 				rprofile_names_add<-colnames(getTrueT())
-	# 				if(is.null(rprofile_names_add)){
-	# 					rprofile_names_add<-as.character(1:ncol(getTrueT()))
-	# 				}
-	# 				rprofile_names<-c(rprofile_names, rprofile_names)
-	# 			}
-	# 			names(rprofiles)<-rprofile_names
-	# 			
-	# 			selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE, multiple=TRUE)
-	# 			
-	# 		})
+	#output$refProfileSelector<-renderUI({
+				
+	#			rprofiles<-c(NA)
+	#			rprofile_names<-c("best_matching")
+	#			if(!is.null(getTrueT())){ 
+	#				rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
+	#				rprofile_names_add<-colnames(getTrueT())
+	#				if(is.null(rprofile_names_add)){
+	#					rprofile_names_add<-as.character(1:ncol(getTrueT()))
+	#				}
+	#				rprofile_names<-c(rprofile_names, rprofile_names)
+	#			}
+	#			names(rprofiles)<-rprofile_names
+	#			
+	#			selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE, multiple=TRUE)
+				
+	#		})
 	
 	output$performancePanel<-renderUI({
 				
@@ -776,8 +784,8 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					h=sprintf("%dpx", h0*nrow)
 					w=sprintf("%dpx", h0*ncol)
 				}else if(input$componentPlotType=="locus plot"){
-					h=500
-					w=1000
+					h="500px"
+					w="1000px"
 				}else{
 					h0=300
 					w0=300
@@ -797,11 +805,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	#}
 
 	output$metaanalysisPanel<-renderUI({
-					
+		if(FALSE){
 				w=500
 				h=500
 				if(input$analysisType=="compare LMCs"){
-					
 					#list(plotOutput('metaPlot',
 					list(plotOutput('comparisonPlot',
 								height = if(input$comparativePlotType=="dendrogram") h else 1.2*h,
@@ -853,16 +860,23 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 					}
 				
 				}
-				
-			})
+			
+			}
+			else{
+				str1 <- paste("<h4>PAGE UNDER CONSTRUCTION<h4>")
+				HTML(str1)
+			}	
+		})
 	
-	# output$compareRunSelector<-renderUI({
-	# 			#wellPanel(
-	# 			runs<-names(getRuns())
-	# 			names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
-	# 			selectInput('analysisrun_ref', '', runs, selectize=TRUE, width="750px", selected=1)
-	# 			#)		
-	# 		})
+	#output$compareRunSelector<-renderUI({
+	#			#wellPanel(
+	#			runs<-names(getRuns())
+	#			if (!is.null(runs)){
+	#				names(runs)<-paste(seq_len(length(runs)),runs, sep=". ")
+	#			}
+	#			selectInput('analysisrun_ref', '', runs, selectize=TRUE, width="750px", selected=1)
+	#			#)		
+	#		})
 
 	output$topSDcgsSelector<-renderUI({
 			
@@ -878,26 +892,26 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 						value=length(ind), step=500, round=0)
 			})
 	
-# 	output$topSDcgsSelectorCompare<-renderUI({
-# 				
-# 				gr<-as.integer(input$cg_group)
-# #				ind<-readRDS(sprintf("%s/cg_group_%d.RDS", 
-# #								getRuns()[[input$analysisrun]][["run.dir"]], 
-# #								#dataset()$groups[gr]
-# #								gr
-# #						))
-# 				ind<-getCGsubset()
-# #				ind_ref<-readRDS(sprintf("%s/cg_group_%d.RDS", 
-# #								getRuns()[[input$analysisrun_ref]][["run.dir"]], 
-# #								#dataset()$groups[gr]
-# #								gr
-# #						))
-# 				ind_ref<-getCGsubsetRef()
-# 				ind_common<-intersect(ind, ind_ref)
-# 				
-# 				sliderInput('topSDcpgsCompare', 'Select top SD cgs', min=100, max=length(ind),
-# 						value=length(ind), step=100, round=0)
-# 			})
+	#output$topSDcgsSelectorCompare<-renderUI({
+				
+	#			gr<-as.integer(input$cg_group)
+#				ind<-readRDS(sprintf("%s/cg_group_%d.RDS", 
+#								getRuns()[[input$analysisrun]][["run.dir"]], 
+#								#dataset()$groups[gr]
+#								gr
+#						))
+	#			ind<-getCGsubset()
+#				ind_ref<-readRDS(sprintf("%s/cg_group_%d.RDS", 
+#								getRuns()[[input$analysisrun_ref]][["run.dir"]], 
+#								#dataset()$groups[gr]
+#								gr
+#						))
+	#			ind_ref<-getCGsubsetRef()
+	#			ind_common<-intersect(ind, ind_ref)
+	#			
+	#			sliderInput('topSDcpgsCompare', 'Select top SD cgs', min=100, max=length(ind),
+	#					value=length(ind), step=100, round=0)
+	#		})
 	
 	output$analysisTokensInput<-renderUI({
 				
@@ -915,22 +929,26 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	# output$dmCGComponentSelector<-renderUI({
-	# 			
-	# 			
-	# 			cmp_choices=as.list(as.character(1:as.integer(input$K)))
-	# 			#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
-	# 			
-	# 			names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
-	# 			
-	# 			list(
-	# 				selectizeInput("componentGroup1", "Select LMCs:", 
-	# 					choices=cmp_choices, selected=1, multiple = TRUE),
-	# 				selectizeInput("componentGroup2", "Select LMCs to compare:", 
-	# 					choices=cmp_choices, selected=2,multiple = TRUE)
-	# 				)
-	# 			
-	# 		})
+	#output$dmCGComponentSelector<-renderUI({
+	#			if (!is.null(input$K)){
+	#				cmp_choices=as.list(as.character(1:as.integer(input$K)))
+	#				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+	#				names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
+	#			}else{
+	#				cmp_choices=as.list(c("1"))
+	#				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+	#				names(cmp_choices)=c("1")#, "All")
+	#			}
+	#					
+	#			
+	#			list(
+	#				selectizeInput("componentGroup1", "Select LMCs:", 
+	#					choices=cmp_choices, selected=1, multiple = TRUE),
+	#				selectizeInput("componentGroup2", "Select LMCs to compare:", 
+	#					choices=cmp_choices, selected=2,multiple = TRUE)
+	#				)
+	#			
+	#		})
 	
 	output$GREAToptionsSelector<-renderUI({
 				
@@ -986,6 +1004,49 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				}
 				
 			})
+	if(repomode){
+		output$groupSelectorRef<-renderUI({
+			#results<-readRDS(file.path(getRuns()[[input$analysisrun]][["run.dir"]], "collected.results.RDS"))
+			results<-dataset_ref()
+			#results <-MeDeComSet(outputs=results$outputs, parameters=results$parameters, dataset_info=list(m=100, n=100))
+			#cat(sprintf("VAR EXISTS %s", "cg_subsets" %in% names(getRuns()[[input$analysisrun]])),file='/tmp/output.shiny.test.out')
+			gr_lists<-results@parameters$cg_subsets
+			GROUPS<-1:length(gr_lists)
+			if(is.null(names(gr_lists))){
+				names(GROUPS)<-sapply(gr_lists, paste, collapse="_")
+			}else{
+				names(GROUPS)<-names(gr_lists)
+			}
+#			for(gr in GROUPS){
+				#cat(sprintf("GROUP PATHS %s", .libPaths()),file='/tmp/output.shiny.test.out')
+				#cat(sprintf("GROUP %d, NAME %s\n", gr, names(GROUPS[gr])) ,file='/tmp/output.shiny.test.out', append=TRUE)
+#			}	
+			selectInput('cg_group_ref', 'Technical CpG subset:', GROUPS, selectize=TRUE)
+	})
+	output$Kselector_ref<-renderUI({
+		Ks<-dataset_ref()@parameters$Ks
+		selectInput('K_ref', 'Number of LMCs (reference)', Ks, selectize=TRUE)
+		})
+
+	output$lambdaSelector_ref<-renderUI({
+		LAMBDAS<-dataset_ref()@parameters$lambdas
+		LAMBDA.IDS<-1:length(dataset_ref()@parameters$lambdas)
+		names(LAMBDA.IDS)<-as.character(LAMBDAS)
+		if (LAMBDA.IDS== NULL){
+		} 
+		selectInput('lambda_ref', 'Lambda value (reference)', LAMBDA.IDS)
+		})
+	
+	output$componentSelectorRef<-renderUI({
+			comps<-c(1:input$K_ref)
+			#names(comps)<-c(as.character(1:input$K), "sum best matching")
+			selectInput('component_ref', 'LMC (ref analysis):', comps, selectize=TRUE, multiple=TRUE, selected=isolate({
+									if("component_ref" %in% names(input))as.character(input$component_ref) else 1
+									}))
+			#input$panel=="Proportions"
+	})
+}
+
 	
 	parse_session_dir<-function(directory){
 		
@@ -1040,12 +1101,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		if("minK" %in% names(input) && "maxK" %in% names(input)){
 			Kvals<-Kvals[Kvals>=as.integer(input$minK) & Kvals<=as.integer(input$maxK)]
 		}
-		
 		#cg subset
 		gr_list <- results@parameters$cg_subsets
 		gr<-as.integer(input$cg_group)
 		cg_ <- gr_list[gr]
-
 		#lambdas
 		ll <- as.integer(input$lambda)
 		lambdas <- results@parameters$lambdas
@@ -1054,14 +1113,14 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		sample_subset = NULL
 		if(statistic=="rmse"){
 			meth.data<-getMethData()
-			if("SAMPLE_SUBSET"%in% names(getRuns()[[input$analysisrun]])){
-				sample_subset<-getRuns()[[input$analysisrun]][["SAMPLE_SUBSET"]]
-			}else{
-				sample_subset<-1:ncol(meth.data)
+			if (repomode){
+				if("SAMPLE_SUBSET"%in% names(getRuns()[[input$analysisrunanalysisrun]])){
+					sample_subset<-getRuns()[[input$analysisrun]][["SAMPLE_SUBSET"]]
+				}else{
+					sample_subset<-1:ncol(meth.data)
+				}
 			}
-		
 		}
-
 		MeDeCom:::plot.K.selection(results, statistic = statistic, Ks = as.numeric(Kvals),lambdas = as.numeric(lambdas), cg_subset = as.integer(cg_), sample_subset = sample_subset,cg_subsets = gr_list, KvsRMSElambdaLegend = TRUE, normalizedCVE = input$normalizedCVE, addPlotTitle = input$addPlotTitle)
 	}
 	
@@ -1112,8 +1171,21 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		if (scale == "logarithmic"){
 			scale = "log"
 		}
+		
+		includeRMSE_T<-FALSE
+		includeMAE_A<-FALSE
+		includeDist2C_T<-FALSE
+		if (!is.null(input$includeRMSE_T) && input$includeRMSE_T) {
+			includeRMSE_T<-TRUE
+		}
+		if (!is.null(input$includeMAE_A)&& input$includeMAE_A) {
+			includeMAE_A<-TRUE
+		}
+		if (!is.null(input$includeDist2C_T)&& input$includeDist2C_T) {
+			includeDist2C_T<-TRUE
+		}
 
-	MeDeCom:::plot.lambda.selection(results, cg_subset = as.integer(cg_), K = k, minLambda = minLam, maxLambda =maxLam, scale= scale ,includeRMSE_T= input$includeRMSE_T, includeMAE_A = input$includeMAE_A, includeDist2C_T = input$includeDist2C_T )
+	MeDeCom:::plot.lambda.selection(results, cg_subset = as.integer(cg_), K = k, minLambda = minLam, maxLambda =maxLam, scale= scale ,includeRMSE_T= includeRMSE_T, includeMAE_A = includeMAE_A, includeDist2C_T = includeDist2C_T )
 
 	}
 	
@@ -1244,7 +1316,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		#top.cgs
 		top.cgs <- NA
 		if(input$componentPlotType %in% c("heatmap","dendrogram","MDS","similarity graph")){
-			if(input$cgVarSubset){
+			if(!is.null(input$cgVarSubset) && input$cgVarSubset){
 				top.cgs<-getTTandTrefSDranking()[1:input$topSDcpgs]
 			}else if(!is.null(Tref)){
 				top.cgs<-1:nrow(Tref)
@@ -1269,10 +1341,9 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		}else{
 			scatter.smooth <- FALSE
 		}
-		
+		meth.data<-getMethData()
 		if(type == "locus plot"){
 			
-			meth.data<-getMethData()
 			sample_subset<-getSampleSubset()
 			if(input$locusChr!="" && input$locusStart!="" && input$locusEnd!=""){
 				
@@ -1295,7 +1366,6 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				locus_params<-NULL
 			}
 		}
-			
 		plotLMCs(results, 
 				type = type, 
 				K =  input$K, 
@@ -1359,8 +1429,18 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		lambda <- lambdas[ll]
 
 		Aref<-getTrueA()
-
-		if(input$componentPlotType=="MDS" || input$propPlotType == "heatmap"){
+		if (is.null(input$componentPlotType)){
+			componentPlotType=FALSE
+		}else {
+			componentPlotType=input$componentPlotType
+		}
+		if (is.null(input$propPlotType)){
+			propPlotType=FALSE
+		}else {
+			propPlotType=input$propPlotType
+		}
+		
+		if(componentPlotType=="MDS" || propPlotType == "heatmap"){
 			if(input$mdsDataCat!="none"){
 				pheno.data<-getPhenoData()
 				data.ch<-pheno.data[[input$mdsDataCat]]
@@ -1506,21 +1586,22 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			
 			samps<-1:ncol(mdd)
 									
-			# if("refThat" %in% input$compareMatrices){
-			# 	#results<-dataset()
-			# 	print(input$K_ref)
-			# 
-			# #hier noch aendern das man nicht auf input_ref zugreift
-			# 	That<-dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
-			# 	
-			# 	colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))
-			# 	if(input$correlationCentered){
-			# 		mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
-			# 	}else{
-			# 		mdd<-cbind(mdd,That)
-			# 	}
-			# 	
-			# }
+#			if("refThat" %in% input$compareMatrices){
+				#results<-dataset()
+				#print(input$K_ref)
+
+			#hier noch aendern das man nicht auf input_ref zugreift
+				#That<-dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
+				
+				#colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))
+				#if(input$correlationCentered){
+				#	mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
+				#}else{
+				#	mdd<-cbind(mdd,That)
+				#}
+				
+				
+			#}
 			
 			if("refD" %in% input$compareMatrices){
 				D<-getRefMethData()[cg_subset_ref,sample_subset_ref][cg_map_ref,]
@@ -1703,9 +1784,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 		#						data=validationData_Pheno[ii,]), silent=TRUE)
 		#		
 		dump("dataSet", file='/tmp/dataSet.RDump')
-		
-       # browser()
-        
+		#browser()
 		fit<-lm(theModel,  data=dataSet)
 	}
 	
@@ -1777,9 +1856,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				#mincmp_pval_matrix[which(LAMBDA_GRID==lambda),which(Ks==k)]<-min.cmp.p
 			}}
 		N_COL_BINS<-10
-		
-        browser()
-        
+		bowser()
 		heatmap.2(#x=1:length(Kvals),y=1:length(lls),
 				-log10(pval_matrix),
 				cellnote=matrix(as.character(round(-log10(pval_matrix),3)),ncol=ncol(pval_matrix)),
@@ -1862,7 +1939,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 		ann_hypo<-getCGAnnot()[ind_hypo,,drop=FALSE]
 		ann_hyper<-getCGAnnot()[ind_hyper,,drop=FALSE]
-						
+		#print(meth_diff[hyper_cgs])			
 		ann_hypo<-cbind(data.frame(ID=rownames(ann_hypo), Diff=meth_diff[hypo_cgs]), ann_hypo)
 		ann_hyper<-cbind(data.frame(ID=rownames(ann_hyper), Diff=meth_diff[hyper_cgs]), ann_hyper)
 		
