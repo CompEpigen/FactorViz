@@ -1440,7 +1440,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			propPlotType=input$propPlotType
 		}
 		
-		if(componentPlotType=="MDS" || propPlotType %in% c("heatmap", "sample characteristics"){
+		if(componentPlotType=="MDS" || propPlotType %in% c("heatmap", "sample characteristics")){
 			if(input$mdsDataCat!="none"){
 				pheno.data<-getPhenoData()
 				data.ch<-pheno.data[[input$mdsDataCat]]
