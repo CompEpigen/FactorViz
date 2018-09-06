@@ -326,8 +326,8 @@ getFactorVizUI<-function(){
 													conditionalPanel(' input.panel === "Meta-analysis" ',
 															
 															selectInput("analysisType", "Analysis:", 
-																	c(if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL, 
-																			"differential methylation", "phenotype modeling"), selected=1)
+                                                                    "phenotype modeling","differential methylation", 
+                                                                            c(if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL), selected=1)
 													),
 													
 													
