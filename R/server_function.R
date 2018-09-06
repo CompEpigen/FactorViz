@@ -56,10 +56,10 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	output$propPlotType<-renderUI({
 		if(repomode){
 			#plot_t=c("heatmap", "barplot", "lineplot", "scatterplot", "stratification plot", "correlations")
-			plot_t=c("heatmap", "barplot", "lineplot", "scatterplot")
+			plot_t=c("heatmap", "barplot", "lineplot", "scatterplot", "sample characteristics")
 		}
 		else{
-			plot_t=c("heatmap", "barplot")
+			plot_t=c("heatmap", "barplot", "sample characteristics")
 		}
 		selectInput('propPlotType', 'Plot type', 
 			plot_t,
