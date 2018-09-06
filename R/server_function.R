@@ -805,7 +805,7 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 	#}
 
 	output$metaanalysisPanel<-renderUI({
-		if(FALSE){
+#		if(FALSE){
 				w=500
 				h=500
 				if(input$analysisType=="compare LMCs"){
@@ -861,11 +861,11 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 				}
 			
-			}
-			else{
-				str1 <- paste("<h4>PAGE UNDER CONSTRUCTION<h4>")
-				HTML(str1)
-			}	
+#			}
+#			else{
+#				str1 <- paste("<h4>PAGE UNDER CONSTRUCTION<h4>")
+#				HTML(str1)
+#			}	
 		})
 	
 	#output$compareRunSelector<-renderUI({
