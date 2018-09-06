@@ -929,26 +929,26 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 				
 			})
 	
-	#output$dmCGComponentSelector<-renderUI({
-	#			if (!is.null(input$K)){
-	#				cmp_choices=as.list(as.character(1:as.integer(input$K)))
-	#				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
-	#				names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
-	#			}else{
-	#				cmp_choices=as.list(c("1"))
-	#				#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
-	#				names(cmp_choices)=c("1")#, "All")
-	#			}
-	#					
-	#			
-	#			list(
-	#				selectizeInput("componentGroup1", "Select LMCs:", 
-	#					choices=cmp_choices, selected=1, multiple = TRUE),
-	#				selectizeInput("componentGroup2", "Select LMCs to compare:", 
-	#					choices=cmp_choices, selected=2,multiple = TRUE)
-	#				)
-	#			
-	#		})
+	output$dmCGComponentSelector<-renderUI({
+				if (!is.null(input$K)){
+					cmp_choices=as.list(as.character(1:as.integer(input$K)))
+					#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+					names(cmp_choices)=c(as.character(1:as.integer(input$K)))#, "All")
+				}else{
+					cmp_choices=as.list(c("1"))
+					#choices[[as.integer(input$K)+1]]=as.character(1:as.integer(input$K))
+					names(cmp_choices)=c("1")#, "All")
+				}
+						
+				
+				list(
+					selectizeInput("componentGroup1", "Select LMCs:", 
+						choices=cmp_choices, selected=1, multiple = TRUE),
+					selectizeInput("componentGroup2", "Select LMCs to compare:", 
+						choices=cmp_choices, selected=2,multiple = TRUE)
+					)
+				
+			})
 	
 	output$GREAToptionsSelector<-renderUI({
 				
