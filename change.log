@@ -1,0 +1,28 @@
+####change_log#####
+main.R{
+if input.data is NULL input object is never defined hence the error downstream 
++
+now if input.data is not defined then based on the above condition we define these parameter as NULL 
+pheno.data=NULL, meth.data=NULL, sample.names=NULL
+
+prepared_annotation <<- instaed of <- in else condition
+}
+server.R{
+all reference related output hidden using repomode as flag
+}
+
+ui.R{
+	removed plot option which were not there in plotLMC
+	removed startification plot and correlation plot from proportions section as the plot is not handled in medecom
+}
+???????????????????????????????Questions
+server_function.R{
+line 1317: D = getMethData()[ind, getSampleSubset()]
+line 180: getSampleSubset<-reactive(quote({
+						dataset()@parameters$sample_subset
+					}), quoted=TRUE)
+}
+
+globals.R{
+ removed PERFORMANCE measures not compatible with plot.K.selection. 
+}

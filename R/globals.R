@@ -49,7 +49,9 @@ RUN_LIST_COLUMNS<-c(
 )
 
 
-PERFORMANCE_MEASURES<-c("Objective"="Fval", "RMSE"="rmse", "CV error"="cve", "RMSE, T"="rmseT", "MDC, T"="dist2C", "MAE, A"="maeA")
+#PERFORMANCE_MEASURES<-c("Objective"="Fval", "RMSE"="rmse", "CV error"="cve", "RMSE, T"="rmseT", "MDC, T"="dist2C", "MAE, A"="maeA")
+PERFORMANCE_MEASURES<-c("Objective"="Fval", "CV error"="cve")
+
 
 HM450_PROBE_CATEGORIES<-list(
 			

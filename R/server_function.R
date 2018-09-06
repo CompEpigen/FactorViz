@@ -1858,8 +1858,6 @@ FactorViz_serverFunc<-function(input, output, object=NULL, ref_object=NULL, data
 			}}
 		N_COL_BINS<-10
 		
-        #browser()
-        
 		heatmap.2(#x=1:length(Kvals),y=1:length(lls),
 				-log10(pval_matrix),
 				cellnote=matrix(as.character(round(-log10(pval_matrix),3)),ncol=ncol(pval_matrix)),

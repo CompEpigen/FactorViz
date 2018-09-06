@@ -323,78 +323,78 @@ getFactorVizUI<-function(){
 													),
 													
 													
-													conditionalPanel(' input.panel === "Meta-analysis" ',
+													#conditionalPanel(' input.panel === "Meta-analysis" ',
 															
-															selectInput("analysisType", "Analysis:", 
-																	c(if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL, 
-																			"differential methylation", "phenotype modeling"), selected=1)
-													),
+													#		selectInput("analysisType", "Analysis:", 
+													#				c(if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL, 
+													#						"differential methylation", "phenotype modeling"), selected=1)
+													#),
 													
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "compare LMCs" ',
+													#conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "compare LMCs" ',
 															
-															wellPanel(
+													#		wellPanel(
 																	#h5("Select an analysis group:"),
 																	#uiOutput("repoSelector"),
-																	h5("Select a reference run:"),
-																	uiOutput("compareRunSelector"),
-																	uiOutput("Kselector_ref"),
-																	uiOutput("lambdaSelector_ref")
+													#				h5("Select a reference run:"),
+													#				uiOutput("compareRunSelector"),
+													#				uiOutput("Kselector_ref"),
+													#				uiOutput("lambdaSelector_ref")
 															
-															),
+													#		),
 															
-															selectizeInput('compareMatrices', 'Select matrices:', 
-																	choices = list(
-																			"Current run" = c(`LMCs (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar'),
-																			"Reference run" = c(`LMCs (\\hat{T})` = 'refThat', `Data` = 'refD', `Reference (T^star)` = 'refTstar')
-																	), multiple = TRUE),
+													#		selectizeInput('compareMatrices', 'Select matrices:', 
+													#				choices = list(
+													#						"Current run" = c(`LMCs (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar'),
+													#						"Reference run" = c(`LMCs (\\hat{T})` = 'refThat', `Data` = 'refD', `Reference (T^star)` = 'refTstar')
+													#				), multiple = TRUE),
 															
-															selectInput("comparativePlotType", "Output type:", c("dendrogram","heatmap","correlation heatmap"), selected=1),
-															uiOutput("topSDcgsSelectorCompare"),
-															radioButtons("SDCompareMatrices", "Calculate SD on:",
-																	c(`All`= "All", `Estimates (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar')),
-															uiOutput("analysisTokensInput")
+													#		selectInput("comparativePlotType", "Output type:", c("dendrogram","heatmap","correlation heatmap"), selected=1),
+													#		uiOutput("topSDcgsSelectorCompare"),
+													#		radioButtons("SDCompareMatrices", "Calculate SD on:",
+													#				c(`All`= "All", `Estimates (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar')),
+													#		uiOutput("analysisTokensInput")
 													
-													),
+													#),
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" ',
+													#conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" ',
 															
-															uiOutput("dmCGComponentSelector"),
-															selectInput("diffTableType", "Direction:", c("hypermethylated","hypomethylated"), selected=1),
-															sliderInput('dmr_threshold', 'Threshold', min=0.0, max=1.0, step=0.01, value=1.0),
-															selectInput('diffOutputType', "Output type:", c("Table", "GREAT enrichments"), selected=1)
+													#		uiOutput("dmCGComponentSelector"),
+													#		selectInput("diffTableType", "Direction:", c("hypermethylated","hypomethylated"), selected=1),
+													#		sliderInput('dmr_threshold', 'Threshold', min=0.0, max=1.0, step=0.01, value=1.0),
+													#		selectInput('diffOutputType', "Output type:", c("Table", "GREAT enrichments"), selected=1)
 													
-													),
+													#),
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" && input.diffOutputType === "Table" ',
+													#conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" && input.diffOutputType === "Table" ',
 															
-															actionButton('locusPlotSelected', "Locus plot")
+													#		actionButton('locusPlotSelected', "Locus plot")
 													
-													),
+													#),
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" && input.diffOutputType === "GREAT enrichments" ',
+													#conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" && input.diffOutputType === "GREAT enrichments" ',
 															
-															selectInput('GREATresults', "Show:", c("start screen", "region-gene associations (plot)", "region-gene associations (table)",
-																			"enriched ontologies (table)", "enriched ontologies (plot)", "region-gene associations for term")),
-															uiOutput("GREAToptionsSelector"),
-															actionButton('GREATsubmitQuery', "Submit GREAT query")
+													#		selectInput('GREATresults', "Show:", c("start screen", "region-gene associations (plot)", "region-gene associations (table)",
+													#						"enriched ontologies (table)", "enriched ontologies (plot)", "region-gene associations for term")),
+													#		uiOutput("GREAToptionsSelector"),
+													#		actionButton('GREATsubmitQuery', "Submit GREAT query")
 													
-													),
+													#),
 													
 													conditionalPanel(' ( input.panel === "LMCs" && input.componentPlotType === "heatmap" ) || ( input.panel === "LMCs" && input.componentPlotType === "scatterplot all" ) || ( input.panel === "LMCs" && input.componentPlotType === "scatterplot matching" ) || ( input.panel === "LMCs" && input.componentPlotType === "scatterplot avg matching" ) || ( input.panel === "LMCs" && input.componentPlotType === "dendrogram" ) || ( input.panel === "LMCs" && input.componentPlotType === "similarity graph" )|| ( input.panel === "Proportions" && input.propPlotType === "correlations" ) || ( input.panel === "Meta-analysis" && input.analysisType === "compare LMCs" && input.comparativePlotType !== "heatmap" ) ',
 															
 															checkboxInput("correlationCentered", "Center matrices", value=FALSE)
 													),	
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "phenotype modeling" ',
-															
-															selectInput("phenoModelOutput", "Output:", choices=c("summary plot","single case")),
-															uiOutput("targetVariableSelector"),
-															uiOutput("adjustmentVariableSelector"),
-															selectInput("discardLMC", "Which LMC to discard:", choices=c("largest", "smallest"), selected=1),
-															selectInput("modelPval", "p-value:", choices=c("overall", "minimal"), selected=1)
-													
-													),
+													#conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "phenotype modeling" ',
+													#		
+													#		selectInput("phenoModelOutput", "Output:", choices=c("summary plot","single case")),
+													#		uiOutput("targetVariableSelector"),
+													#		uiOutput("adjustmentVariableSelector"),
+													#		selectInput("discardLMC", "Which LMC to discard:", choices=c("largest", "smallest"), selected=1),
+													#		selectInput("modelPval", "p-value:", choices=c("overall", "minimal"), selected=1)
+													#
+													#),
 													
 													checkboxInput("addPlotTitle", "Add plot titles", value=TRUE)
 											)
