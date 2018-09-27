@@ -132,11 +132,8 @@ getFactorVizUI<-function(){
 													),
 													
 													conditionalPanel(' input.panel === "Performance" ',	
-															
 															uiOutput("performanceModeSelector"),
-															checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE),
-															checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE),
-															checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE)
+															uiOutput("include_type")
 													
 													),
 													
@@ -153,10 +150,7 @@ getFactorVizUI<-function(){
 													),
 													
 													conditionalPanel('input.panel === "Proportions" ',	
-															
-															selectInput('propPlotType', 'Plot type', 
-																	c("heatmap", "barplot", "lineplot", "scatterplot", "stratification plot", "correlations"), 
-																	selected=1)
+															uiOutput('propPlotType')
 													
 													),
 													
@@ -217,17 +211,13 @@ getFactorVizUI<-function(){
 													
 													
 													conditionalPanel('input.panel === "LMCs" ',	
-															
-															selectInput('componentPlotType', 'Plot type', 
-																	c("dendrogram","matching plot", "distance to center", "extremality", "heatmap", "mds plot", "similarity graph", "histogram", "scatterplot all","scatterplot matching","scatterplot avg matching", "locus plot"), 
-																	selected=1)
-													
+														uiOutput('plot_t_LMC')
 													),
 													
 													conditionalPanel('input.panel === "LMCs" && (input.componentPlotType === "heatmap" || input.componentPlotType === "mds plot" || input.componentPlotType === "dendrogram"  || input.componentPlotType == "similarity graph" ) ',
-															
-															checkboxInput("cgVarSubset", "Select top-variable CpGs:", value=FALSE)
-													
+															if (repomode){
+																checkboxInput("cgVarSubset", "Select top-variable CpGs:", value=FALSE)
+															}
 													),
 													
 													
@@ -336,36 +326,36 @@ getFactorVizUI<-function(){
 													conditionalPanel(' input.panel === "Meta-analysis" ',
 															
 															selectInput("analysisType", "Analysis:", 
-																	c(if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL, 
-																			"differential methylation", "phenotype modeling"), selected=1)
+                                                                    c("phenotype modeling","differential methylation", 
+                                                                            if(repomode || !is.null(medecom_ref_object)) "compare LMCs" else NULL), selected=1)
 													),
 													
 													
-													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "compare LMCs" ',
-															
-															wellPanel(
-																	#h5("Select an analysis group:"),
-																	#uiOutput("repoSelector"),
-																	h5("Select a reference run:"),
-																	uiOutput("compareRunSelector"),
-																	uiOutput("Kselector_ref"),
-																	uiOutput("lambdaSelector_ref")
-															
-															),
-															
-															selectizeInput('compareMatrices', 'Select matrices:', 
-																	choices = list(
-																			"Current run" = c(`LMCs (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar'),
-																			"Reference run" = c(`LMCs (\\hat{T})` = 'refThat', `Data` = 'refD', `Reference (T^star)` = 'refTstar')
-																	), multiple = TRUE),
-															
-															selectInput("comparativePlotType", "Output type:", c("dendrogram","heatmap","correlation heatmap"), selected=1),
-															uiOutput("topSDcgsSelectorCompare"),
-															radioButtons("SDCompareMatrices", "Calculate SD on:",
-																	c(`All`= "All", `Estimates (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar')),
-															uiOutput("analysisTokensInput")
-													
-													),
+#													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "compare LMCs" ',
+#															
+#															wellPanel(
+#																	h5("Select an analysis group:"),
+#																	uiOutput("repoSelector"),
+#																	h5("Select a reference run:"),
+#																	uiOutput("compareRunSelector"),
+#																	uiOutput("Kselector_ref"),
+#																	uiOutput("lambdaSelector_ref")
+#															
+#															),
+#															
+#															selectizeInput('compareMatrices', 'Select matrices:', 
+#																	choices = list(
+#																			"Current run" = c(`LMCs (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar'),
+#																			"Reference run" = c(`LMCs (\\hat{T})` = 'refThat', `Data` = 'refD', `Reference (T^star)` = 'refTstar')
+#																	), multiple = TRUE),
+#															
+#															selectInput("comparativePlotType", "Output type:", c("dendrogram","heatmap","correlation heatmap"), selected=1),
+#															uiOutput("topSDcgsSelectorCompare"),
+#															radioButtons("SDCompareMatrices", "Calculate SD on:",
+#																	c(`All`= "All", `Estimates (\\hat{T})` = 'That', `Data` = 'D', `Reference (T^star)` = 'Tstar')),
+#															uiOutput("analysisTokensInput")
+#													
+#													),
 													
 													conditionalPanel(' input.panel === "Meta-analysis" && input.analysisType === "differential methylation" ',
 															
@@ -459,7 +449,6 @@ getFactorVizUI<-function(){
 													
 													tabPanel('Meta-analysis', 
 															uiOutput('metaanalysisPanel')),
-													
 													
 													tabPanel('Downloads',
 															uiOutput('downloadPanel'))
