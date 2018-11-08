@@ -1,31 +1,4 @@
-#
-# Global setting^s
-#
-#BASE_URL="http://internal.genetik.uni-sb.de/shiny/shinyFactorTestInternal/"
-BASE_URL="http://172.29.0.166/shiny/C010/FactorViz"
-
-#RUN_REPO_DIR="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/completed_runs/"
-#RUN_REPO_DIRS=c(
-#		"TEST advanced :)"="/ngs_share/tmp/factorviz_results"#,
-#	#	"TEST :)"=         "/projects/factorization/scratch/medecom_results"#,
-##		"Test_advanced ;) " = "/projects/factorization/data"
-##		"Paper2016"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/paper2016",
-##		"Simulations"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/sim",
-##		"Ordinary"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/normal",
-##		"Neuronal data sets"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/neuronal",
-##		"Blood data sets"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/blood",
-##		"Partial information"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/partial",
-##		"Test runs"="/home/lutsik/Documents/science/projects/heterogeneity/analysis/parameter_tuning/visualization/testing"
-#		)
-#RUN_REPO_DIR="/home/lutsik/Documents/science/projects/heterogeneity/analysis/"
-#GLOBAL_DATA_DIR="/projects/factorization/scratch/data"
-GLOBAL_DATA_DIR="/ngs_share/tmp/factorviz_data"
-SESSIONS_DIR="/ngs_share/tmp/factorviz_sessions"
-#SESSIONS_DIR="/project/factorization/scratch/shinny_test"
-
-
-
-RUN_LIST_COLUMNS<-c(
+RUN_LIST_COLUMNS<<-c(
 	"DATASET"="Data set"
 	,"DATA_SUBSET"="Data subset"
 #	"NO_OF_SAMPLES"="Number of samples",
@@ -49,11 +22,11 @@ RUN_LIST_COLUMNS<-c(
 )
 
 
-#PERFORMANCE_MEASURES<-c("Objective"="Fval", "RMSE"="rmse", "CV error"="cve", "RMSE, T"="rmseT", "MDC, T"="dist2C", "MAE, A"="maeA")
-PERFORMANCE_MEASURES<-c("Objective"="Fval", "CV error"="cve")
+PERFORMANCE_MEASURES<<-c("Objective"="Fval", "RMSE"="rmse", "CV error"="cve", "RMSE, T"="rmseT", "MDC, T"="dist2C", "MAE, A"="maeA")
+#PERFORMANCE_MEASURES<-c("Objective"="Fval", "CV error"="cve")
 
 
-HM450_PROBE_CATEGORIES<-list(
+HM450_PROBE_CATEGORIES<<-list(
 			
 			"categorical"=c(
 					"Chromosome", 
@@ -73,7 +46,7 @@ HM450_PROBE_CATEGORIES<-list(
 			)
 		)
 		
-GREAT_ONTOLOGIES<-
+GREAT_ONTOLOGIES<<-
 		c(
 				"GO Molecular Function", 
 				"GO Biological Process", 
@@ -98,12 +71,12 @@ GREAT_ONTOLOGIES<-
 		)
 
 
-GREAT_CRITERIA<-c("oneClosest", "twoClosest", "basalPlusExt")
+GREAT_CRITERIA<<-c("oneClosest", "twoClosest", "basalPlusExt")
 
 #
 # Set of meta-information tags for the deconvolution experiments
 #
-ANALYSIS_META_INFO<-list(
+ANALYSIS_META_INFO<<-list(
 		
 		"analysis_params"=c(
 				#"ANALYSIS"="Analysis name",
@@ -116,7 +89,7 @@ ANALYSIS_META_INFO<-list(
 				"NORMALIZATION"="Normalization method",
 				"ANALYSIS_TOKEN"="Additional info",
 				"LAMBDA_GRID"="Tested values of lambda",
-				"GROUP_LISTS"="CpG subsets, used for analysis",
+				#"GROUP_LISTS"="CpG subsets, used for analysis",
 				"MARKER_SELECTION"="Further CpG selection steps",
 				"Ks"="Tested values of k",
 				"K_FIXED"="Reference profiles, supplied as fixed to the QuadHC_fixedT variant",
@@ -189,3 +162,46 @@ ANALYSIS_META_INFO<-list(
 		
 		)
 )
+
+#############################################
+############ DeComp FILES ###################
+#############################################
+
+ANN_C<<-"ann_C.RData"
+ANN_S<<-"ann_S.RData"
+MEDSET<<-"medecom_set.RData"
+REF<<-"ref_meth.RData"
+CURRENT_USER<<-Sys.info()[["user"]]
+
+#############################################
+################ FLAGS ######################
+#############################################
+
+MEDSET_FLAG<<-F
+ANN_C_FLAG<<-F
+TRUE_T_FLAG<<-F
+PHENO_DATA_FLAG<<-F
+SAMPLE_NAME_FLAG<<-F
+METH_DATA_FLAG<<-F
+#############################################
+############## Base Objects #################
+#############################################
+
+medecom_object<<-NULL
+input_object<<-list(
+  pheno.data=NULL,
+  meth.data=NULL,
+  sample.names=NULL
+)
+
+true_T_matrix<<-NULL
+true_A_matrix<<-NULL
+true_T_matrix_ref<<-NULL
+cg_annot_object<<-NULL
+gene_annot_object<<-NULL
+prepared_annotation<<-list("cat_list"=NULL,
+                           "cat_inf_vs"=NULL,
+                           "faetures"=NULL,
+                           "settings"=NULL
+                           )
+gene_set_object<<-NULL
