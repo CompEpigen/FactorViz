@@ -1,11 +1,8 @@
-# This script contains the basic server interface of FactorViz, server code related to 
+# This script contains the basic server interface of FactorViz, server code related to
 # ouptut, reactive elements and output can be found inside server folder.
 
 base_server<-function(input, output) {
-  source('server/getters.R', local = T)
-  source('server/output.R', local = T)
-  source('server/reactive.R', local=T)
-  source('server/plot.R', local=T)
+
   shinyDirChoose(input, 'dir', roots=c(computer=("/"), home=paste('/home/', CURRENT_USER, "/", sep="")), filetypes=c('', 'RData') )
   df<-eventReactive(input$load, {
     withProgress(message = 'Loading datasets in progress\n',
@@ -32,7 +29,7 @@ base_server<-function(input, output) {
                      if("sample_id" %in% colnames(ann.S)){
                        input_object$sample.names<<-ann.S$sample_id
                      }else{
-                       input_object$sample.names<<-1:nrow(ann.S) 
+                       input_object$sample.names<<-1:nrow(ann.S)
                      }
                      SAMPLE_NAME_FLAG<<-T
                    }
@@ -42,7 +39,7 @@ base_server<-function(input, output) {
                      true_T_matrix<<-ref.meth
                      TRUE_T_FLAG<<-T
                    }
-                   
+
                    incProgress(1/4)
                 })
   })

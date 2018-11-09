@@ -1,8 +1,10 @@
 # base file to call from commad line
-setwd("/home/reaper/epigen/FactorViz/FactorViz2.0")
-library(MeDeCom)
-source("app.R", local=T)
-startFactorViz<-function(object, input.data=NULL) { 
-  runApp(app)
+
+# startFactorViz
+# @export
+startFactorViz<-function(object, input.data=NULL) {
+	app<-shiny::shinyApp(
+  ui = baseUI,
+  server = base_server)
+  shiny::runApp(app)
 }
-startFactorViz(NULL)  
