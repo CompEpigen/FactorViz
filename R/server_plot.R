@@ -142,7 +142,7 @@ server_env$doComponentPlot<-function(){
     }
     }
   }
-  MeDeCom:::plotLMCs(results,
+  MeDeCom::plotLMCs(results,
            type = type,
            K =  K,
            lambda= lambda ,
@@ -191,7 +191,7 @@ server_env$doProportionPlot<-function(){
     data.ch<-NULL
   }
 
-  MeDeCom:::plotProportions(results,
+  MeDeCom::plotProportions(results,
                   type = input$propPlotType,
                   K = as.integer(input$K_4),
                   lambda = lambda,
