@@ -27,46 +27,46 @@ PERFORMANCE_MEASURES<<-c("Objective"="Fval", "RMSE"="rmse", "CV error"="cve", "R
 
 
 HM450_PROBE_CATEGORIES<<-list(
-			
+
 			"categorical"=c(
-					"Chromosome", 
+					"Chromosome",
 					"Strand",
 					"Design",
 					"Color",
 					"Context",
-					"CGI Relation", 
-					"SNPs 3", 
+					"CGI Relation",
+					"SNPs 3",
 					"SNPs 5",
 					"SNPs Full"
 			),
-			
+
 			"quantitative"=c(
-					"CpG", 
+					"CpG",
 					"GC"
 			)
 		)
-		
+
 GREAT_ONTOLOGIES<<-
 		c(
-				"GO Molecular Function", 
-				"GO Biological Process", 
-				"GO Cellular Component", 
-				"Mouse Phenotype", 
-				"Human Phenotype", 
-				"Disease Ontology", 
-				"MSigDB Oncogenic Signatures", 
+				"GO Molecular Function",
+				"GO Biological Process",
+				"GO Cellular Component",
+				"Mouse Phenotype",
+				"Human Phenotype",
+				"Disease Ontology",
+				"MSigDB Oncogenic Signatures",
 				"MSigDB Immunologic Signatures",
-				"MSigDB Cancer Neighborhood", 
-				"Placenta Disorders", 
-				"PANTHER Pathway", 
-				"BioCyc Pathway", 
-				"MSigDB Pathway", 
-				"MGI Expression: Detected", 
-				"MSigDB Perturbation", 
-				"MSigDB Predicted Promoter Motifs", 
-				"MSigDB miRNA Motifs", 
-				"InterPro", 
-				"TreeFam", 
+				"MSigDB Cancer Neighborhood",
+				"Placenta Disorders",
+				"PANTHER Pathway",
+				"BioCyc Pathway",
+				"MSigDB Pathway",
+				"MGI Expression: Detected",
+				"MSigDB Perturbation",
+				"MSigDB Predicted Promoter Motifs",
+				"MSigDB miRNA Motifs",
+				"InterPro",
+				"TreeFam",
 				"HGNC Gene Families"
 		)
 
@@ -77,7 +77,7 @@ GREAT_CRITERIA<<-c("oneClosest", "twoClosest", "basalPlusExt")
 # Set of meta-information tags for the deconvolution experiments
 #
 ANALYSIS_META_INFO<<-list(
-		
+
 		"analysis_params"=c(
 				#"ANALYSIS"="Analysis name",
 				"DATASET"="Data set",
@@ -100,13 +100,13 @@ ANALYSIS_META_INFO<<-list(
 				"NFOLDS"="Number of cross-validation folds",
 				"ITERMAX"="Maximal numer of iterations"
 		),
-		
+
 		"data_set_params"=c(
 				"DATASET",
 				"DATA_SUBSET",
 				"REFERENCE_PROFILES"
 		),
-		
+
 		"param_extensions"=list(
 				"NORMALIZATION"=c(
 						"unnorm"="No",
@@ -115,15 +115,15 @@ ANALYSIS_META_INFO<<-list(
 						"noob"="Background corrected with method NOOB from the package methylumi",
 						"external"= "External normalization and adjustment procedures"
 				),
-				
+
 				"QUALITY_FILTERING"=c(
-						"standard"=paste("Total intensity (M+U) outliers (not withn 0.05, 0.95 quantiles) were removed,", 
+						"standard"=paste("Total intensity (M+U) outliers (not withn 0.05, 0.95 quantiles) were removed,",
 								"all probes overlapping with SNPs were removed"),
 						"snp"="All probes overlapping with SNPs were removed",
 						"somatic"="All probes on chromosomes X and Y were removed",
 						"snpANDsomatic"="All on chromosomes X and Y, and all probes overlapping with SNPs were removed"
 				),
-				
+
 				"MARKER_SELECTION"=c(
 						"no"="No marker selection. All CpGs used",
 						#"houseman"="Only those CpGs were used, which also present in a lits of top-50k markers as selected by method in Houseman et al, BMC Bioinformatics, 2012"
@@ -153,55 +153,12 @@ ANALYSIS_META_INFO<<-list(
 						"rowFstat15k"="15,000 CpGs with highest association to the cell-type categorical in the reference data",
 						"rowFstat20k"="20,000 CpGs with highest association to the cell-type categorical in the reference data",
 						"rowFstat50k"="20,000 CpGs with highest association to the cell-type categorical in the reference data"
-				
+
 				),
-				
+
 				"LAMBDA_GRID_TYPE"=c(
 						"rough"="Rough",
 						"fine"="Fine")
-		
+
 		)
 )
-
-#############################################
-############ DeComp FILES ###################
-#############################################
-
-ANN_C<<-"ann_C.RData"
-ANN_S<<-"ann_S.RData"
-MEDSET<<-"medecom_set.RData"
-REF<<-"ref_meth.RData"
-CURRENT_USER<<-Sys.info()[["user"]]
-
-#############################################
-################ FLAGS ######################
-#############################################
-
-MEDSET_FLAG<<-F
-ANN_C_FLAG<<-F
-TRUE_T_FLAG<<-F
-PHENO_DATA_FLAG<<-F
-SAMPLE_NAME_FLAG<<-F
-METH_DATA_FLAG<<-F
-#############################################
-############## Base Objects #################
-#############################################
-
-medecom_object<<-NULL
-input_object<<-list(
-  pheno.data=NULL,
-  meth.data=NULL,
-  sample.names=NULL
-)
-
-true_T_matrix<<-NULL
-true_A_matrix<<-NULL
-true_T_matrix_ref<<-NULL
-cg_annot_object<<-NULL
-gene_annot_object<<-NULL
-prepared_annotation<<-list("cat_list"=NULL,
-                           "cat_inf_vs"=NULL,
-                           "faetures"=NULL,
-                           "settings"=NULL
-                           )
-gene_set_object<<-NULL

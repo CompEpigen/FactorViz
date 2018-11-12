@@ -1,6 +1,6 @@
 # This script contains the code related to Home tab
 
-home_tab <- tabPanel(title="Home", id="home",
+home_tab <- function(){tabPanel(title="Home", id="home",
                             sidebarPanel(
                               width = 2,
                               shinyDirButton("dir", label = "Choose Directory", "Upload"),
@@ -13,4 +13,4 @@ home_tab <- tabPanel(title="Home", id="home",
                               uiOutput("AnalysisRunDescriptionHeader"),
                               tableOutput('AnalysisRunParameterTable')
                             )
-                   )
+                   )}

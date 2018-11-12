@@ -5,17 +5,17 @@
 #############################################
 
 ##########################################  Home tab main panel
-
+server_output<-function(input, output, server_env){
 output$files <- renderPrint(
-  list.files(path())
+  list.files(server_env$path())
   )
 
 output$AnalysisRunDescriptionHeader<-renderUI({
-  df()
+  server_env$df()
   if (MEDSET_FLAG){
     wellPanel(
       #strong("Analysis Run:"),
-      h4(getAnalysisName())
+      h4(server_env$getAnalysisName())
     )
   }else{
     wellPanel(
@@ -25,26 +25,26 @@ output$AnalysisRunDescriptionHeader<-renderUI({
 })
 
 output$AnalysisRunParameterTable<-renderTable({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
     withProgress(message = 'Loading datasets in progress\n',
                  detail = 'This may take a while...', value = 0, style = getShinyOption('old'),
                  {
     output<-list()
     print("Starting table")
-    results<-dataset()
+    results<-server_env$dataset()
     print("...............................MeDeComSet...........................")
     print("...............................MeDeComSet_ende...........................")
-    
+
     for(name in names(ANALYSIS_META_INFO[["analysis_params"]])){
       incProgress(1/length(names(ANALYSIS_META_INFO[["analysis_params"]])))
       display_name<-ANALYSIS_META_INFO[["analysis_params"]][name]
       if(name %in% names(results@parameters)){
         val<-results@parameters[[name]]
         if(name %in% c("lambdas")){
-          val<-sort(val)						
+          val<-sort(val)
         }
-        
+
         if(is.integer(val)){
           val<-as.character(val)
         }else{
@@ -56,9 +56,9 @@ output$AnalysisRunParameterTable<-renderTable({
           }
         }
       }else if(name %in% "NO_OF_SAMPLES"){
-        val<-as.character(ncol(getMethData()))
+        val<-as.character(ncol(server_env$getMethData()))
       }else if(name %in% "REFERENCE_PROFILES"){
-        val<-paste(colnames(getTrueT()), collapse=", ")
+        val<-paste(colnames(server_env$getTrueT()), collapse=", ")
       }else{
         val=""
       }
@@ -75,24 +75,24 @@ output$AnalysisRunParameterTable<-renderTable({
     table
                  })
   }else{
-    
+
   }
 }, width=1000, include.rownames=FALSE)
 
 ##################################### K selection main panel
 output$RMSEvsKplot<-renderPlot({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-  doKselectionPlot()
+  server_env$doKselectionPlot()
   }
 })
 
 ######################## Lambda selection main panel
 output$performancePanel<-renderUI({
-  df()
+  server_env$df()
   if(!is.null(input$performanceMode)&&   !is.null(input$lambdaMin) && !is.null(input$lambdaMax)){
   if(input$performanceMode=="lineplots"){
-    list(plotOutput('lineplot', 
+    list(plotOutput('lineplot',
                     height = "800px",
                     width = "600px"),
          br(),
@@ -104,13 +104,13 @@ output$performancePanel<-renderUI({
 })
 
 output$lineplot <- renderPlot({
-  df()
-  doLambdaPlot()
+  server_env$df()
+  server_env$doLambdaPlot()
 })
 
 output$performanceTable<-renderTable({
-  df()
-  results<-dataset()
+  server_env$df()
+  results<-server_env$dataset()
   gr<-as.integer(input$cg_group_2)
   elts<-PERFORMANCE_MEASURES
   output<-list()
@@ -147,7 +147,7 @@ output$performanceTable<-renderTable({
 
 ######################## LMC main panel
 output$componentsPanel<-renderUI({
-  df()
+  server_env$df()
   K<-input$K_3
   if(!is.null(input$componentPlotType)){
   if(input$componentPlotType=="mds plot" || input$componentPlotType=="dendrogram"){
@@ -181,19 +181,19 @@ output$componentsPanel<-renderUI({
                   width =  w), br(),
        downloadLink("componentPlotPDF", "PDF"))
   }
-  
+
 })
 
 output$componentPlot<-renderPlot({
-  df()
-  doComponentPlot()
-})	
+  server_env$df()
+  server_env$doComponentPlot()
+})
 
 ######################## Proportion Main Panel
 output$proportionplot<-renderPlot({
-  df()
+  server_env$df()
   if(!is.null(input$propPlotType)){
-  doProportionPlot()
+  server_env$doProportionPlot()
   }
 })
 
@@ -204,9 +204,9 @@ output$proportionplot<-renderPlot({
 ########################################### Sidebar outputs for K selection tab
 
 output$groupSelector<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-  results<-dataset()
+  results<-server_env$dataset()
   gr_lists<-results@parameters$cg_subsets
   GROUPS<-1:length(gr_lists)
   if(is.null(names(gr_lists))){
@@ -219,32 +219,32 @@ output$groupSelector<-renderUI({
 })
 
 output$minKselector<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    selectInput('minK', 'Minimum k:', dataset()@parameters$Ks)
+    selectInput('minK', 'Minimum k:', server_env$dataset()@parameters$Ks)
   }
 })
 
 output$maxKselector<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    selectInput('maxK', 'Maximum k:', dataset()@parameters$Ks, selected=dataset()@parameters$Ks[length(dataset()@parameters$Ks)])
+    selectInput('maxK', 'Maximum k:', server_env$dataset()@parameters$Ks, selected=server_env$dataset()@parameters$Ks[length(server_env$dataset()@parameters$Ks)])
   }
 })
 
 output$lambdaSelector<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    LAMBDAS<-dataset()@parameters$lambdas
-    LAMBDA.IDS<-1:length(dataset()@parameters$lambdas)
+    LAMBDAS<-server_env$dataset()@parameters$lambdas
+    LAMBDA.IDS<-1:length(server_env$dataset()@parameters$lambdas)
     names(LAMBDA.IDS)<-as.character(LAMBDAS)
     selectInput('lambda', 'Lambda value', LAMBDA.IDS)
   }
-  
+
 })
 
 output$KvsStat<-renderUI({
-  df()
+  server_env$df()
   p_measure<-c("Objective"="Fval", "CV error"="cve")
   if(METH_DATA_FLAG){
     p_measure<-c(p_measure, "RMSE"="rmse", "RMSE, T"="rmseT",  "MDC, T"="dist2C", "MAE, A"="maeA")
@@ -258,9 +258,9 @@ output$KvsStat<-renderUI({
 ######################################## Sidebar outputs for lambda selection tab
 
 output$groupSelector_2<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    results<-dataset()
+    results<-server_env$dataset()
     gr_lists<-results@parameters$cg_subsets
     GROUPS<-1:length(gr_lists)
     if(is.null(names(gr_lists))){
@@ -273,35 +273,35 @@ output$groupSelector_2<-renderUI({
 })
 
 output$Kselector_2<-renderUI({
-  df()
+  server_env$df()
   #Ks<-dataset()[["Ks"]]
-  Ks<-dataset()@parameters$Ks
+  Ks<-server_env$dataset()@parameters$Ks
   selectInput('K_2', 'Number of LMCs (k)', Ks, selectize=TRUE)
 })
 
 output$minLambdaSelector<-renderUI({
-  df()
-  lambda_list<-sort(dataset()@parameters$lambdas)
+  server_env$df()
+  lambda_list<-sort(server_env$dataset()@parameters$lambdas)
   selectInput('lambdaMin', 'Minimum lambda:', lambda_list, selected=lambda_list[which.min(lambda_list)])
 })
 
 output$maxLambdaSelector<-renderUI({
-  df()
-  lambda_list<-sort(dataset()@parameters$lambdas)
+  server_env$df()
+  lambda_list<-sort(server_env$dataset()@parameters$lambdas)
   selectInput('lambdaMax', 'Maximum lambda:', lambda_list, selected=lambda_list[which.max(lambda_list)])
 })
 
 output$performanceModeSelector<-renderUI({
-  df()
+  server_env$df()
     selectInput('performanceMode', 'Show results as:', c("lineplots","table"), selectize=TRUE)
   })
 
 #################################################### Sidebar output LMCs panel
 
 output$groupSelector_3<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    results<-dataset()
+    results<-server_env$dataset()
     gr_lists<-results@parameters$cg_subsets
     GROUPS<-1:length(gr_lists)
     if(is.null(names(gr_lists))){
@@ -314,45 +314,45 @@ output$groupSelector_3<-renderUI({
 })
 
 output$Kselector_3<-renderUI({
-  df()
+  server_env$df()
   #Ks<-dataset()[["Ks"]]
-  Ks<-dataset()@parameters$Ks
+  Ks<-server_env$dataset()@parameters$Ks
   selectInput('K_3', 'Number of LMCs (k)', Ks, selectize=TRUE)
 })
 
 output$lambdaSelector_3<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    LAMBDAS<-dataset()@parameters$lambdas
-    LAMBDA.IDS<-1:length(dataset()@parameters$lambdas)
+    LAMBDAS<-server_env$dataset()@parameters$lambdas
+    LAMBDA.IDS<-1:length(server_env$dataset()@parameters$lambdas)
     names(LAMBDA.IDS)<-as.character(LAMBDAS)
     selectInput('lambda_3', 'Lambda value', LAMBDA.IDS)
   }
-  
+
 })
 
 output$componentPlotT<-renderUI({
-  df()
+  server_env$df()
   p_type<-c("dendrogram", "extremality", "heatmap", "mds plot", "similarity graph", "scatterplot all","scatterplot matching","scatterplot avg matching")
   if(METH_DATA_FLAG){
     p_type<-c(p_type, "distance to center")
-    
+
   }
-  selectInput('componentPlotType', 'Plot type', 
-              p_type, 
+  selectInput('componentPlotType', 'Plot type',
+              p_type,
               selected=1)
-  
+
 })
 
 output$componentSelector<-renderUI({
-  df()
+  server_env$df()
   comps<-c(1:input$K_3, NA)
   names(comps)<-c(as.character(1:input$K_3), "sum best matching")
   selectInput('component', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=1)#isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
 })
 
 output$topSDcgsSelector<-renderUI({
-  df()
+  server_env$df()
   gr<-as.integer(input$cg_group_3)
   ind<-getCGsubset()
   sliderInput('topSDcpgs', 'Select top SD cgs', min=1, max=length(ind),
@@ -360,8 +360,8 @@ output$topSDcgsSelector<-renderUI({
 })
 
 output$sampleColorSelector<-renderUI({
-  df()
-  pd<-getPhenoData()
+  server_env$df()
+  pd<-server_env$getPhenoData()
   if(!is.null(pd)){
     siteannot<-colnames(pd)
   }else{
@@ -371,14 +371,14 @@ output$sampleColorSelector<-renderUI({
 })
 
 output$pointColorSelector<-renderUI({
-  df()
+  server_env$df()
   cats<-names(getCGcategories())
   feats<-names(getCGquantFeatureSettings())
   selectInput('pointCategory', 'Color data points by:', c("none", cats, feats), selectize=TRUE)
 })
 
 output$pointFilter<-renderUI({
-  df()
+  server_env$df()
   if("pointCategory" %in% names(input) && input$pointCategory!="none"){
     if(input$pointCategory %in% names(getCGcategories())){
       list(
@@ -395,7 +395,7 @@ output$pointFilter<-renderUI({
 })
 
 output$CGcategorySubsetSelector<-renderUI({
-  df()
+  server_env$df()
   if("CGsubsetToCategory" %in% names(input) && input$CGsubsetToCategory && input$pointCategory!="none"){
     cats<-getCGcategories()
     features<-1:length(cats[[input$pointCategory]])
@@ -405,13 +405,13 @@ output$CGcategorySubsetSelector<-renderUI({
 })
 
 output$geneSetSelector<-renderUI({
-  df()
-  gene.sets<-getGeneSets()				
+  server_env$df()
+  gene.sets<-getGeneSets()
   selectInput('geneSet', 'Gene set:', names(gene.sets), selectize=TRUE)
 })
 
 output$locusSelector<-renderUI({
-  df()
+  server_env$df()
   gene.sets<-getGeneSets()
   selectInput('locus', 'Gene:', gene.sets[[input$geneSet]], selectize=TRUE)
 })
@@ -420,9 +420,9 @@ output$locusSelector<-renderUI({
 #################################################### Sidebar output Proportions panel
 
 output$groupSelector_4<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    results<-dataset()
+    results<-server_env$dataset()
     gr_lists<-results@parameters$cg_subsets
     GROUPS<-1:length(gr_lists)
     if(is.null(names(gr_lists))){
@@ -435,33 +435,33 @@ output$groupSelector_4<-renderUI({
 })
 
 output$Kselector_4<-renderUI({
-  df()
+  server_env$df()
   #Ks<-dataset()[["Ks"]]
-  Ks<-dataset()@parameters$Ks
+  Ks<-server_env$dataset()@parameters$Ks
   selectInput('K_4', 'Number of LMCs (k)', Ks, selectize=TRUE)
 })
 
 output$lambdaSelector_4<-renderUI({
-  df()
+  server_env$df()
   if(MEDSET_FLAG){
-    LAMBDAS<-dataset()@parameters$lambdas
-    LAMBDA.IDS<-1:length(dataset()@parameters$lambdas)
+    LAMBDAS<-server_env$dataset()@parameters$lambdas
+    LAMBDA.IDS<-1:length(server_env$dataset()@parameters$lambdas)
     names(LAMBDA.IDS)<-as.character(LAMBDAS)
     selectInput('lambda_4', 'Lambda value', LAMBDA.IDS)
   }
-  
+
 })
 
 output$propPlotT<-renderUI({
-  df()
+  server_env$df()
   p_measure<-c("heatmap", "barplot", "lineplot", "scatterplot", "stratification plot", "correlations")
-  selectInput('propPlotType', 'Plot type', 
-              p_measure, 
-              selected=1)  
+  selectInput('propPlotType', 'Plot type',
+              p_measure,
+              selected=1)
 })
 
 output$propMatrixSelector<-renderUI({
-  df()
+  server_env$df()
   if(!is.null(input$propPlotType)){
   if(input$propPlotType=="scatterplot"){
     prop_mats<-c("regression")
@@ -475,11 +475,11 @@ output$propMatrixSelector<-renderUI({
   }
   selectInput('propMatrix', labl, prop_mats, selectize=TRUE)
   }
-  
+
 })
 
 output$componentSelectorRef<-renderUI({
-  df()
+  server_env$df()
   comps<-c(1:input$K_ref)
   selectInput('component_ref', 'LMC (ref analysis):', comps, selectize=TRUE, multiple=TRUE, selected=isolate({
     if("component_ref" %in% names(input))as.character(input$component_ref) else 1
@@ -487,32 +487,33 @@ output$componentSelectorRef<-renderUI({
 })
 
 output$componentSelector_4<-renderUI({
-  df()
+  server_env$df()
   comps<-c(1:input$K_4, NA)
   names(comps)<-c(as.character(1:input$K_4), "sum best matching")
   selectInput('component_4', 'LMC:', comps, selectize=TRUE, multiple=TRUE, selected=1)#isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
 })
 
 output$refProfileSelector<-renderUI({
-  df()
-  rprofiles<-c(NA)
-  rprofile_names<-c("best_matching")
-  if(!is.null(getTrueT())){ 
+  server_env$df()
+  rprofiles<-c()
+  rprofile_names<-c()
+  if(!is.null(getTrueT())){
     rprofiles<-c(rprofiles, 1:ncol(getTrueT()))
     rprofile_names_add<-colnames(getTrueT())
+    print(rprofile_names_add)
     if(is.null(rprofile_names_add)){
       rprofile_names_add<-as.character(1:ncol(getTrueT()))
     }
-    rprofile_names<-c(rprofile_names, rprofile_names)
+    rprofile_names<-c(rprofile_names, rprofile_names_add)
   }
   names(rprofiles)<-rprofile_names
-  selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE, multiple=TRUE)
-  
+  selectInput('profile', 'Reference Profile:', rprofiles, selectize=TRUE)
+
 })
 
 output$sampleColorSelector_4<-renderUI({
-  df()
-  pd<-getPhenoData()
+  server_env$df()
+  pd<-server_env$getPhenoData()
   if(!is.null(pd)){
     siteannot<-colnames(pd)
   }else{
@@ -520,3 +521,4 @@ output$sampleColorSelector_4<-renderUI({
   }
   selectInput('mdsDataCat_4', 'Color samples by:', c("none", siteannot), selectize=TRUE)
 })
+}

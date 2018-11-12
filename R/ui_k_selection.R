@@ -1,5 +1,6 @@
 # This script contains the code related to K selection tab
-k_selec<-tabPanel(title="K selection", id="k_select", 
+k_selec<-function(){
+  tabPanel(title="K selection", id="k_select",
                   sidebarPanel(
                     width = 2,
                     uiOutput("groupSelector"),
@@ -15,11 +16,11 @@ k_selec<-tabPanel(title="K selection", id="k_select",
                     ),
                     uiOutput("lambdaSelector"),
                     checkboxInput("addPlotTitle", "Add plot titles", value=TRUE)
-                    
-                    
+
+
                   ),
                   mainPanel(
-                    value='RMSEvsK', 
+                    value='RMSEvsK',
                     plotOutput('RMSEvsKplot'
                                ,height = "450px"
                                ,width = "600px"
@@ -28,3 +29,4 @@ k_selec<-tabPanel(title="K selection", id="k_select",
                     downloadLink('RMSEvsKplotPDF', label = "PDF", class = NA)
                   )
                  )
+                 }
