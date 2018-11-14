@@ -2,11 +2,6 @@
 # tabs can be found inside UI folder.
 
 baseUI <- function(){
-          #source('ui_home.R', local = T)
-          #source('ui_k_selection.R', local = T)
-          #source('ui_l_selection.R', local = T)
-          #source('ui_lmc.R', local = T)
-          #source('ui_proportions.R', local = T)
           tagList(
             navbarPage(
               theme = shinythemes::shinytheme("cosmo"),
@@ -16,9 +11,9 @@ baseUI <- function(){
               l_selec(),
               lmc_tab(),
               proportion(),
-              tabPanel("Meta Analysis", "Page Under Construction"),
-              #tabPanel("Meta Analysis", "This panel is intentionally left blank"),
-              tabPanel("Downloads", "Page Underconstruction")
+              #meta_analysis(),
+              tabPanel("Meta Analysis", "Page Under construction"),
+              tabPanel("Downloads", "Page Under construction")
             )
           )
         }

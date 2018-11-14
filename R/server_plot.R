@@ -204,4 +204,281 @@ server_env$doProportionPlot<-function(){
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows)
 }
+
+doComparisonPlot<-function(){
+  
+  if(length(input$compareMatrices)>0){
+    
+    cg_subset<-system_env$getCGsubset()
+    cg_subset_ref<-system_env$getCGsubsetRef()
+    sample_subset<-system_env$getSampleSubset()
+    sample_subset_ref<-system_env$getRefSampleSubset()
+    
+    cpg_intersect<-intersect(cg_subset, cg_subset_ref)
+    
+    if(length(cpg_intersect)<1){
+      return(invisible(NULL))
+    }			
+    
+    
+    cg_map<-match(cpg_intersect,cg_subset)
+    cg_map_ref<-match(cpg_intersect, cg_subset_ref)
+    
+    #cg_map<-cg_subset
+    
+    mdd<-matrix(NA, nrow=length(cpg_intersect), ncol=0)
+    
+    results <-system_env$dataset()
+    gr<-as.integer(input$cg_group_5)
+    ll<-as.integer(input$lambda_5)
+    K<-as.integer(input$K_5)
+    #finds out the index of k in Ks
+    Ks<-results@parameters$Ks
+    index <- NULL
+    for (i in 1:length(Ks)){
+      if(Ks[i]==K){
+        index <- as.numeric(i)
+      }	
+    }		
+    
+    ll_ref<-as.integer(input$lambda_ref)
+    sds<-NULL			
+    
+    if("That" %in% input$compareMatrices){
+      That<-system_env$dataset()@outputs[[as.character(gr)]]$T[[index,ll]][cg_map,]
+      
+      colnames(That)<-paste0(paste0(input$analysisToken, "_LMC"), 1:ncol(That))
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
+      }else{
+        mdd<-cbind(mdd, That)
+      }
+      if(input$SDCompareMatrices=="That"){
+        sds<-apply(That,1,sd)
+      }
+    }
+    
+    if("D" %in% input$compareMatrices){
+      D<-system_env$getMethData()[cg_subset,sample_subset][cg_map,]
+      sn<-system_env$getSampleNames()[sample_subset]
+      if(is.null(sn)){
+        colnames(D)<-paste(paste0(input$analysisToken, "_D"), 1:ncol(D), sep="_")
+      }else{
+        colnames(D)<-sn
+      }
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(D,1,rowMeans(D),"-"))
+      }else{
+        mdd<-cbind(mdd, D)
+      }
+      if(input$SDCompareMatrices=="D"){
+        sds<-apply(D,1,sd)
+      }
+    }
+    
+    if("Tstar" %in% input$compareMatrices){
+      Tref<-system_env$getTrueT()[cg_subset,][cg_map,]
+      if(is.null(colnames(Tref))){
+        colnames(Tref)<-paste(paste0(input$analysisToken, "_Tstar"), 1:ncol(Tref), sep="_")
+      }
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(Tref,1,rowMeans(Tref),"-"))
+      }else{
+        mdd<-cbind(mdd, Tref)
+      }
+      if(input$SDCompareMatrices=="Tstar"){
+        sds<-apply(Tref,1,sd)
+      }
+    }
+    
+    samps<-1:ncol(mdd)
+    
+    if("refThat" %in% input$compareMatrices){
+      print(input$K_ref)
+      That<-server_env$dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
+      
+      colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(That,1,rowMeans(That),"-"))
+      }else{
+        mdd<-cbind(mdd,That)
+      }
+      
+    }
+    
+    if("refD" %in% input$compareMatrices){
+      D<-server_env$getRefMethData()[cg_subset_ref,sample_subset_ref][cg_map_ref,]
+      sn<-server_env$getRefSampleNames()[sample_subset_ref]
+      if(is.null(sn)){
+        colnames(D)<-paste(paste0(input$refAnalysisToken,"D"), 1:ncol(D), sep="_")
+      }else{
+        colnames(D)<-paste(paste0(input$refAnalysisToken,"_D_"), sn, sep="_")
+      }
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(D,1,rowMeans(D),"-"))
+      }else{
+        mdd<-cbind(mdd,D)
+      }
+    }
+    
+    if("refTstar" %in% input$compareMatrices){
+      Tref<-server_env$getRefTrueT()[cg_subset_ref,][cg_map_ref,]
+      if(is.null(colnames(Tref))){
+        colnames(Tref)<-paste(paste0(input$refAnalysisToken,"Tstar"), 1:ncol(Tref), sep="_")
+      }else{
+        colnames(Tref)<-paste(paste0(input$refAnalysisToken,"_Tstar_"), colnames(Tref), sep="_")
+        
+      }
+      if(input$correlationCentered){
+        mdd<-cbind(mdd,sweep(Tref,1,rowMeans(Tref),"-"))
+      }else{
+        mdd<-cbind(mdd,Tref)
+      }
+      
+    }
+    
+    if(input$topSDcpgsCompare<nrow(mdd)){
+      if(is.null(sds)){
+        sds<-apply(mdd,1,sd)
+      }
+      mdd<-mdd[order(sds, decreasing=TRUE)[1:input$topSDcpgsCompare], ]
+    }
+    
+    if(ncol(mdd)>length(samps)){
+      ref_samps<-(samps[length(samps)]+1):ncol(mdd)
+    }else{
+      ref_samps<-NULL
+    }
+    
+    if(input$comparativePlotType=="dendrogram"){
+      
+      if(input$mdsDist=="euclidean"){
+        d <- dist(t(mdd))
+      }else{
+        d<-as.dist(1-cor(mdd))
+      }
+      labelColors <- c("red","blue")
+      colLab <- function(n) {
+        if (is.leaf(n)) {
+          a <- attributes(n)
+          labCol <- labelColors[as.integer(grepl(input$refAnalysisToken, a$label))+1]
+          attr(n, "nodePar") <- c(a$nodePar, lab.col = labCol)
+        }
+        n
+      }
+      
+      hcl_obj<-hclust(d, method="average")
+      dendr<-as.dendrogram(hcl_obj)
+      dendr<-dendrapply(dendr, colLab)
+      
+      if(!is.null(runPart)){
+        plot(dendr)
+        return(hcl_obj)
+      }else{
+        plot(dendr)
+      }
+      
+    }else if(input$comparativePlotType=="heatmap"){
+      
+      max_rows<-20000
+      
+      heatmap.2(mdd[1:min(max_rows, nrow(mdd)),], 
+                trace="none", scale="none", col=zero2oneCols, margins=c(10,5), labRow=FALSE)
+      
+    }else if(input$comparativePlotType=="correlation heatmap"){
+      
+      MeDeCom:::components.heatmap(mdd[,samps,drop=FALSE], if(!is.null(ref_samps)) mdd[,ref_samps,drop=FALSE] else NULL, margins=c(5,7), cexRow=1, top.sd.cgs=NA, centered=input$correlationCentered)
+      
+    }else{
+      
+    }		
+  }
+}
+
+
+
+server_env$doDiffCGPlot<-function(){
+  #values$change
+  results<-server_env$dataset()
+  gr<-as.integer(input$cg_group_5)
+  ll<-as.integer(input$lambda_5)
+  K<-input$K_5
+  #finds out the index of k in Ks
+  Ks<-results@parameters$Ks
+  index <- NULL
+  for (i in 1:length(Ks)){
+    if(Ks[i]==K){
+      index <- as.numeric(i)
+    }
+  }	
+  
+  cmp_group1<-as.integer(input$componentGroup1)
+  cmp_group2<-as.integer(input$componentGroup2)
+  
+  That<-results@outputs[[gr]]$T[[index,ll]]
+  
+  if(length(cmp_group1)>0 && length(cmp_group2)>0){
+    
+    meth_diff<-rowMeans(That[,cmp_group1,drop=FALSE])-rowMeans(That[,cmp_group2,drop=FALSE])
+    
+    xl<-min(1.0, max(abs(meth_diff))+0.1)
+    
+    hist(meth_diff, breaks=200, xlim=c(-xl,xl), main="", xlab="(mean) methylation difference")
+    abline(v=input$dmr_threshold)
+    abline(v=-input$dmr_threshold)
+    if(input$addPlotTitle){
+      title(sprintf("LMC(s) %s vs LMC(s) %s",
+                    paste(input$componentGroup1, collapse=", "),
+                    paste(input$componentGroup2, collapse=", ")
+      ))
+    }
+  }
+}
+
+server_env$doPhenotypeModelPlot<-function(){
+  results<-server_env$dataset()
+  lls<-sort(results@parameters$lambdas)
+  Kvals<-results@parameters$Ks
+  Ks<-results@parameters$Ks
+  index <- NULL
+  for (i in 1:length(Ks)){
+    if(Ks[i]==Kvals){
+      index <- as.numeric(i)
+    }
+  }	
+  
+  pheno_data<-server_env$getPhenoData()[server_env$getSampleSubset(),,drop=FALSE]
+  
+  pval_matrix<-matrix(0, ncol=length(Kvals),nrow=length(lls))
+  
+  blue.cols<-colorRampPalette(c("white", "blue"))
+  
+  target_var<-input$phenoTarget
+  adj_vars<-input$phenoAdjust
+  
+  for(k in Kvals){
+    for(lambda in sort(lls)){
+      Ahat<-results@outputs[[input$cg_group_5]]$A[[as.integer(as.character(index)),match(lambda, lls)]]
+      
+      fit<-fitPhenotypeModel(Ahat, pheno_data, target_var, adj_vars, input$zeroLevel, input$discardLMC)
+      
+      sf<-summary(fit)
+      global.p<-pf(sf$fstatistic[1], sf$fstatistic[2], sf$fstatistic[3], lower.tail=FALSE)
+      min.cmp.p<-min(sf$coefficients[-1,4])
+      
+      if(input$modelPval=="overall"){
+        pval_matrix[which(lls==lambda),which(Kvals==k)]<-global.p
+      }else if(input$modelPval=="minimal"){
+        pval_matrix[which(lls==lambda),which(Kvals==k)]<-min.cmp.p
+      }
+    }}
+  N_COL_BINS<-10
+  
+  heatmap.2(-log10(pval_matrix),
+            cellnote=matrix(as.character(round(-log10(pval_matrix),3)),ncol=ncol(pval_matrix)),
+            col=blue.cols(N_COL_BINS-1),
+            labCol=as.character(Kvals), labRow=sprintf("%g", lls), 
+            scale="none", trace="none", Colv=NA, Rowv=NA, 
+            key.xlab="-log10(p)", key.title="")
+}
 }

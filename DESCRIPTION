@@ -19,10 +19,14 @@ Depends:
     grid,
     gridExtra,
     DT,
-    MeDeCom
-Suggests:
+    MeDeCom,
     RnBeads,
-    rGREAT,
-    R.matlab
+    RnBeads.hg19,
+    RnBeads.mm10,
+    RnBeads.hg38
+Suggests:
+    R.matlab,
+    LOLA,
+    GOstats
 License: GPL-3
 RoxygenNote: 6.1.1
