@@ -1,7 +1,7 @@
 # base file to call from commad line
 
-# starttest
-# @export
+#' startFactorViz
+#' @export
 
 #source("app.R", local=T)
 startFactorViz <- function() {
@@ -65,6 +65,8 @@ startFactorViz <- function() {
       gene_set_object <<- NULL
 
       medecom_ref_object<<-NULL
+
+      lola.db<<-NULL
       }
   )
 

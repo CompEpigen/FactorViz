@@ -78,6 +78,6 @@ meta_analysis <- function() {
       checkboxInput("addPlotTitle", "Add plot titles", value =
                       TRUE)
     ),
-    mainPanel(uiOutput('metaAnalysisPanel'))
+    mainPanel(uiOutput('metaAnalysisPanel'), uiOutput('additionalMetaPlots'))
   )
 }

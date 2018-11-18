@@ -268,7 +268,12 @@ server_output <- function(input, output, server_env) {
   output$diffCGPlot<-renderPlot({
     server_env$doDiffCGPlot();
   })
-
+  output$additionalMetaPlots<-renderUI({
+    plotOutput("metaPlot")
+    })
+output$metaPlot<-renderPlot({
+  server_env$doMetaPlot()
+  })
 
   output$comparisonPlot <- renderPlot({
     server_env$doComparisonPlot()

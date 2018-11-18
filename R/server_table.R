@@ -87,7 +87,6 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
     }else if(input$diffTableType=="differential"){
       type="differential"
     }
-    lola.db<-NULL
     loladb_path=NULL
     if (input$assembly=="hg38"){
        loladb_path="/home/reaper/epigen/GIT/lola_hg38.RData"
@@ -99,12 +98,13 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
     if(file.exists(loladb_path)){
       new.envi <- new.env()
       load(loladb_path, envir=new.envi)
-      lola.db <- get(ls(envir = new.envi),envir = new.envi)
+      lola.db <<- get(ls(envir = new.envi),envir = new.envi)
       new.envi <- new.env()
       gc()
     }else{
-        lola.db<-MeDeCom::load.lola.for.medecom(dir.path=tempdir(), assembly=input$assembly)
+        lola.db<<-MeDeCom::load.lola.for.medecom(dir.path=tempdir(), assembly=input$assembly)
     }
+    print(lola.db)
     out<- tryCatch({
       MeDeCom::lmc.lola.enrichment(results,
         annotation.filter=NULL,
