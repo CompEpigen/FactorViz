@@ -10,7 +10,7 @@ meta_analysis <- function() {
       uiOutput("Kselector_5"),
       selectInput("analysisType", "Analysis:",
                   c(if(!is.null(medecom_ref_object)) "compare LMCs" else NULL,
-                    "differential methylation", "phenotype modeling"), selected=1),
+                    "differential methylation"), selected=1),
       conditionalPanel('input.analysisType === "compare LMCs" ',
                        wellPanel(
                          h5("Select a reference run:"),
@@ -33,12 +33,11 @@ meta_analysis <- function() {
 
       ),
       conditionalPanel(' input.analysisType === "differential methylation" ',
-
-                       uiOutput("dmCGComponentSelector"),
-                       selectInput("diffTableType", "Direction:", c("hypermethylated","hypomethylated"), selected=1),
-                       sliderInput('dmr_threshold', 'Threshold', min=0.0, max=1.0, step=0.01, value=1.0),
-                       selectInput('diffOutputType', "Output type:", c("Table", "GO Enrichments"), selected=1)
-
+                        selectInput('diffOutputType', "Output type:", c("Table", "GO Enrichments", "LOLA Enrichments"), selected=1),
+                        conditionalPanel('input.diffOutputType === "Table"',
+                       uiOutput("dmCGComponentSelector")),
+                       uiOutput("diffTabT"),
+                       sliderInput('dmr_threshold', 'Threshold', min=0.0, max=1.0, step=0.01, value=1.0)
       ),
 
       #conditionalPanel(' input.analysisType === "differential methylation" &&
@@ -47,15 +46,15 @@ meta_analysis <- function() {
 
       #),
       conditionalPanel(' input.analysisType === "differential methylation" &&
-                       input.diffOutputType === "Go enrichments" ',
-
-                       selectInput('GO results', "Show:",
-                                   c("start screen",
-                                     "region-gene associations (table)",
-                                     "enriched ontologies (table)",
-                                     "region-gene associations for term")),
-                       uiOutput("GOoptionsSelector"),
-                       actionButton('GREATsubmitQuery', "Submit GREAT query")
+                       (input.diffOutputType === "GO Enrichments" || input.diffOutputType === "LOLA Enrichments" )',
+                       uiOutput("region_selector"),
+                       uiOutput("assemblySelector"),
+                       conditionalPanel('input.diffOutputType === "GO Enrichments" ',
+                        uiOutput("lmcgoSelector"),
+                        actionButton('GOsubmitQuery', "Submit GO query")),
+                       conditionalPanel('input.diffOutputType === "LOLA Enrichments" ',
+                       uiOutput("lmclolaSelector"),
+                         actionButton('LOLAsubmitQuery', "Submit LOLA query"))
 
       ),
       conditionalPanel(' input.analysisType === "compare LMCs" &&
@@ -63,16 +62,16 @@ meta_analysis <- function() {
 
                        checkboxInput("correlationCentered_5", "Center matrices", value=FALSE)
       ),
-      conditionalPanel(' input.analysisType === "phenotype modeling" ',
+      #conditionalPanel(' input.analysisType === "phenotype modeling" ',
 
-                       selectInput("phenoModelOutput", "Output:", choices=c("summary plot",
-                                                                            "single case")),
-                       uiOutput("targetVariableSelector"),
-                       uiOutput("adjustmentVariableSelector"),
-                       selectInput("discardLMC", "Which LMC to discard:", choices=c("largest", "smallest"), selected=1),
-                       selectInput("modelPval", "p-value:", choices=c("overall", "minimal"), selected=1)
+      #                 selectInput("phenoModelOutput", "Output:", choices=c("summary plot",
+      #                                                                      "single case")),
+      #                 uiOutput("targetVariableSelector"),
+      #                 uiOutput("adjustmentVariableSelector"),
+      #                 selectInput("discardLMC", "Which LMC to discard:", choices=c("largest", "smallest"), selected=1),
+      #                 selectInput("modelPval", "p-value:", choices=c("overall", "minimal"), selected=1)
 
-      ),
+      #),
 
 
 

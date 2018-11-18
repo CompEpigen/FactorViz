@@ -104,9 +104,43 @@ server_output_meta <- function(input, output, server_env) {
     )
     }
   })
-  output$GOoptionsSelector <- renderUI({
+  output$diffTabT<-renderUI({
+    direct<-c("hypermethylated","hypomethylated")
+    if (input$diffOutputType== "GO Enrichments" || input$diffOutputType== "LOLA Enrichments"){
+      direct<-c(direct, "differential")
+    }
+    selectInput("diffTableType", "Direction:", direct, selected=1)
+    })
 
+  output$region_selector<- renderUI({
+    region_t=c("genes", "promoters")
+    if (input$diffOutputType == "GO Enrichments" && !is.null(input$assembly) && input$assembly=="hg38"){
+      region_t=c(region_t, "gencode22genes", "gencode22promoters")
+    }
+    if(input$diffOutputType == "LOLA Enrichments"){
+      region_t=c(region_t, "tilling", "tiling200bp", "tiling500bp", "tiling1kb","tiling10kb", "cpgislands")
+      if((!is.null(input$assembly)) && (input$assembly=="hg38" || input$assembly=="hg19")){
+      region_t=c(region_t,"ensembleRegBuildBPall")
+      }
+    }
+          selectInput("region_type", "Region Type:", choices=region_t, selected=1)
+    })
+
+  output$assemblySelector <- renderUI({
+      selectInput("assembly", "Genome Assembly:", choices=c("hg38", "hg19", "mm10"), selected=1)
   })
+
+
+output$lmcgoSelector<-renderUI({
+  server_env$getGOEnrichmenttable()
+  server_env$lmcgoSelect()
+})
+
+
+output$lmclolaSelector<-renderUI({
+  server_env$getLOLAEnrichmenttable()
+  server_env$lmclolaSelect()
+})
 
   output$targetVariableSelector <- renderUI({
     pheno <- server_env$getPhenoData()

@@ -241,7 +241,10 @@ server_output <- function(input, output, server_env) {
              DT::dataTableOutput('diffCGTable')
            }
            else if (input$diffOutputType == "GO Enrichments") {
-            DT::dataTableOutput('goEnrichementTable')
+             DT::dataTableOutput('goEnrichementTable')
+           }
+           else if (input$diffOutputType == "LOLA Enrichments") {
+             DT::dataTableOutput('lolaEnrichementTable')
            }
            else{
              br()

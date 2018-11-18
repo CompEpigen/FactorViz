@@ -14,14 +14,14 @@ server_output_proportion <- function(input, output, server_env) {
                     TRUE)
     }
   })
-  
+
   output$Kselector_4 <- renderUI({
     server_env$df()
     #Ks<-dataset()[["Ks"]]
     Ks <- server_env$dataset()@parameters$Ks
     selectInput('K_4', 'Number of LMCs (k)', Ks, selectize = TRUE)
   })
-  
+
   output$lambdaSelector_4 <- renderUI({
     server_env$df()
     if (MEDSET_FLAG) {
@@ -30,9 +30,9 @@ server_output_proportion <- function(input, output, server_env) {
       names(LAMBDA.IDS) <- as.character(LAMBDAS)
       selectInput('lambda_4', 'Lambda value', LAMBDA.IDS)
     }
-    
+
   })
-  
+
   output$propPlotT <- renderUI({
     server_env$df()
     p_measure <-
@@ -48,7 +48,7 @@ server_output_proportion <- function(input, output, server_env) {
                 p_measure,
                 selected = 1)
   })
-  
+
   output$propMatrixSelector <- renderUI({
     server_env$df()
     if (!is.null(input$propPlotType)) {
@@ -64,9 +64,9 @@ server_output_proportion <- function(input, output, server_env) {
       }
       selectInput('propMatrix', labl, prop_mats, selectize = TRUE)
     }
-    
+
   })
-  
+
   output$componentSelectorRef <- renderUI({
     server_env$df()
     comps <- c(1:input$K_ref)
@@ -84,7 +84,7 @@ server_output_proportion <- function(input, output, server_env) {
       })
     )
   })
-  
+
   output$componentSelector_4 <- renderUI({
     server_env$df()
     comps <- c(1:input$K_4, NA)
@@ -98,25 +98,25 @@ server_output_proportion <- function(input, output, server_env) {
       selected = 1
     )#isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
   })
-  
+
   output$refProfileSelector <- renderUI({
     server_env$df()
     rprofiles <- c()
     rprofile_names <- c()
-    if (!is.null(getTrueT())) {
-      rprofiles <- c(rprofiles, 1:ncol(getTrueT()))
-      rprofile_names_add <- colnames(getTrueT())
+    if (!is.null(server_env$getTrueT())) {
+      rprofiles <- c(rprofiles, 1:ncol(server_env$getTrueT()))
+      rprofile_names_add <- colnames(server_env$getTrueT())
       print(rprofile_names_add)
       if (is.null(rprofile_names_add)) {
-        rprofile_names_add <- as.character(1:ncol(getTrueT()))
+        rprofile_names_add <- as.character(1:ncol(server_env$getTrueT()))
       }
       rprofile_names <- c(rprofile_names, rprofile_names_add)
     }
     names(rprofiles) <- rprofile_names
     selectInput('profile', 'Reference Profile:', rprofiles, selectize = TRUE)
-    
+
   })
-  
+
   output$sampleColorSelector_4 <- renderUI({
     server_env$df()
     pd <- server_env$getPhenoData()

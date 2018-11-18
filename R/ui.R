@@ -11,8 +11,8 @@ baseUI <- function(){
               l_selec(),
               lmc_tab(),
               proportion(),
-              #meta_analysis(),
-              tabPanel("Meta Analysis", "Page Under construction"),
+              meta_analysis(),
+              #tabPanel("Meta Analysis", "Page Under construction"),
               tabPanel("Downloads", "Page Under construction")
             )
           )
