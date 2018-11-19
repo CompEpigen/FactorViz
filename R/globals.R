@@ -71,7 +71,6 @@ GREAT_ONTOLOGIES<<-
 		)
 
 
-GREAT_CRITERIA<<-c("oneClosest", "twoClosest", "basalPlusExt")
 
 #
 # Set of meta-information tags for the deconvolution experiments

@@ -40,10 +40,11 @@ server_output_proportion <- function(input, output, server_env) {
         "heatmap",
         "barplot",
         "lineplot",
-        "scatterplot",
-        "stratification plot",
         "correlations"
       )
+      if(TRUE_A_FLAG){
+          p_measure<-c(p_measure, "scatterplot")
+      }
     selectInput('propPlotType', 'Plot type',
                 p_measure,
                 selected = 1)
@@ -87,8 +88,13 @@ server_output_proportion <- function(input, output, server_env) {
 
   output$componentSelector_4 <- renderUI({
     server_env$df()
+    if(!is.null(input$K_4)){
     comps <- c(1:input$K_4, NA)
     names(comps) <- c(as.character(1:input$K_4), "sum best matching")
+    }else{
+      comps <- c(NA)
+      names(comps) <- c("sum best matching")
+    }
     selectInput(
       'component_4',
       'LMC:',
@@ -96,7 +102,7 @@ server_output_proportion <- function(input, output, server_env) {
       selectize = TRUE,
       multiple = TRUE,
       selected = 1
-    )#isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
+    )
   })
 
   output$refProfileSelector <- renderUI({
@@ -119,15 +125,18 @@ server_output_proportion <- function(input, output, server_env) {
 
   output$sampleColorSelector_4 <- renderUI({
     server_env$df()
-    pd <- server_env$getPhenoData()
-    if (!is.null(pd)) {
-      siteannot <- colnames(pd)
-    } else{
-      siteannot <- character()
+      if(PHENO_DATA_FLAG){
+      pd <- server_env$getPhenoData()
+      if (!is.null(pd)) {
+        siteannot <- colnames(pd)
+      } else{
+        siteannot <- character()
+      }
+      selectInput('mdsDataCat_4',
+                  'Color samples by:',
+                  c("none", siteannot),
+                  selectize = TRUE)
     }
-    selectInput('mdsDataCat_4',
-                'Color samples by:',
-                c("none", siteannot),
-                selectize = TRUE)
-  })
+    })
+
 }

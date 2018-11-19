@@ -132,6 +132,11 @@ output$lolaEnrichementTable<-DT::renderDataTable({
     result<-server_env$getLOLAEnrichmenttable()[[input$lmc_lola]]
     numVars<-sapply(result, is.numeric)
     result[numVars] <- lapply(result[numVars], round, digits = 2)
+    numVars<-names(result)
+    selected<-c('dbSet','collection','pValueLog', 'oddsRatio', 'description', 'cellType', 'qValue')
+    result$description <- gsub(x = result$description, pattern = ";", replace = ", ")
+    print(selected)
+    result<-result[, selected]
     return(result)
   }else{
     return(data.frame())

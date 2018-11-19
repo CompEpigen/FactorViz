@@ -218,8 +218,6 @@ server_output <- function(input, output, server_env) {
   ######################## Meta-Analysis Panel
 
   output$metaAnalysisPanel <- renderUI({
-    w = 500
-    h = 500
     if (input$analysisType == "compare LMCs") {
       list(
         plotOutput(

@@ -175,9 +175,6 @@ server_env$doProportionPlot<-function(){
   lambda <- lambdas[ll]
 
   Aref<-server_env$getTrueA()
-  ind<-server_env$getCGsubset_4()
-  trueT<-server_env$getTrueT()
-  Tref<-trueT[ind,]
 
   if(input$propPlotType == "heatmap"){
     if(input$mdsDataCat_4!="none"){

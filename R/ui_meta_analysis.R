@@ -10,7 +10,7 @@ meta_analysis <- function() {
       uiOutput("Kselector_5"),
       selectInput("analysisType", "Analysis:",
                   c(if(!is.null(medecom_ref_object)) "compare LMCs" else NULL,
-                    "differential methylation"), selected=1),
+                    "differential methylation", "Enrichments"), selected=1),
       conditionalPanel('input.analysisType === "compare LMCs" ',
                        wellPanel(
                          h5("Select a reference run:"),
