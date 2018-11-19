@@ -48,8 +48,10 @@ server_env$getGOEnrichmenttable<-eventReactive(input$GOsubmitQuery, {
 output$goEnrichementTable<-DT::renderDataTable({
   server_env$getGOEnrichmenttable()
   if(!is.null(input$lmc_go)){
-    require(GOstats)
-    return(summary(server_env$getGOEnrichmenttable()[[input$lmc_go]]))
+    result<-server_env$getGOEnrichmenttable()[[input$lmc_go]]
+    numVars<-sapply(result, is.numeric)
+    result[numVars] <- lapply(result[numVars], round, digits = 2)
+    return(result)
   }else{
     return(data.frame())
   }
@@ -127,7 +129,10 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
 output$lolaEnrichementTable<-DT::renderDataTable({
   server_env$getLOLAEnrichmenttable()
   if(!is.null(input$lmc_lola)){
-    return(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])
+    result<-server_env$getLOLAEnrichmenttable()[[input$lmc_lola]]
+    numVars<-sapply(result, is.numeric)
+    result[numVars] <- lapply(result[numVars], round, digits = 2)
+    return(result)
   }else{
     return(data.frame())
   }

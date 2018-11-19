@@ -1,9 +1,8 @@
 # base file to call from commad line
 
 #' startFactorViz
+#' This function intialises factorviz and start, it accepts no parameters
 #' @export
-
-#source("app.R", local=T)
 startFactorViz <- function() {
   require(shiny)
   require(shinyFiles)
@@ -72,4 +71,3 @@ startFactorViz <- function() {
 
   shiny::runApp(app)
 }
-#startFactorViz()
