@@ -49,7 +49,7 @@ lmc_tab <- function() {
       "mdsInclude",
       "Include data:",
       c("references" = "ref", "all data" = "data"),
-      selected = 1
+      selected = 2
     )
   ),
   conditionalPanel(
@@ -61,15 +61,15 @@ lmc_tab <- function() {
       c("hide" = "hide", "show" = "show"),
       selected = 1
     )
-    
+
   ),
   conditionalPanel(
     'input.componentPlotType === "mds plot" &&
     input.mdsInclude === "data"',
     uiOutput("sampleColorSelector")
-    
+
   ),
-  
+
   conditionalPanel(
     'input.componentPlotType !== "heatmap" &&
     input.componentPlotType !== "mds plot" &&
@@ -93,7 +93,7 @@ lmc_tab <- function() {
     uiOutput("pointColorSelector"),
     uiOutput("pointFilter"),
     uiOutput("CGcategorySubsetSelector")
-    
+
   ),
   conditionalPanel(
     'input.componentPlotType === "locus plot"',
@@ -136,7 +136,7 @@ lmc_tab <- function() {
       max = 100000,
       step = 10
     ),
-    
+
     checkboxInput(
       "locusIncludeTref",
       "Include reference profiles (Tstar)",
@@ -145,7 +145,7 @@ lmc_tab <- function() {
     checkboxInput("locusIncludeD", "Include target profiles (D)", value =
                     TRUE)
   ),
-  
+
   conditionalPanel(
     'input.componentPlotType === "similarity graph" ',
     sliderInput(

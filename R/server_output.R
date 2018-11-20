@@ -104,7 +104,7 @@ server_output <- function(input, output, server_env) {
           downloadLink("lineplotPDF", "PDF")
         )
       } else if (input$performanceMode == "table") {
-        tableOutput('performanceTable')
+         DT::dataTableOutput('performanceTable')
       }
     }
   })
@@ -114,48 +114,6 @@ server_output <- function(input, output, server_env) {
     server_env$doLambdaPlot()
   })
 
-  output$performanceTable <- renderTable({
-    server_env$df()
-    results <- server_env$dataset()
-    gr <- as.integer(input$cg_group_2)
-    elts <- PERFORMANCE_MEASURES
-    output <- list()
-    test_Ks <- input$K_2
-    Ks <- results@parameters$Ks
-    index <- match(test_Ks, Ks)
-    for (elt in 1:length(elts)) {
-      min_lls <- integer(length(test_Ks))
-      min_vals <- double(length(test_Ks))
-      if (all(is.na(results@outputs[[gr]][[elts[elt]]]))) {
-        next
-      }
-      for (kk in 1:length(test_Ks)) {
-        #use the index instead of test_Ks
-        min_lls[kk] <-
-          which.min(results@outputs[[gr]][[elts[elt]]][index, , drop = F])
-        min_vals[kk] <-
-          results@outputs[[gr]][[elts[elt]]][index, min_lls[kk], drop = F]
-      }
-      min_kk <- which.min(min_vals)
-      output[[elt]] <-
-        c(
-          names(elts)[elt],
-          sprintf("%f", min(min_vals[min_kk])),
-          sprintf("%f", results@parameters$lambdas[min_lls[min_kk]])
-        )
-      if (length(test_Ks) > 1) {
-        output[[elt]] <- c(output[[elt]], sprintf("%d", test_Ks[kk]))
-      }
-    }
-    output <- do.call("rbind", output)
-    rownames(output) <- NULL
-    cn <- c("Statistic", "Minimal value", "Lambda")
-    if (length(test_Ks) > 1) {
-      cn <- c(cn, "K")
-    }
-    colnames(output) <- cn
-    output
-  }, include.rownames = FALSE)
 
   ######################## LMC main panel
   output$componentsPanel <- renderUI({
@@ -181,15 +139,19 @@ server_output <- function(input, output, server_env) {
         h = 500
         w = 1000
       } else{
+        print("Hello")
         h0 = 300
         w0 = 300
         trueT <- server_env$getTrueT()
         ncol <- min(3, ncol(trueT))
-        nrow <-
-          ncol(trueT) %/% ncol + as.integer(ncol(trueT) %% ncol > 0)
+        nrow <- min(2,
+          ncol(trueT) %/% ncol + as.integer(ncol(trueT) %% ncol > 0))
         h = sprintf("%dpx", h0 * nrow)
         w = sprintf("%dpx", h0 * ncol)
+        print(h)
+        print(w)
       }
+      print("Hello1")
       list(
         plotOutput('componentPlot',
                    height = h,

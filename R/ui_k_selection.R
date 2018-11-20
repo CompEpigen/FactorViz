@@ -11,13 +11,7 @@ k_selec<-function(){
                     conditionalPanel('input.KvsStat === "cve" ',
                                      checkboxInput("normalizedCVE", "normalized", value=FALSE)
                     ),
-                    conditionalPanel('(input.KvsStat === "cve" || input.KvsStat === "rmse") ',
-                                     checkboxInput("normalizedCVEscale", "[0,1] scale", value=FALSE)
-                    ),
-                    uiOutput("lambdaSelector"),
-                    checkboxInput("addPlotTitle", "Add plot titles", value=TRUE)
-
-
+                    uiOutput("lambdaSelector")
                   ),
                   mainPanel(
                     value='RMSEvsK',

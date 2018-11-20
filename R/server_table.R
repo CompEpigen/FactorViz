@@ -1,4 +1,50 @@
 server_table<-function(input, output, server_env){
+
+##################LAMBDA SELECTION TAB
+    output$performanceTable <- DT::renderDataTable({
+      server_env$df()
+      results <- server_env$dataset()
+      gr <- as.integer(input$cg_group_2)
+      elts <- PERFORMANCE_MEASURES
+      output <- list()
+      test_Ks <- input$K_2
+      Ks <- results@parameters$Ks
+      index <- match(test_Ks, Ks)
+      for (elt in 1:length(elts)) {
+        min_lls <- integer(length(test_Ks))
+        min_vals <- double(length(test_Ks))
+        if (all(is.na(results@outputs[[gr]][[elts[elt]]]))) {
+          next
+        }
+        for (kk in 1:length(test_Ks)) {
+          min_lls[kk] <-
+            which.min(results@outputs[[gr]][[elts[elt]]][index, , drop = F])
+          min_vals[kk] <-
+            results@outputs[[gr]][[elts[elt]]][index, min_lls[kk], drop = F]
+        }
+        min_kk <- which.min(min_vals)
+        output[[elt]] <-
+          c(
+            names(elts)[elt],
+            min(min_vals[min_kk]),
+            results@parameters$lambdas[min_lls[min_kk]]
+          )
+        if (length(test_Ks) > 1) {
+          output[[elt]] <- c(output[[elt]], sprintf("%d", test_Ks[kk]))
+        }
+      }
+      output <- do.call("rbind", output)
+      rownames(output) <- NULL
+      cn <- c("Statistic", "Minimal value", "Lambda")
+      if (length(test_Ks) > 1) {
+        cn <- c(cn, "K")
+      }
+      colnames(output) <- cn
+      output
+    }, rownames = FALSE)
+
+
+#################META ANALYSIS TAB
 output$diffCGTable<-DT::renderDataTable({
 
   diff_cgs<-server_env$getDiffCGs()

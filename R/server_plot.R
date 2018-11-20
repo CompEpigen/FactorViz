@@ -26,7 +26,7 @@ server_env$doKselectionPlot<-function(){
     meth.data<-server_env$getMethData()
     sample_subset<-1:ncol(meth.data)
   }
-  MeDeCom:::plot.K.selection(results, statistic = statistic, Ks = as.numeric(Kvals),lambdas = as.numeric(lambda), cg_subset = as.integer(cg_), sample_subset = sample_subset,cg_subsets = gr_list, KvsRMSElambdaLegend = TRUE, normalizedCVE = input$normalizedCVE, addPlotTitle = input$addPlotTitle)
+  MeDeCom:::plot.K.selection(results, statistic = statistic, Ks = as.numeric(Kvals),lambdas = as.numeric(lambda), cg_subset = as.integer(cg_), sample_subset = sample_subset,cg_subsets = gr_list, KvsRMSElambdaLegend = TRUE, normalizedCVE = input$normalizedCVE, addPlotTitle = TRUE)
   }
 }
 
@@ -44,7 +44,19 @@ server_env$doLambdaPlot<-function(){
   if (scale == "logarithmic"){
     scale = "log"
   }
-  MeDeCom:::plot.lambda.selection(results, cg_subset = as.integer(cg_), K = k, minLambda = minLam, maxLambda =maxLam, scale= scale ,includeRMSE_T= input$includeRMSE_T, includeMAE_A = input$includeMAE_A, includeDist2C_T = input$includeDist2C_T )
+  includeRMSE_T<-F
+  includeMAE_A<-F
+  includeDist2C_T<-F
+  if (!is.null(input$includeRMSE_T)){
+    includeRMSE_T<-input$includeRMSE_T
+  }
+  if (!is.null(input$includeMAE_A)){
+    includeMAE_A<-input$includeMAE_A
+  }
+  if (!is.null(input$includeRMSE_T)){
+    includeDist2C_T<-input$includeDist2C_T
+  }
+  MeDeCom:::plot.lambda.selection(results, cg_subset = as.integer(cg_), K = k, minLambda = minLam, maxLambda =maxLam, scale= scale ,includeRMSE_T= includeRMSE_T, includeMAE_A = includeMAE_A, includeDist2C_T = includeDist2C_T )
 
 }
 

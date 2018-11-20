@@ -13,7 +13,7 @@ server_output_k_selec <- function(input, output, server_env) {
       selectInput('cg_group', 'Technical CpG subset:', GROUPS, selectize = TRUE)
     }
   })
-  
+
   output$minKselector <- renderUI({
     server_env$df()
     if (MEDSET_FLAG) {
@@ -22,7 +22,7 @@ server_output_k_selec <- function(input, output, server_env) {
                   server_env$dataset()@parameters$Ks)
     }
   })
-  
+
   output$maxKselector <- renderUI({
     server_env$df()
     if (MEDSET_FLAG) {
@@ -34,19 +34,21 @@ server_output_k_selec <- function(input, output, server_env) {
       )
     }
   })
-  
+
   output$lambdaSelector <- renderUI({
     server_env$df()
     if (MEDSET_FLAG) {
+      if (is.null(input$RMSEvsKplotAllLambdas)|| !input$RMSEvsKplotAllLambdas){
       LAMBDAS <- server_env$dataset()@parameters$lambdas
       LAMBDA.IDS <-
         1:length(server_env$dataset()@parameters$lambdas)
       names(LAMBDA.IDS) <- as.character(LAMBDAS)
       selectInput('lambda', 'Lambda value', LAMBDA.IDS)
     }
-    
+  }
+
   })
-  
+
   output$KvsStat <- renderUI({
     server_env$df()
     p_measure <- c("Objective" = "Fval", "CV error" = "cve")

@@ -1,3 +1,44 @@
+onstartLoad<-function(){
+	ANN_C <<- "ann_C.RData"
+	ANN_S <<- "ann_S.RData"
+	MEDSET <<- "medecom_set.RData"
+	REF <<- "ref_meth.RData"
+	CURRENT_USER <<- Sys.info()[["user"]]
+
+	MEDSET_FLAG <<- F
+	ANN_C_FLAG <<- F
+	TRUE_T_FLAG <<- F
+	TRUE_A_FLAG<<-F
+	PHENO_DATA_FLAG <<- F
+	SAMPLE_NAME_FLAG <<- F
+	METH_DATA_FLAG <<- F
+
+	medecom_object <<- NULL
+	input_object <<- list(
+		pheno.data = NULL,
+		meth.data = NULL,
+		sample.names = NULL
+	)
+
+	true_T_matrix <<- NULL
+	true_A_matrix <<- NULL
+	true_T_matrix_ref <<- NULL
+	cg_annot_object <<- NULL
+	gene_annot_object <<- NULL
+	prepared_annotation <<- list(
+		"cat_list" = NULL,
+		"cat_inf_vs" = NULL,
+		"faetures" = NULL,
+		"settings" = NULL
+	)
+	gene_set_object <<- NULL
+
+	medecom_ref_object<<-NULL
+
+	lola.db<<-NULL
+
+
+
 RUN_LIST_COLUMNS<<-c(
 	"DATASET"="Data set"
 	,"DATA_SUBSET"="Data subset"
@@ -161,3 +202,4 @@ ANALYSIS_META_INFO<<-list(
 
 		)
 )
+}
