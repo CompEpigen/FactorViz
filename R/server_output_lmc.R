@@ -14,14 +14,14 @@ server_output_lmc <- function(input, output, server_env) {
                     TRUE)
     }
   })
-  
+
   output$Kselector_3 <- renderUI({
     server_env$df()
     #Ks<-dataset()[["Ks"]]
     Ks <- server_env$dataset()@parameters$Ks
     selectInput('K_3', 'Number of LMCs (k)', Ks, selectize = TRUE)
   })
-  
+
   output$lambdaSelector_3 <- renderUI({
     server_env$df()
     if (MEDSET_FLAG) {
@@ -30,9 +30,9 @@ server_output_lmc <- function(input, output, server_env) {
       names(LAMBDA.IDS) <- as.character(LAMBDAS)
       selectInput('lambda_3', 'Lambda value', LAMBDA.IDS)
     }
-    
+
   })
-  
+
   output$componentPlotT <- renderUI({
     server_env$df()
     p_type <-
@@ -40,22 +40,27 @@ server_output_lmc <- function(input, output, server_env) {
         "dendrogram",
         "extremality",
         "heatmap",
-        "mds plot",
-        "similarity graph",
-        "scatterplot all",
-        "scatterplot matching",
-        "scatterplot avg matching"
+        "similarity graph"
       )
-    if (METH_DATA_FLAG) {
+    if(TRUE_T_FLAG && (!is.null(input$useReferences) && (input$useReferences))){
+      p_type<-c(p_type, "scatterplot all",
+              "scatterplot matching",
+              "scatterplot avg matching")
+    }
+    print(input$K_3)
+    if (!is.null(input$K_3) && (as.integer(input$K_3) > 2)){
+      p_type<-c(p_type, "mds plot")
+    }
+    if (METH_DATA_FLAG && !is.null(input$useReferences) && (input$useReferences)) {
       p_type <- c(p_type, "distance to center")
-      
+
     }
     selectInput('componentPlotType', 'Plot type',
                 p_type,
                 selected = 1)
-    
+
   })
-  
+
   output$componentSelector <- renderUI({
     server_env$df()
     comps <- c(1:input$K_3, NA)
@@ -67,13 +72,19 @@ server_output_lmc <- function(input, output, server_env) {
       selectize = TRUE,
       multiple = TRUE,
       selected = 1
-    )#isolate({if("component" %in% names(input)) as.character(input$component) else 1}))
+    )
   })
-  
+  output$cgVar<-renderUI({
+   if(TRUE_T_FLAG){
+     checkboxInput("cgVarSubset", "Select top-variable CpGs:", value = FALSE)
+   }
+  })
+
   output$topSDcgsSelector <- renderUI({
     server_env$df()
+
     gr <- as.integer(input$cg_group_3)
-    ind <- getCGsubset()
+    ind <- server_env$getCGsubset_3()
     sliderInput(
       'topSDcpgs',
       'Select top SD cgs',
@@ -83,8 +94,9 @@ server_output_lmc <- function(input, output, server_env) {
       step = 500,
       round = 0
     )
+
   })
-  
+
   output$sampleColorSelector <- renderUI({
     server_env$df()
     pd <- server_env$getPhenoData()
@@ -98,7 +110,7 @@ server_output_lmc <- function(input, output, server_env) {
                 c("none", siteannot),
                 selectize = TRUE)
   })
-  
+
   output$pointColorSelector <- renderUI({
     server_env$df()
     cats <- names(getCGcategories())
@@ -108,7 +120,7 @@ server_output_lmc <- function(input, output, server_env) {
                 c("none", cats, feats),
                 selectize = TRUE)
   })
-  
+
   output$pointFilter <- renderUI({
     server_env$df()
     if ("pointCategory" %in% names(input) &&
@@ -136,7 +148,7 @@ server_output_lmc <- function(input, output, server_env) {
       }
     }
   })
-  
+
   output$CGcategorySubsetSelector <- renderUI({
     server_env$df()
     if ("CGsubsetToCategory" %in% names(input) &&
@@ -154,18 +166,18 @@ server_output_lmc <- function(input, output, server_env) {
       )
     }
   })
-  
+
   output$geneSetSelector <- renderUI({
     server_env$df()
     gene.sets <- getGeneSets()
     selectInput('geneSet', 'Gene set:', names(gene.sets), selectize = TRUE)
   })
-  
+
   output$locusSelector <- renderUI({
     server_env$df()
     gene.sets <- getGeneSets()
     selectInput('locus', 'Gene:', gene.sets[[input$geneSet]], selectize =
                   TRUE)
   })
-  
+
 }

@@ -20,7 +20,6 @@ startFactorViz <- function() {
     onStart <-function(){
       onstartLoad()
     }
-    port=6578,
   )
-  shiny::runApp(app)
+  shiny::runApp(app, port=6578)
 }

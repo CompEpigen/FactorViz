@@ -6,9 +6,10 @@ server_reactive<-function(input, output, server_env){
       computer = ("/"),
       home = paste('/home/', CURRENT_USER, "/", sep = "")
     )
-    parseDirPath(volumes,input$dir)
+    parseDirPath(volumes,server_env$dir())
   })
   server_env$dataset <- reactive(quote({
+    server_env$df()
     results<-medecom_object
     results
     }),quoted=TRUE)

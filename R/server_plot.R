@@ -1,6 +1,11 @@
 server_plot<-function(input, output, server_env){
 server_env$doKselectionPlot<-function(){
   server_env$df()
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
   statistic<-input$KvsStat
   Kvals<-results@parameters$Ks
@@ -28,9 +33,15 @@ server_env$doKselectionPlot<-function(){
   }
   MeDeCom:::plot.K.selection(results, statistic = statistic, Ks = as.numeric(Kvals),lambdas = as.numeric(lambda), cg_subset = as.integer(cg_), sample_subset = sample_subset,cg_subsets = gr_list, KvsRMSElambdaLegend = TRUE, normalizedCVE = input$normalizedCVE, addPlotTitle = TRUE)
   }
+})
 }
 
 server_env$doLambdaPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
   #cg subset
   gr_list <- results@parameters$cg_subsets
@@ -57,10 +68,15 @@ server_env$doLambdaPlot<-function(){
     includeDist2C_T<-input$includeDist2C_T
   }
   MeDeCom:::plot.lambda.selection(results, cg_subset = as.integer(cg_), K = k, minLambda = minLam, maxLambda =maxLam, scale= scale ,includeRMSE_T= includeRMSE_T, includeMAE_A = includeMAE_A, includeDist2C_T = includeDist2C_T )
-
+})
 }
 
 server_env$doComponentPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
   cmp<-as.integer(input$component)
   #cg subset
@@ -81,7 +97,12 @@ server_env$doComponentPlot<-function(){
 
   ind<-server_env$getCGsubset_3()
   trueT<-server_env$getTrueT()
+  if (!is.null(trueT)){
   Tref<-trueT[ind,]
+  }else{
+    Tref<-NULL
+  }
+
   #types
   type <- input$componentPlotType
   if (type == "mds plot"){
@@ -92,26 +113,23 @@ server_env$doComponentPlot<-function(){
 
 
   #sample.characteristic
+  data.ch<-NULL
   if(type=="MDS"){
-    if(input$mdsDataCat!="none"){
+    if(!is.null(input$mdsDataCat) && input$mdsDataCat!="none"){
       pheno.data<-server_env$getPhenoData()
       data.ch<-pheno.data[[input$mdsDataCat]]
     }
   }
-  else{
-    data.ch<-NULL
-  }
   #top.cgs never used ?
   top.cgs <- NA
   if(type %in% c("heatmap","dendrogram","MDS","similarity graph")){
-    if(input$cgVarSubset){
+    if(!is.null(input$cgVarSubset) && input$cgVarSubset){
       top.cgs<-server_env$getTTandTrefSDranking()[1:input$topSDcpgs]
     }else if(!is.null(Tref)){
       top.cgs<-1:nrow(Tref)
     }else{
       top.cgs<-1:nrow(That)
     }
-
   }
 
   #scatterplot
@@ -129,30 +147,12 @@ server_env$doComponentPlot<-function(){
   }else{
     scatter.smooth <- FALSE
   }
-
-  if(type == "locus plot"){
-    meth.data<-server_env$getMethData()
-    sample_subset<-server_env$getSampleSubset()
-    if(F){
-    if(input$locusChr!="" && input$locusStart!="" && input$locusEnd!=""){
-      locus_params<-list()
-      locus_params[["ann"]]<-server_env$getCGAnnot()
-      locus_params[["ann.genes"]]<-server_env$getGeneAnnot()
-      locus_params[["locus.name"]]=input$locusName
-      locus_params[["locus.chr"]]=input$locusChr
-      locus_params[["locus.start"]]=as.integer(input$locusStart)
-      locus_params[["locus.end"]]=as.integer(input$locusEnd)
-      locus_params[["locus.forward"]]=input$locusStrand=="+"
-      locus_params[["flank.start"]]=as.integer(input$upstreamMinus)
-      locus_params[["flank.end"]]=as.integer(input$downstreamPlus)
-      locus_params[["Tstar"]]=if(input$locusIncludeTref) Tref else NULL
-      locus_params[["D"]]=if(input$locusIncludeD) meth.data[ind, sample_subset] else NULL
-      locus_params[["plot.genes"]]=TRUE
-
-    }else{
-      locus_params<-NULL
-    }
-    }
+  if(!is.null(input$useReferences) && (!input$useReferences)){
+      Tref<-NULL
+      D<-NULL
+      data.ch<-NULL
+  }else{
+    D<- server_env$getMethData()[ind, server_env$getSampleSubset()]
   }
   MeDeCom::plotLMCs(results,
            type = type,
@@ -162,18 +162,23 @@ server_env$doComponentPlot<-function(){
            lmc = as.integer(input$component),
            Tref = Tref,
            distance = input$mdsDist ,
-           center = input$correlationCentered,
+           center = input$correlationCentered_3,
            n.most.var = NA,
-           D = server_env$getMethData()[ind, server_env$getSampleSubset()] ,
+           D = D,
            sample.characteristic = data.ch ,
            scatter.matching = scatter.matching,
            scatter.smooth = TRUE,
            scatter.cg.feature = NULL
-           #locus.parameters = locus_params
            )
+})
 }
 
 server_env$doProportionPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
 
   #cg subset
@@ -212,9 +217,15 @@ server_env$doProportionPlot<-function(){
                   sample.characteristic=data.ch,
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows)
+})
 }
 
-doComparisonPlot<-function(){
+server_env$doComparisonPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
 
   if(length(input$compareMatrices)>0){
 
@@ -402,12 +413,18 @@ doComparisonPlot<-function(){
 
     }
   }
+})
 }
 
 
 
 server_env$doDiffCGPlot<-function(){
   #values$change
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
   gr<-as.integer(input$cg_group_5)
   ll<-as.integer(input$lambda_5)
@@ -442,9 +459,15 @@ server_env$doDiffCGPlot<-function(){
       ))
     }
   }
+})
 }
 
 server_env$doPhenotypeModelPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   results<-server_env$dataset()
   lls<-sort(results@parameters$lambdas)
   Kvals<-results@parameters$Ks
@@ -489,15 +512,22 @@ server_env$doPhenotypeModelPlot<-function(){
             labCol=as.character(Kvals), labRow=sprintf("%g", lls),
             scale="none", trace="none", Colv=NA, Rowv=NA,
             key.xlab="-log10(p)", key.title="")
+})
 }
 
 ##################################################################################################
 ################################ Meta Analysis Plots #############################################
 ##################################################################################################
 server_env$doMetaPlot<-function(){
+  withProgress(
+    message = 'Plotting...\n',
+    detail = '...',
+    value = 0.3,
+    {
   server_env$getLOLAEnrichmenttable()
   if(!is.null(input$lmc_lola)){
       MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=0.01)
 }
+})
 }
 }

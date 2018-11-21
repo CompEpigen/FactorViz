@@ -105,11 +105,11 @@ server_output_meta <- function(input, output, server_env) {
     }
   })
   output$diffTabT<-renderUI({
-    direct<-c("hypermethylated","hypomethylated")
+    direct<-c("hypomethylated","hypermethylated")
     if (input$diffOutputType== "GO Enrichments" || input$diffOutputType== "LOLA Enrichments"){
       direct<-c(direct, "differential")
     }
-    selectInput("diffTableType", "Direction:", direct, selected=1)
+    selectInput("diffTableType", "Direction:", direct, selected=2)
     })
 
   output$region_selector<- renderUI({

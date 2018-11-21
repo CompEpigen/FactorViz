@@ -139,7 +139,6 @@ server_output <- function(input, output, server_env) {
         h = 500
         w = 1000
       } else{
-        print("Hello")
         h0 = 300
         w0 = 300
         trueT <- server_env$getTrueT()
@@ -148,10 +147,7 @@ server_output <- function(input, output, server_env) {
           ncol(trueT) %/% ncol + as.integer(ncol(trueT) %% ncol > 0))
         h = sprintf("%dpx", h0 * nrow)
         w = sprintf("%dpx", h0 * ncol)
-        print(h)
-        print(w)
       }
-      print("Hello1")
       list(
         plotOutput('componentPlot',
                    height = h,

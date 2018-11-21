@@ -138,7 +138,8 @@ ANALYSIS_META_INFO<<-list(
 				"ANALYSIS_DATE"="Analysis start time",
 				"NINIT"="Number of random initializations",
 				"NFOLDS"="Number of cross-validation folds",
-				"ITERMAX"="Maximal numer of iterations"
+				"ITERMAX"="Maximal numer of iterations",
+				"ASSEMBLY"="Genome Assembly"
 		),
 
 		"data_set_params"=c(
