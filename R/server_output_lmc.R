@@ -113,8 +113,8 @@ server_output_lmc <- function(input, output, server_env) {
 
   output$pointColorSelector <- renderUI({
     server_env$df()
-    cats <- names(getCGcategories())
-    feats <- names(getCGquantFeatureSettings())
+    cats <- names(server_env$getCGcategories())
+    feats <- names(server_env$getCGquantFeatureSettings())
     selectInput('pointCategory',
                 'Color data points by:',
                 c("none", cats, feats),
@@ -125,10 +125,10 @@ server_output_lmc <- function(input, output, server_env) {
     server_env$df()
     if ("pointCategory" %in% names(input) &&
         input$pointCategory != "none") {
-      if (input$pointCategory %in% names(getCGcategories())) {
+      if (input$pointCategory %in% names(server_env$getCGcategories())) {
         list(checkboxInput('CGsubsetToCategory', "limit to", value = FALSE))
-      } else if (input$pointCategory %in% names(getCGquantFeatureSettings())) {
-        features <- getCGquantFeatureSettings()
+      } else if (input$pointCategory %in% names(server_env$getCGquantFeatureSettings())) {
+        features <- server_env$getCGquantFeatureSettings()
         list(
           sliderInput(
             'quantFilterMin',

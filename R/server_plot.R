@@ -122,14 +122,8 @@ server_env$doComponentPlot<-function(){
   }
   #top.cgs never used ?
   top.cgs <- NA
-  if(type %in% c("heatmap","dendrogram","MDS","similarity graph")){
     if(!is.null(input$cgVarSubset) && input$cgVarSubset){
-      top.cgs<-server_env$getTTandTrefSDranking()[1:input$topSDcpgs]
-    }else if(!is.null(Tref)){
-      top.cgs<-1:nrow(Tref)
-    }else{
-      top.cgs<-1:nrow(That)
-    }
+      top.cgs<-input$topSDcpgs
   }
 
   #scatterplot
@@ -154,6 +148,10 @@ server_env$doComponentPlot<-function(){
   }else{
     D<- server_env$getMethData()[ind, server_env$getSampleSubset()]
   }
+  min.similarity=0
+  if(!is.null(input$minGraphSimilarity)){
+    min.similarity=input$minGraphSimilarity
+  }
   MeDeCom::plotLMCs(results,
            type = type,
            K =  K,
@@ -168,7 +166,8 @@ server_env$doComponentPlot<-function(){
            sample.characteristic = data.ch ,
            scatter.matching = scatter.matching,
            scatter.smooth = TRUE,
-           scatter.cg.feature = NULL
+           scatter.cg.feature = NULL,
+
            )
 })
 }
@@ -193,7 +192,7 @@ server_env$doProportionPlot<-function(){
 
   Aref<-server_env$getTrueA()
 
-  if(input$propPlotType == "heatmap"){
+  if(input$propPlotType == "heatmap" || input$propPlotType == "correlations"){
     if(input$mdsDataCat_4!="none"){
       pheno.data<-server_env$getPhenoData()
       data.ch<-pheno.data[[input$mdsDataCat_4]]
@@ -204,7 +203,6 @@ server_env$doProportionPlot<-function(){
   else{
     data.ch<-NULL
   }
-
   MeDeCom::plotProportions(results,
                   type = input$propPlotType,
                   K = as.integer(input$K_4),
@@ -526,8 +524,29 @@ server_env$doMetaPlot<-function(){
     {
   server_env$getLOLAEnrichmenttable()
   if(!is.null(input$lmc_lola)){
+    if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
       MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=0.01)
+    }
 }
 })
+}
+server_env$doTraitAssociation<-function(){
+  withProgress(message="Associating Traits...\n", detail='...', value=0.3,{
+    results<-server_env$dataset()
+    gr_list <- results@parameters$cg_subsets
+    gr<-as.integer(input$cg_group_5)
+    cg_ <- gr_list[gr]
+    ll<-as.integer(input$lambda_5)
+    lambdas <- results@parameters$lambdas
+    lambda <- lambdas[ll]
+    K<-input$K_5
+    out<-MeDeCom::run.trait.association.single(results, server_env$getPhenoData(), cg_subset=cg_, K=K, lambda=lambda, test.fun=t.test)
+    if(!is.null(input$tatstat)){
+      return(out[[input$tatstat]])
+    }else{
+      return(br())
+    }
+
+  })
 }
 }

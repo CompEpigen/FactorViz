@@ -58,12 +58,9 @@ lmc_tab <- function() {
   ),
 
   conditionalPanel(
-    'input.componentPlotType !== "heatmap" &&
-    input.componentPlotType !== "mds plot" &&
-    input.componentPlotType !== "dendrogram" &&
-    input.componentPlotType !== "similarity graph" &&
-    input.componentPlotType !== "histogram" &&
-    input.componentPlotType !== "locus plot" ',
+    'input.componentPlotType === "scatterplot all" &&
+    input.componentPlotType === "scatterplot matching" &&
+    input.componentPlotType === "scatterplot avg matching" ',
     selectInput(
       "scatterType",
       "Scatterplot",

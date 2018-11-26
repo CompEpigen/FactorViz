@@ -127,7 +127,7 @@ server_output <- function(input, output, server_env) {
       } else if (input$componentPlotType == "heatmap") {
         h = "500px"
         w = sprintf("%dpx", max(500, 50 * as.integer(K)))
-      } else if (input$componentPlotType == "scatterplot matching") {
+      } else if (input$componentPlotType %in% c("scatterplot all", "scatterplot matching", "scatterplot avg matching")) {
         h0 = 300
         w0 = 300
         ncol = min(3, as.integer(K))
@@ -176,6 +176,7 @@ server_output <- function(input, output, server_env) {
   ######################## Meta-Analysis Panel
 
   output$metaAnalysisPanel <- renderUI({
+    server_env$df()
     if (input$analysisType == "compare LMCs") {
       list(
         plotOutput(
@@ -193,40 +194,31 @@ server_output <- function(input, output, server_env) {
       )
     } else if (input$analysisType == "differential methylation") {
       list(plotOutput('diffCGPlot'),
-           if (input$diffOutputType == "Table") {
-             DT::dataTableOutput('diffCGTable')
-           }
-           else if (input$diffOutputType == "GO Enrichments") {
-             DT::dataTableOutput('goEnrichementTable')
-           }
-           else if (input$diffOutputType == "LOLA Enrichments") {
-             DT::dataTableOutput('lolaEnrichementTable')
-           }
-           else{
-             br()
-           }
-         )
-    } else if (input$analysisType == "phenotype modeling") {
-      if (input$phenoModelOutput == "summary plot") {
-        list(plotOutput(
-          'phenotypeModelPlot',
-          height = h,
-          width =  2 * w
-        ),
-        br())
-      } else if (input$phenoModelOutput == "single case") {
-        verbatimTextOutput("phenotypeModelSummary")
+            DT::dataTableOutput('diffCGTable'))
       }
-
-    }
-
+      else if((input$analysisType == "Enrichments")){
+        list(plotOutput("metaPlot"), if (input$diffOutputType == "GO Enrichments") {
+           DT::dataTableOutput('goEnrichementTable')
+         }
+         else if (input$diffOutputType == "LOLA Enrichments") {
+           DT::dataTableOutput('lolaEnrichementTable')
+         }else{
+           br()
+         })
+      } else if(input$analysisType=="Trait Association"){
+        plotOutput('TraitAssociation')
+        }else{
+        br()
+      }
   })
+
+  output$TraitAssociation<-renderPlot({
+    server_env$doTraitAssociation()
+  })
+
   output$diffCGPlot<-renderPlot({
     server_env$doDiffCGPlot();
   })
-  output$additionalMetaPlots<-renderUI({
-    plotOutput("metaPlot")
-    })
 output$metaPlot<-renderPlot({
   server_env$doMetaPlot()
   })

@@ -42,8 +42,8 @@ proportion<-function(){
                                      uiOutput("refProfileSelector")
 
                     ),
-                    conditionalPanel('input.propPlotType !== "lineplot" ',
-
+                    conditionalPanel('input.propPlotType !== "lineplot" &&
+                     input.propPlotType !== "barplot"',
                                      uiOutput("sampleColorSelector_4")
 
                     ),
@@ -54,8 +54,8 @@ proportion<-function(){
                     ),
                   mainPanel(
                              plotOutput('proportionplot',
-                                        height = "500px",
-                                        width = "500px"),
+                                        height = "600px",
+                                        width = "600px"),
                              br(),
                              downloadLink('proportionPlotPDF', label = "PDF", class = NA)
                   )

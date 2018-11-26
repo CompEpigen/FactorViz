@@ -106,7 +106,7 @@ server_output_meta <- function(input, output, server_env) {
   })
   output$diffTabT<-renderUI({
     direct<-c("hypomethylated","hypermethylated")
-    if (input$diffOutputType== "GO Enrichments" || input$diffOutputType== "LOLA Enrichments"){
+    if (input$analysisType=="Enrichments"){
       direct<-c(direct, "differential")
     }
     selectInput("diffTableType", "Direction:", direct, selected=2)
@@ -141,7 +141,17 @@ output$lmclolaSelector<-renderUI({
   server_env$getLOLAEnrichmenttable()
   server_env$lmclolaSelect()
 })
-
+output$analyType<-renderUI({
+  atype<-c()
+  if(!is.null(medecom_ref_object)){
+    atype<-c(atype, "compare LMCs")
+  }
+  atype<-c(atype, "differential methylation", "Enrichments")
+  if(PHENO_DATA_FLAG){
+    atype<-c(atype, "Trait Association")
+  }
+  selectInput("analysisType", "Analysis:",  atype, selected=1)
+  })
   output$targetVariableSelector <- renderUI({
     pheno <- server_env$getPhenoData()
     selectInput(

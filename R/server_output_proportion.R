@@ -112,7 +112,6 @@ server_output_proportion <- function(input, output, server_env) {
     if (!is.null(server_env$getTrueT())) {
       rprofiles <- c(rprofiles, 1:ncol(server_env$getTrueT()))
       rprofile_names_add <- colnames(server_env$getTrueT())
-      print(rprofile_names_add)
       if (is.null(rprofile_names_add)) {
         rprofile_names_add <- as.character(1:ncol(server_env$getTrueT()))
       }

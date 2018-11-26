@@ -95,9 +95,22 @@ output$goEnrichementTable<-DT::renderDataTable({
   server_env$getGOEnrichmenttable()
   if(!is.null(input$lmc_go)){
     result<-server_env$getGOEnrichmenttable()[[input$lmc_go]]
+    if(is.na(result)){
+      result<-data.frame(
+        GOBPID = character(),
+        Pvalue = integer(),
+        OddsRatio = numeric(),
+        ExpCount=numeric(),
+        Count=numeric(),
+        Size=numeric(),
+        Term=character(),
+        p.val.adj.fdr=numeric()
+      )
+    }else{
     numVars<-sapply(result, is.numeric)
     result[numVars] <- lapply(result[numVars], round, digits = 2)
     return(result)
+  }
   }else{
     return(data.frame())
   }
@@ -176,13 +189,24 @@ output$lolaEnrichementTable<-DT::renderDataTable({
   server_env$getLOLAEnrichmenttable()
   if(!is.null(input$lmc_lola)){
     result<-server_env$getLOLAEnrichmenttable()[[input$lmc_lola]]
+    if(is.na(result)){
+      result<-data.frame(
+        dbSet = character(),
+        collection = integer(),
+        pValueLog = numeric(),
+        oddsRatio=numeric(),
+        description=character(),
+        cellType=character(),
+        qValue=numeric()
+      )
+    }else{
     numVars<-sapply(result, is.numeric)
     result[numVars] <- lapply(result[numVars], round, digits = 2)
     numVars<-names(result)
     selected<-c('dbSet','collection','pValueLog', 'oddsRatio', 'description', 'cellType', 'qValue')
     result$description <- gsub(x = result$description, pattern = ";", replace = ", ")
-    print(selected)
     result<-result[, selected]
+    }
     return(result)
   }else{
     return(data.frame())
