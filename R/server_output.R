@@ -197,14 +197,13 @@ server_output <- function(input, output, server_env) {
             DT::dataTableOutput('diffCGTable'))
       }
       else if((input$analysisType == "Enrichments")){
-        list(plotOutput("metaPlot"), if (input$diffOutputType == "GO Enrichments") {
-           DT::dataTableOutput('goEnrichementTable')
-         }
-         else if (input$diffOutputType == "LOLA Enrichments") {
-           DT::dataTableOutput('lolaEnrichementTable')
+        if (input$diffOutputType == "GO Enrichments"){
+          DT::dataTableOutput('goEnrichementTable')
+        }else if (input$diffOutputType == "LOLA Enrichments") {
+          list(plotOutput("metaPlot"),  DT::dataTableOutput('lolaEnrichementTable'))
          }else{
            br()
-         })
+         }
       } else if(input$analysisType=="Trait Association"){
         plotOutput('TraitAssociation')
         }else{

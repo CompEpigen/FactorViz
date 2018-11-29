@@ -2,7 +2,7 @@
 #' This function intialises factorviz and start, it accepts no parameters
 #' @export
 #'
-startFactorViz <- function() {
+startFactorViz <- function(path=NULL) {
   require(shiny)
   require(shinyFiles)
   require(shinythemes)
@@ -18,7 +18,10 @@ startFactorViz <- function() {
     ui = baseUI,
     server = base_server,
     onStart <-function(){
-      onstartLoad()
+      onstartLoad(path)
+      if(!is.null(PATH)){
+      load_data(PATH)
+    }
     }
   )
   shiny::runApp(app, port=6578)
