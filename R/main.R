@@ -1,5 +1,7 @@
 #' startFactorViz
-#' This function intialises factorviz and start, it accepts no parameters
+#' This function intialises factorviz and start
+#'
+#' @param path takes in the directory path to decomp output
 #' @export
 #'
 startFactorViz <- function(path=NULL) {

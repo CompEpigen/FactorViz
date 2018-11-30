@@ -9,14 +9,13 @@ server_output_lmc <- function(input, output, server_env) {
       } else{
         names(GROUPS) <- names(gr_lists)
       }
-      selectInput('cg_group_3', 'Technical CpG subset:', GROUPS, selectize =
-                    TRUE)
+      selectInput('cg_group_3', 'Technical CpG subset:', GROUPS,selected=server_env$Selected$CG)
     }
   })
 
   output$Kselector_3 <- renderUI({
     Ks <- server_env$dataset()@parameters$Ks
-    selectInput('K_3', 'Number of LMCs (k)', Ks, selectize = TRUE)
+    selectInput('K_3', 'Number of LMCs (k)', Ks, selected=server_env$Selected$K)
   })
 
   output$lambdaSelector_3 <- renderUI({
@@ -24,7 +23,7 @@ server_output_lmc <- function(input, output, server_env) {
       LAMBDAS <- server_env$dataset()@parameters$lambdas
       LAMBDA.IDS <- 1:length(server_env$dataset()@parameters$lambdas)
       names(LAMBDA.IDS) <- as.character(LAMBDAS)
-      selectInput('lambda_3', 'Lambda value', LAMBDA.IDS)
+      selectInput('lambda_3', 'Lambda value', LAMBDA.IDS, selected=server_env$Selected$LAMBDA)
     }
 
   })

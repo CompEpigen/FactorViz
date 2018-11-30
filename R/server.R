@@ -1,7 +1,7 @@
 # This script contains the basic server interface of FactorViz, server code related to
 # ouptut, reactive elements and output can be found inside server folder.
 
-base_server <- function(input, output) {
+base_server <- function(input, output, session) {
 
 
   server_env <- new.env()
@@ -44,6 +44,8 @@ base_server <- function(input, output) {
   if(!MEDSET_FLAG){
     hideTabs(input, output)
   }
+
+
   #source(server_reactive.R, local=TRUE)
   server_reactive(input, output, server_env)
   #source(server_getters.R, local=TRUE)
@@ -54,4 +56,5 @@ base_server <- function(input, output) {
   server_plot(input, output, server_env)
   server_pdf(input, output, server_env)
   server_table(input, output, server_env)
+  server_tab_uniformity_keeper(input, output, session, server_env)
 }

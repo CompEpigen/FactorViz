@@ -310,3 +310,47 @@ output$metaPlot<-renderPlot({
   ################################################Sidebar output Downloads panel
   server_output_downloads(input, output, server_env)
 }
+
+server_tab_uniformity_keeper<-function(input, output, session, server_env){
+  ###################### Handle CpG Subset
+  observeEvent(input$cg_group, server_env$Selected$CG<-input$cg_group)
+  observeEvent(input$cg_group_2, server_env$Selected$CG<-input$cg_group_2)
+  observeEvent(input$cg_group_3, server_env$Selected$CG<-input$cg_group_3)
+  observeEvent(input$cg_group_4, server_env$Selected$CG<-input$cg_group_4)
+  observeEvent(input$cg_group_5, server_env$Selected$CG<-input$cg_group_5)
+  observeEvent(input$cg_group_6, server_env$Selected$CG<-input$cg_group_6)
+
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group", selected=server_env$Selected$CG))
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group_2", selected=server_env$Selected$CG))
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group_3", selected=server_env$Selected$CG))
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group_4", selected=server_env$Selected$CG))
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group_5", selected=server_env$Selected$CG))
+  observeEvent(server_env$Selected$CG, updateSelectInput(session, "cg_group_6", selected=server_env$Selected$CG))
+
+
+  ######################### Handle Lambdas
+  observeEvent(input$lambda, server_env$Selected$LAMBDA<-input$lambda)
+  observeEvent(input$lambda_3, server_env$Selected$LAMBDA<-input$lambda_3)
+  observeEvent(input$lambda_4, server_env$Selected$LAMBDA<-input$lambda_4)
+  observeEvent(input$lambda_5, server_env$Selected$LAMBDA<-input$lambda_5)
+  observeEvent(input$lambda_6, server_env$Selected$LAMBDA<-input$lambda_6)
+
+  observeEvent(server_env$Selected$LAMBDA, updateSelectInput(session, "lambda", selected=server_env$Selected$LAMBDA))
+  observeEvent(server_env$Selected$LAMBDA, updateSelectInput(session, "lambda_3", selected=server_env$Selected$LAMBDA))
+  observeEvent(server_env$Selected$LAMBDA, updateSelectInput(session, "lambda_4", selected=server_env$Selected$LAMBDA))
+  observeEvent(server_env$Selected$LAMBDA, updateSelectInput(session, "lambda_5", selected=server_env$Selected$LAMBDA))
+  observeEvent(server_env$Selected$LAMBDA, updateSelectInput(session, "lambda_6", selected=server_env$Selected$LAMBDA))
+
+  ######################### Handle Ks
+  observeEvent(input$K_2, server_env$Selected$K<-input$K_2)
+  observeEvent(input$K_3, server_env$Selected$K<-input$K_3)
+  observeEvent(input$K_4, server_env$Selected$K<-input$K_4)
+  observeEvent(input$K_5, server_env$Selected$K<-input$K_5)
+  observeEvent(input$K_6, server_env$Selected$K<-input$K_6)
+
+  observeEvent(server_env$Selected$K, updateSelectInput(session, "K_2", selected=server_env$Selected$K))
+  observeEvent(server_env$Selected$K, updateSelectInput(session, "K_3", selected=server_env$Selected$K))
+  observeEvent(server_env$Selected$K, updateSelectInput(session, "K_4", selected=server_env$Selected$K))
+  observeEvent(server_env$Selected$K, updateSelectInput(session, "K_5", selected=server_env$Selected$K))
+  observeEvent(server_env$Selected$K, updateSelectInput(session, "K_6", selected=server_env$Selected$K))
+}

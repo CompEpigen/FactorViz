@@ -10,15 +10,14 @@ output$groupSelector_2 <- renderUI({
     } else{
       names(GROUPS) <- names(gr_lists)
     }
-    selectInput('cg_group_2', 'Technical CpG subset:', GROUPS, selectize =
-                  TRUE)
+    selectInput('cg_group_2', 'Technical CpG subset:', GROUPS, selected=server_env$Selected$CG)
   }
 })
 
 output$Kselector_2 <- renderUI({
 
   Ks <- server_env$dataset()@parameters$Ks
-  selectInput('K_2', 'Number of LMCs (k)', Ks, selectize = TRUE)
+  selectInput('K_2', 'Number of LMCs (k)', Ks, selected=server_env$Selected$K)
 })
 
 output$minLambdaSelector <- renderUI({

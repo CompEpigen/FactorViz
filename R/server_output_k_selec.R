@@ -9,7 +9,7 @@ server_output_k_selec <- function(input, output, server_env) {
       } else{
         names(GROUPS) <- names(gr_lists)
       }
-      selectInput('cg_group', 'Technical CpG subset:', GROUPS, selectize = TRUE)
+      selectInput('cg_group', 'Technical CpG subset:', GROUPS, selected=server_env$Selected$CG)
     }
   })
 
@@ -39,7 +39,7 @@ server_output_k_selec <- function(input, output, server_env) {
       LAMBDA.IDS <-
         1:length(server_env$dataset()@parameters$lambdas)
       names(LAMBDA.IDS) <- as.character(LAMBDAS)
-      selectInput('lambda', 'Lambda value', LAMBDA.IDS)
+      selectInput('lambda', 'Lambda value', LAMBDA.IDS, selected=server_env$Selected$LAMBDA)
     }
   }
 
