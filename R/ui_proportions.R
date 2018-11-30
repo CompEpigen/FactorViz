@@ -37,7 +37,8 @@ proportion<-function(){
                                      checkboxInput("vertPlotLabs", "Vertical labels:", value=FALSE)
 
                     ),
-                    conditionalPanel(' input.propPlotType !== "heatmap"',
+                    conditionalPanel(' input.propPlotType === "lineplot" ||
+                                       input.propPlotType === "scatterplot" ',
                                      uiOutput("componentSelector_4"),
                                      uiOutput("refProfileSelector")
 
