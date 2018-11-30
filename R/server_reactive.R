@@ -3,6 +3,9 @@ server_reactive<-function(input, output, server_env){
   server_env$dir <- reactive(input$dir)
   server_env$path <- reactive({
     ret<-""
+    if(!is.null(PATH)){
+      ret<-PATH
+    }
     if(server_env$dir()){
     volumes<-c(
       computer = ("/"),

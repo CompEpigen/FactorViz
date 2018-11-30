@@ -113,6 +113,9 @@ onstartLoad<-function(path=NULL){
 	K<<-NULL
 	LAMBDA<<-NULL
 	CG<<-NULL
+	if(!is.null(path) && (substr(path, nchar(path), nchar(path))!= .Platform$file.sep)){
+		path=paste0(path, .Platform$file.sep)
+	}
 	PATH<<-path
 
 

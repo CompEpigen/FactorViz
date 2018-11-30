@@ -8,8 +8,9 @@ home_tab <- function() {
       width = 2,
       shinyDirButton("dir", label = "Choose Directory", "Upload"),
       tags$h5("OR", align="center"),
-      textInput("text_dir", label="Path"),
+      textInput("text_dir", label="Path", value=PATH),
       tags$strong("Note:"),
+      tags$br(),
       tags$code("If both path (as text input) and directory (choosen via the file manager) is provided only the path will be consdiered"),
       tags$h5(""),
       actionButton("load", "Load Datasets")

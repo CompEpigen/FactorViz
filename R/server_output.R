@@ -11,8 +11,9 @@ server_output <- function(input, output, server_env) {
         print("Please Select or provide path to a directory")
       }else{
         path<-server_env$path()
+        pattern<-sub('.*\\/', '', path)
         path<-sub("/[^/]+$", "", path)
-        list.files(path)    
+        list.files(path, pattern=pattern)
       }
     })
 

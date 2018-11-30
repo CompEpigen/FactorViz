@@ -18,10 +18,7 @@ startFactorViz <- function(path=NULL) {
     ui = baseUI,
     server = base_server,
     onStart <-function(){
-      onstartLoad(path)
-      if(!is.null(PATH)){
-      load_data(PATH)
-    }
+      onstartLoad(path=path)
     }
   )
   shiny::runApp(app, port=6578)
