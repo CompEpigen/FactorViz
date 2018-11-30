@@ -1,6 +1,5 @@
 server_output_meta <- function(input, output, server_env) {
   output$groupSelector_5 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       results <- server_env$dataset()
       gr_lists <- results@parameters$cg_subsets
@@ -16,13 +15,11 @@ server_output_meta <- function(input, output, server_env) {
   })
 
   output$Kselector_5 <- renderUI({
-    server_env$df()
     Ks <- server_env$dataset()@parameters$Ks
     selectInput('K_5', 'Number of LMCs (k)', Ks, selectize = TRUE)
   })
 
   output$lambdaSelector_5 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       LAMBDAS <- server_env$dataset()@parameters$lambdas
       LAMBDA.IDS <- 1:length(server_env$dataset()@parameters$lambdas)
@@ -31,7 +28,6 @@ server_output_meta <- function(input, output, server_env) {
     }
   })
   output$compareRunSelector <- renderUI({
-    server_env$df()
     runs <- names(server_env$getRuns())
     names(runs) <- paste(seq_len(length(runs)), runs, sep = ". ")
     selectInput(

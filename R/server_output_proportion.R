@@ -1,6 +1,5 @@
 server_output_proportion <- function(input, output, server_env) {
   output$groupSelector_4 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       results <- server_env$dataset()
       gr_lists <- results@parameters$cg_subsets
@@ -16,14 +15,11 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$Kselector_4 <- renderUI({
-    server_env$df()
-    #Ks<-dataset()[["Ks"]]
     Ks <- server_env$dataset()@parameters$Ks
     selectInput('K_4', 'Number of LMCs (k)', Ks, selectize = TRUE)
   })
 
   output$lambdaSelector_4 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       LAMBDAS <- server_env$dataset()@parameters$lambdas
       LAMBDA.IDS <- 1:length(server_env$dataset()@parameters$lambdas)
@@ -51,7 +47,6 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$propMatrixSelector <- renderUI({
-    server_env$df()
     if (!is.null(input$propPlotType)) {
       if (input$propPlotType == "scatterplot") {
         prop_mats <- c("regression")
@@ -69,7 +64,6 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$componentSelectorRef <- renderUI({
-    server_env$df()
     comps <- c(1:input$K_ref)
     selectInput(
       'component_ref',
@@ -87,7 +81,6 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$componentSelector_4 <- renderUI({
-    server_env$df()
     if(!is.null(input$K_4)){
     comps <- c(1:input$K_4, NA)
     names(comps) <- c(as.character(1:input$K_4), "sum best matching")
@@ -106,7 +99,6 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$refProfileSelector <- renderUI({
-    server_env$df()
     rprofiles <- c()
     rprofile_names <- c()
     if (!is.null(server_env$getTrueT())) {
@@ -123,7 +115,6 @@ server_output_proportion <- function(input, output, server_env) {
   })
 
   output$sampleColorSelector_4 <- renderUI({
-    server_env$df()
       if(PHENO_DATA_FLAG){
       pd <- server_env$getPhenoData()
       if (!is.null(pd)) {

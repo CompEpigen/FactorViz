@@ -4,6 +4,7 @@
 baseUI <- function(){
           tagList(
             navbarPage(
+              id="base_nav",
               theme = shinythemes::shinytheme("cosmo"),
               "FactorViz 2.0",
               home_tab(),
@@ -11,9 +12,10 @@ baseUI <- function(){
               l_selec(),
               lmc_tab(),
               proportion(),
-              meta_analysis(),
+              meta_analysis()
+              #downloads()
               #tabPanel("Meta Analysis", "Page Under construction"),
-              tabPanel("Downloads", "Page Under construction")
+              #tabPanel("Downloads", "Page Under construction")
             )
           )
         }

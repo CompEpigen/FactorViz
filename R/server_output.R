@@ -91,7 +91,6 @@ server_output <- function(input, output, server_env) {
 
   ##################################### K selection main panel
   output$RMSEvsKplot <- renderPlot({
-    server_env$df()
     if (MEDSET_FLAG) {
       server_env$doKselectionPlot()
     }
@@ -99,7 +98,6 @@ server_output <- function(input, output, server_env) {
 
   ######################## Lambda selection main panel
   output$performancePanel <- renderUI({
-    server_env$df()
     if (!is.null(input$performanceMode) &&
         !is.null(input$lambdaMin) && !is.null(input$lambdaMax)) {
       if (input$performanceMode == "lineplots") {
@@ -117,14 +115,12 @@ server_output <- function(input, output, server_env) {
   })
 
   output$lineplot <- renderPlot({
-    server_env$df()
     server_env$doLambdaPlot()
   })
 
 
   ######################## LMC main panel
   output$componentsPanel <- renderUI({
-    server_env$df()
     K <- input$K_3
     if (!is.null(input$componentPlotType)) {
       if (input$componentPlotType == "mds plot" ||
@@ -167,13 +163,11 @@ server_output <- function(input, output, server_env) {
   })
 
   output$componentPlot <- renderPlot({
-    server_env$df()
     server_env$doComponentPlot()
   })
 
   ######################## Proportion Main Panel
   output$proportionplot <- renderPlot({
-    server_env$df()
     if (!is.null(input$propPlotType)) {
       server_env$doProportionPlot()
     }
@@ -183,7 +177,6 @@ server_output <- function(input, output, server_env) {
   ######################## Meta-Analysis Panel
 
   output$metaAnalysisPanel <- renderUI({
-    server_env$df()
     if(!is.null(input$analysisType)){
     if (input$analysisType == "compare LMCs") {
       list(
@@ -230,6 +223,51 @@ server_output <- function(input, output, server_env) {
     }
   })
 
+
+  output$downloadPanel<-renderUI({
+				wellPanel(
+						h4("Input Data"),
+						{sprintf("Target data (intensities) for CpG subset # %s",input$cg_group_6)},
+						downloadLink('inputDataIntMat', label = "(.MAT)", class = NULL),
+						br(),
+						{sprintf("Target data (ratios) for CpG subset # %s",input$cg_group_6)},
+						downloadLink('inputDataMat', label = "(.MAT)", class = NULL),
+						br(),
+						{sprintf("CpG subset # %s (with respect to the RnBeads HM450 annotation)",input$cg_group_6)},
+						downloadLink('inputCGsubset', label = "(.MAT)", class = NULL),
+						br(),
+						{sprintf("Sample information")},
+						downloadLink('inputPheno', label = "(.MAT)", class = NULL),
+						br(),
+						{sprintf("Sample subset")},
+						downloadLink('inputSampleSubset', label = "(.MAT)", class = NULL),
+						br(),
+						{sprintf("Reference profiles (T^star) for CpG subset # %s ",input$cg_group_6)},
+						downloadLink('inputRefDataMat', label = "(.MAT)", class = NULL),
+						br(),
+						if(!is.null(server_env$getTrueA())) {sprintf("Known proportion matrix (A^star)")},
+						if(!is.null(server_env$getTrueA())) downloadLink('inputTrueA',label="(.MAT)"),
+						hr(),
+						h4("Results"),
+						{ sprintf("Results for CpG subset # %s , k %s, lambda %g",
+					    input$cg_group_6, input$K_6, server_env$dataset()@parameters$lambdas[as.integer(input$lambda_6)])},
+						downloadLink('outputResults', label = "(.MAT)", class = NULL)
+				)
+
+			})
+      output$inputDataIntMat<-downloadHandler(
+  			filename=function(){
+  				gr_lists<-server_env$getRuns()[[input$analysisrun]][["cg_subsets"]]
+  				group_names<-sapply(gr_lists, paste, collapse="_")
+  				sprintf("input_data_M_U_cggroup_%s.mat",group_names[as.integer(input$cg_group)])
+  			},
+  			content=function(con){
+  				ind<-getCGsubset()
+  				#writeMat(con, D=getMethData()[ind,])
+  				system(sprintf("cp %s %s", file.path(getRuns()[[input$analysisrun]][["data.dir"]], "MandU.mat") ,con))
+  			}
+  	)
+
   output$TraitAssociation<-renderPlot({
     server_env$doTraitAssociation()
   })
@@ -268,4 +306,7 @@ output$metaPlot<-renderPlot({
 
   ################################################Sidebar output Meta Analysis panel
   server_output_meta(input, output, server_env)
+
+  ################################################Sidebar output Downloads panel
+  server_output_downloads(input, output, server_env)
 }

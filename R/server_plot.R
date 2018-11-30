@@ -1,6 +1,5 @@
 server_plot<-function(input, output, server_env){
 server_env$doKselectionPlot<-function(){
-  server_env$df()
   withProgress(
     message = 'Plotting...\n',
     detail = '...',

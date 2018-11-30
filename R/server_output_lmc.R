@@ -1,6 +1,5 @@
 server_output_lmc <- function(input, output, server_env) {
   output$groupSelector_3 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       results <- server_env$dataset()
       gr_lists <- results@parameters$cg_subsets
@@ -16,14 +15,11 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$Kselector_3 <- renderUI({
-    server_env$df()
-    #Ks<-dataset()[["Ks"]]
     Ks <- server_env$dataset()@parameters$Ks
     selectInput('K_3', 'Number of LMCs (k)', Ks, selectize = TRUE)
   })
 
   output$lambdaSelector_3 <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       LAMBDAS <- server_env$dataset()@parameters$lambdas
       LAMBDA.IDS <- 1:length(server_env$dataset()@parameters$lambdas)
@@ -34,7 +30,6 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$componentPlotT <- renderUI({
-    server_env$df()
     p_type <-
       c(
         "dendrogram",
@@ -61,7 +56,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$componentSelector <- renderUI({
-    server_env$df()
+
     comps <- c(1:input$K_3, NA)
     names(comps) <- c(as.character(1:input$K_3), "sum best matching")
     selectInput(
@@ -80,7 +75,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$topSDcgsSelector <- renderUI({
-    server_env$df()
+
 
     gr <- as.integer(input$cg_group_3)
     ind <- server_env$getCGsubset_3()
@@ -97,7 +92,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$sampleColorSelector <- renderUI({
-    server_env$df()
+
     pd <- server_env$getPhenoData()
     if (!is.null(pd)) {
       siteannot <- colnames(pd)
@@ -111,7 +106,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$pointColorSelector <- renderUI({
-    server_env$df()
+
     cats <- names(server_env$getCGcategories())
     feats <- names(server_env$getCGquantFeatureSettings())
     selectInput('pointCategory',
@@ -121,7 +116,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$pointFilter <- renderUI({
-    server_env$df()
+
     if ("pointCategory" %in% names(input) &&
         input$pointCategory != "none") {
       if (input$pointCategory %in% names(server_env$getCGcategories())) {
@@ -149,7 +144,7 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$CGcategorySubsetSelector <- renderUI({
-    server_env$df()
+
     if ("CGsubsetToCategory" %in% names(input) &&
         input$CGsubsetToCategory && input$pointCategory != "none") {
       cats <- getCGcategories()
@@ -167,13 +162,13 @@ server_output_lmc <- function(input, output, server_env) {
   })
 
   output$geneSetSelector <- renderUI({
-    server_env$df()
+
     gene.sets <- getGeneSets()
     selectInput('geneSet', 'Gene set:', names(gene.sets), selectize = TRUE)
   })
 
   output$locusSelector <- renderUI({
-    server_env$df()
+
     gene.sets <- getGeneSets()
     selectInput('locus', 'Gene:', gene.sets[[input$geneSet]], selectize =
                   TRUE)

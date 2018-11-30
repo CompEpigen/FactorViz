@@ -1,6 +1,5 @@
 server_output_k_selec <- function(input, output, server_env) {
   output$groupSelector <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       results <- server_env$dataset()
       gr_lists <- results@parameters$cg_subsets
@@ -15,7 +14,6 @@ server_output_k_selec <- function(input, output, server_env) {
   })
 
   output$minKselector <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       selectInput('minK',
                   'Minimum k:',
@@ -24,7 +22,6 @@ server_output_k_selec <- function(input, output, server_env) {
   })
 
   output$maxKselector <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       selectInput(
         'maxK',
@@ -36,7 +33,6 @@ server_output_k_selec <- function(input, output, server_env) {
   })
 
   output$lambdaSelector <- renderUI({
-    server_env$df()
     if (MEDSET_FLAG) {
       if (is.null(input$RMSEvsKplotAllLambdas)|| !input$RMSEvsKplotAllLambdas){
       LAMBDAS <- server_env$dataset()@parameters$lambdas

@@ -2,7 +2,6 @@ server_table<-function(input, output, server_env){
 
 ##################LAMBDA SELECTION TAB
     output$performanceTable <- DT::renderDataTable({
-      server_env$df()
       results <- server_env$dataset()
       gr <- as.integer(input$cg_group_2)
       elts <- PERFORMANCE_MEASURES
