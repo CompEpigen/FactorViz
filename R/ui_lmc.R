@@ -6,7 +6,7 @@ lmc_tab <- function() {
       width = 2,
       uiOutput("groupSelector_3"),
       uiOutput("Kselector_3"),
-      checkboxInput("useReferences", "Use Reference", value=T),
+      uiOutput("refcheck"),
       conditionalPanel(
         'input.componentPlotType !== "matching plot" ',
         uiOutput("lambdaSelector_3")

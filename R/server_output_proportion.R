@@ -128,5 +128,11 @@ server_output_proportion <- function(input, output, server_env) {
                   selectize = TRUE)
     }
     })
+    output$refcheck<-renderUI({
+      server_env$df()
+      if(ANN_C_FLAG || TRUE_T_FLAG || TRUE_A_FLAG ||	PHENO_DATA_FLAG || 	SAMPLE_NAME_FLAG ||	METH_DATA_FLAG){
+        checkboxInput("useReferences", "Use Reference", value=T)
+      }
+      })
 
 }
