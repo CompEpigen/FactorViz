@@ -6,9 +6,15 @@
 
 ##########################################  Home tab main panel
 server_output <- function(input, output, server_env) {
-  output$files <- renderPrint(
-      list.files(server_env$path())
-    )
+  output$files <- renderPrint({
+      if(server_env$path()==""){
+        print("Please Select or provide path to a directory")
+      }else{
+        path<-server_env$path()
+        path<-sub("/[^/]+$", "", path)
+        list.files(path)    
+      }
+    })
 
   output$AnalysisRunDescriptionHeader <- renderUI({
     server_env$df()

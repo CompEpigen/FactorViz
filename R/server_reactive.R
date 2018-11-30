@@ -2,11 +2,20 @@
 server_reactive<-function(input, output, server_env){
   server_env$dir <- reactive(input$dir)
   server_env$path <- reactive({
+    ret<-""
+    if(server_env$dir()){
     volumes<-c(
       computer = ("/"),
       home = paste('/home/', CURRENT_USER, "/", sep = "")
     )
-    parseDirPath(volumes,server_env$dir())
+    ret<-parseDirPath(volumes,server_env$dir())
+    }
+    if(!is.null(input$text_dir)){
+      if(input$dir!=""){
+      ret<-input$text_dir
+    }
+    }
+    return(ret)
   })
   server_env$dataset <- reactive(quote({
     server_env$df()
