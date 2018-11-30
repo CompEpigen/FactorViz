@@ -48,7 +48,7 @@ server_table<-function(input, output, server_env){
 output$diffCGTable<-DT::renderDataTable({
 
   diff_cgs<-server_env$getDiffCGs()
-
+  if(!is.null(input$diffTableType)){
   if(input$diffTableType=="hypomethylated"){
     output<-diff_cgs[[1]]
   }else if(input$diffTableType=="hypermethylated"){
@@ -56,6 +56,7 @@ output$diffCGTable<-DT::renderDataTable({
   }
 
   output
+  }
 },rownames=FALSE, selection = 'single')
 
 server_env$getGOEnrichmenttable<-eventReactive(input$GOsubmitQuery, {

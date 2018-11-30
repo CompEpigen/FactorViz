@@ -177,6 +177,7 @@ server_output <- function(input, output, server_env) {
 
   output$metaAnalysisPanel <- renderUI({
     server_env$df()
+    if(!is.null(input$analysisType)){
     if (input$analysisType == "compare LMCs") {
       list(
         plotOutput(
@@ -203,8 +204,13 @@ server_output <- function(input, output, server_env) {
           DT::dataTableOutput('goEnrichementTable')
         }else if (input$diffOutputType == "LOLA Enrichments") {
           list(plotOutput("metaPlot"),
-          downloadLink("metaPlotPDF", "PDF"),
-          DT::dataTableOutput('lolaEnrichementTable'))
+          DT::dataTableOutput('lolaEnrichementTable'),
+          if(server_env$getLOLAEnrichmenttable()){
+            downloadLink("metaPlotPDF", "Lola Plot PDF")
+          }else{
+            br()
+          })
+
          }else{
            br()
          }
@@ -214,6 +220,7 @@ server_output <- function(input, output, server_env) {
         }else{
         br()
       }
+    }
   })
 
   output$TraitAssociation<-renderPlot({
