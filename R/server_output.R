@@ -194,18 +194,23 @@ server_output <- function(input, output, server_env) {
       )
     } else if (input$analysisType == "differential methylation") {
       list(plotOutput('diffCGPlot'),
-            DT::dataTableOutput('diffCGTable'))
+           downloadLink("diffCGPlotPDF", "PDF"),
+           DT::dataTableOutput('diffCGTable')
+          )
       }
       else if((input$analysisType == "Enrichments")){
         if (input$diffOutputType == "GO Enrichments"){
           DT::dataTableOutput('goEnrichementTable')
         }else if (input$diffOutputType == "LOLA Enrichments") {
-          list(plotOutput("metaPlot"),  DT::dataTableOutput('lolaEnrichementTable'))
+          list(plotOutput("metaPlot"),
+          downloadLink("metaPlotPDF", "PDF"),
+          DT::dataTableOutput('lolaEnrichementTable'))
          }else{
            br()
          }
       } else if(input$analysisType=="Trait Association"){
-        plotOutput('TraitAssociation')
+        list(plotOutput('TraitAssociation'),
+             downloadLink("TraitAssociationPDF", "PDF"))
         }else{
         br()
       }

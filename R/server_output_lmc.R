@@ -47,7 +47,6 @@ server_output_lmc <- function(input, output, server_env) {
               "scatterplot matching",
               "scatterplot avg matching")
     }
-    print(input$K_3)
     if (!is.null(input$K_3) && (as.integer(input$K_3) > 2)){
       p_type<-c(p_type, "mds plot")
     }

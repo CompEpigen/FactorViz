@@ -312,7 +312,6 @@ server_env$doComparisonPlot<-function(){
     samps<-1:ncol(mdd)
 
     if("refThat" %in% input$compareMatrices){
-      print(input$K_ref)
       That<-server_env$dataset_ref()@outputs[[as.character(gr)]]$T[[input$K_ref,ll_ref]][cg_map_ref,]
 
       colnames(That)<-paste0(paste0(input$refAnalysisToken, "_LMC"), 1:ncol(That))

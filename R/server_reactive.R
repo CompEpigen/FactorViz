@@ -13,4 +13,8 @@ server_reactive<-function(input, output, server_env){
     results<-medecom_object
     results
     }),quoted=TRUE)
+
+  server_env$K<-reactive(K)
+  server_env$lambda<-reactive(LAMBDA)
+  server_env$cg<-reactive(CG)
   }

@@ -32,6 +32,7 @@ base_server <- function(input, output) {
   server_output(input, output, server_env)
   #source(server_plot.R, local=T)
   server_plot(input, output, server_env)
+  server_pdf(input, output, server_env)
   server_table(input, output, server_env)
 
 }

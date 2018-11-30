@@ -12,7 +12,9 @@ lmc_tab <- function() {
         uiOutput("lambdaSelector_3")
       ),
       uiOutput('componentPlotT'),
-      conditionalPanel('input.componentPlotType === "scatterplot all" ',
+      conditionalPanel('input.componentPlotType === "scatterplot all" ||
+                        input.componentPlotType === "scatterplot matching" ||
+                        input.componentPlotType === "scatterplot avg matching"',
         uiOutput("componentSelector")
       ),
       conditionalPanel(

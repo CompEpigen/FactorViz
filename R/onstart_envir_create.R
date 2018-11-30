@@ -62,6 +62,14 @@ load_data<-function(path){
 	}
 	#incProgress(1 / 4)
 	new.envi <- new.env()
+	k<-sort(medecom_object@parameters$Ks)
+	K <<- k[which.min(k)]
+	lambda_list <- sort(medecom_object@parameters$lambdas)
+	LAMBDA<<-lambda_list[which.min(lambda_list)]
+	CG<<-1
+	print(K)
+	print(LAMBDA)
+	print(CG)
 	gc()
 }
 onstartLoad<-function(path=NULL){
@@ -102,7 +110,9 @@ onstartLoad<-function(path=NULL){
 	medecom_ref_object<<-NULL
 
 	lola.db<<-NULL
-
+	K<<-NULL
+	LAMBDA<<-NULL
+	CG<<-NULL
 	PATH<<-path
 
 
