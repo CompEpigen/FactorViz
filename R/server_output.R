@@ -205,7 +205,7 @@ server_output <- function(input, output, server_env) {
         }else if (input$diffOutputType == "LOLA Enrichments") {
           list(plotOutput("metaPlot"),
           DT::dataTableOutput('lolaEnrichementTable'),
-          if(server_env$getLOLAEnrichmenttable()){
+          if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
             downloadLink("metaPlotPDF", "Lola Plot PDF")
           }else{
             br()
