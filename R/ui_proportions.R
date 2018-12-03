@@ -9,10 +9,10 @@ proportion<-function(){
                     conditionalPanel('input.propPlotType === "lineplot" ',
                                      selectInput("sampleOrder", label="Order:", choices=c("increasing", "decreasing", "original"))
                     ),
-                    conditionalPanel('input.propPlotType === "scatterplot" ||
-                                     input.propPlotType !== "lineplot" ',
-                                     uiOutput("propMatrixSelector")
-                    ),
+                    #conditionalPanel('input.propPlotType === "scatterplot" ||
+                    #                 input.propPlotType !== "lineplot" ',
+                    #                 uiOutput("propMatrixSelector")
+                    #),
                     conditionalPanel('input.propPlotType === "heatmap" ',
                                      checkboxInput("propClusterCols", "Cluster columns:", value=FALSE),
                                      checkboxInput("propClusterRows", "Cluster rows:", value=FALSE)

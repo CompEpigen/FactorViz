@@ -202,8 +202,13 @@ server_env$doProportionPlot<-function(){
   else{
     data.ch<-NULL
   }
+  if (input$propPlotType=="correlations"){
+    propPlotType="sample characteristics"
+  }else{
+    propPlotType=input$propPlotType
+  }
   MeDeCom::plotProportions(results,
-                  type = input$propPlotType,
+                  type = propPlotType,
                   K = as.integer(input$K_4),
                   lambda = lambda,
                   cg_subset = cg_,
@@ -214,7 +219,8 @@ server_env$doProportionPlot<-function(){
                   sample.characteristic=data.ch,
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows,
-                  reorder=input$sampleOrder)
+                  reorder=input$sampleOrder,
+                  mdsDataCat = input$mdsDataCat_4)
 })
 }
 

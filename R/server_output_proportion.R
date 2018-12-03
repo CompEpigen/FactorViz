@@ -108,8 +108,9 @@ server_output_proportion <- function(input, output, server_env) {
       rprofile_names <- c(rprofile_names, rprofile_names_add)
     }
     names(rprofiles) <- rprofile_names
+    if(length(rprofiles)>0){
     selectInput('profile', 'Reference Profile:', rprofiles, selectize = TRUE)
-
+    }
   })
 
   output$sampleColorSelector_4 <- renderUI({
