@@ -204,12 +204,13 @@ server_output <- function(input, output, server_env) {
           DT::dataTableOutput('goEnrichementTable')
         }else if (input$diffOutputType == "LOLA Enrichments") {
           list(plotOutput("metaPlot"),
-          DT::dataTableOutput('lolaEnrichementTable'),
-          if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
+          if(!all(is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]]))){
             downloadLink("metaPlotPDF", "Lola Plot PDF")
           }else{
             br()
-          })
+          },
+          DT::dataTableOutput('lolaEnrichementTable')
+          )
 
          }else{
            br()
@@ -273,7 +274,7 @@ server_output <- function(input, output, server_env) {
   })
 
   output$diffCGPlot<-renderPlot({
-    server_env$doDiffCGPlot();
+    server_env$doDiffCGPlot()
   })
 output$metaPlot<-renderPlot({
   server_env$doMetaPlot()

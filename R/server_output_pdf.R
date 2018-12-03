@@ -86,11 +86,11 @@ output$metaPlotPDF <- downloadHandler(
 
 		},
 
-		content=function(con){
+		content=function(file){
 			#pdf(con, width=7, height=10)
-			pdf(con)
-			server_env$doMetaPlot()
-			dev.off()
+			require(ggplot)
+			#pdf(con, width=7, height=10)
+			ggsave(file, plot = server_env$doMetaPlot(), device = "pdf")
 		},
 		contentType="application/pdf"
 
@@ -99,14 +99,13 @@ output$TraitAssociationPDF <- downloadHandler(
 		filename=function(){
 			sprintf("%s_TraitAssociation_cgsubset_%s_K_%s_lambdaval_%s.pdf",
 					input$tatstat, input$cg_group_5, input$K_5, input$lambda_5)
-			
+
 		},
 
-		content=function(con){
+		content=function(file){
+			require(ggplot)
 			#pdf(con, width=7, height=10)
-			pdf(con)
-			server_env$doTraitAssociation()
-			dev.off()
+			ggsave(file, plot = server_env$doTraitAssociation(), device = "pdf")
 		},
 		contentType="application/pdf"
 

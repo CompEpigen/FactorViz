@@ -5,7 +5,7 @@ home_tab <- function() {
     title = "Home",
     id = "home",
     sidebarPanel(
-      width = 2,
+      width = 3,
       shinyDirButton("dir", label = "Choose Directory", "Upload"),
       tags$h5("OR", align="center"),
       textInput("text_dir", label="Path", value=PATH),
