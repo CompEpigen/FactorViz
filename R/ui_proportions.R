@@ -7,15 +7,6 @@ proportion<-function(){
                     uiOutput("lambdaSelector_4"),
                     uiOutput("propPlotT"),
                     conditionalPanel('input.propPlotType === "lineplot" ',
-                                     checkboxInput("includeRegrProp", "Regression", value=TRUE),
-                                     checkboxInput("includeHousemanProp", "Houseman 2012", value=TRUE),
-                                     selectInput("propPlotLegend", "Legend",
-                                                 choices=c("top right"="topright",
-                                                           "top left"="topleft",
-                                                           "bottom right"="bottomright",
-                                                           "bottom left"="bottomleft",
-                                                           "none"=NA)
-                                     ),
                                      selectInput("sampleOrder", label="Order:", choices=c("increasing", "decreasing", "original"))
                     ),
                     conditionalPanel('input.propPlotType === "scatterplot" ||
@@ -50,8 +41,7 @@ proportion<-function(){
                     ),
                     conditionalPanel('input.propPlotType === "correlations" ',
                                      checkboxInput("correlationCentered_4", "Center matrices", value=FALSE)
-                    ),
-                  checkboxInput("addPlotTitle", "Add plot titles", value=TRUE)
+                    )
                     ),
                   mainPanel(
                              plotOutput('proportionplot',

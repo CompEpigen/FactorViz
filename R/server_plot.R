@@ -213,7 +213,8 @@ server_env$doProportionPlot<-function(){
                   assignment.method = "pearson",
                   sample.characteristic=data.ch,
                   heatmap.clusterCols = input$propClusterCols,
-                  heatmap.clusterRows = input$propClusterRows)
+                  heatmap.clusterRows = input$propClusterRows,
+                  reorder=input$sampleOrder)
 })
 }
 

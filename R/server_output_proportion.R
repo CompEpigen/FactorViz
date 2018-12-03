@@ -92,7 +92,6 @@ server_output_proportion <- function(input, output, server_env) {
       'LMC:',
       comps,
       selectize = TRUE,
-      multiple = TRUE,
       selected = 1
     )
   })
