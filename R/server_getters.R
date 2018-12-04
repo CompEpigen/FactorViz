@@ -146,13 +146,14 @@ server_env$getDiffCGs<-reactive(quote({
 
   ann_hypo<-server_env$getCGAnnot()[ind_hypo,,drop=FALSE]
   ann_hyper<-server_env$getCGAnnot()[ind_hyper,,drop=FALSE]
+
   #We only select some of the columns here
-  sel.columns <- c("ID",'Diff',"Chromosome","Start","End","Strand","CGI Relation")
-  if(all(c("ID",'Diff',"Chromosome","Start","End","Strand","CGI Relation") %in% colnames(ann_hypo))){
-    ann.hypo <- ann.hypo[,sel.columns,drop=FALSE]
+  sel.columns <- c("Chromosome","Start","End","Strand","CGI Relation")
+  if(all(sel.columns %in% colnames(ann_hypo))){
+    ann_hypo <- ann_hypo[,sel.columns,drop=FALSE]
   }
-  if(all(c("ID",'Diff',"Chromosome","Start","End","Strand","CGI Relation") %in% colnames(ann_hyper))){
-    ann.hyper <- ann.hyper[,sel.columns,drop=FALSE]
+  if(all(sel.columns %in% colnames(ann_hyper))){
+    ann_hyper <- ann_hyper[,sel.columns,drop=FALSE]
   }
 
   ann_hypo<-cbind(data.frame(ID=rownames(ann_hypo), Diff=meth_diff[hypo_cgs]), ann_hypo)
