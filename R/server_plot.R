@@ -455,12 +455,6 @@ server_env$doDiffCGPlot<-function(){
     hist(meth_diff, breaks=200, xlim=c(-xl,xl), main="", xlab="(mean) methylation difference")
     abline(v=input$dmr_threshold)
     abline(v=-input$dmr_threshold)
-    if(input$addPlotTitle){
-      title(sprintf("LMC(s) %s vs LMC(s) %s",
-                    paste(input$componentGroup1, collapse=", "),
-                    paste(input$componentGroup2, collapse=", ")
-      ))
-    }
   }
 })
 }
