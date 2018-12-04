@@ -6,17 +6,18 @@ server_reactive<-function(input, output, server_env){
     if(!is.null(PATH)){
       ret<-PATH
     }
-    if(server_env$dir()){
+    if(!is.null(server_env$dir())){
     volumes<-c(
       computer = ("/"),
       home = paste('/home/', CURRENT_USER, "/", sep = "")
     )
-    ret<-parseDirPath(volumes,server_env$dir())
+    pat<-parseDirPath(volumes,server_env$dir())
+    if(length(pat)>0){
+      ret<-paste(pat, "/", sep="")
     }
-    if(!is.null(input$text_dir)){
-      if(input$dir!=""){
+  }
+    if(!is.null(input$text_dir) && input$text_dir!=''){
       ret<-input$text_dir
-    }
     }
     return(ret)
   })
