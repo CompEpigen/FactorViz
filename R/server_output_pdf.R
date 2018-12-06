@@ -37,12 +37,14 @@ output$componentPlotPDF <- downloadHandler(
 					input$componentPlotType, input$cg_group_3, input$K_3, input$lambda_3)
 		},
 
-		content=function(con){
+		content=function(file){
 			#pdf(con, width=7, height=10)
-			pdf(con)
-			par(mar=c(2,2,2,2))
-			server_env$doComponentPlot()
-			dev.off()
+			#pdf(con)
+			#par(mar=c(2,2,2,2))
+			#server_env$doComponentPlot()
+			#dev.off()
+			#pdf(con, width=7, height=10)
+			ggsave(file, plot = server_env$doComponentPlot(), device = "pdf")
 		},
 		contentType="application/pdf"
 
@@ -70,11 +72,13 @@ output$diffCGPlotPDF <- downloadHandler(
 					input$cg_group_5, input$K_5, input$lambda_5, input$diffTableType)
 		},
 
-		content=function(con){
+		content=function(file){
 			#pdf(con, width=7, height=10)
-			pdf(con)
-			server_env$doDiffCGPlot()
-			dev.off()
+			#pdf(con)
+			#server_env$doDiffCGPlot()
+			#dev.off()
+			#pdf(con, width=7, height=10)
+			ggsave(file, plot = server_env$doDiffCGPlot(), device = "pdf")
 		},
 		contentType="application/pdf"
 
@@ -88,7 +92,6 @@ output$metaPlotPDF <- downloadHandler(
 
 		content=function(file){
 			#pdf(con, width=7, height=10)
-			require(ggplot)
 			#pdf(con, width=7, height=10)
 			ggsave(file, plot = server_env$doMetaPlot(), device = "pdf")
 		},
@@ -103,7 +106,6 @@ output$TraitAssociationPDF <- downloadHandler(
 		},
 
 		content=function(file){
-			require(ggplot)
 			#pdf(con, width=7, height=10)
 			ggsave(file, plot = server_env$doTraitAssociation(), device = "pdf")
 		},

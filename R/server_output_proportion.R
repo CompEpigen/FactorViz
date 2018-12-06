@@ -82,11 +82,7 @@ server_output_proportion <- function(input, output, server_env) {
   output$componentSelector_4 <- renderUI({
     if(!is.null(input$K_4)){
     comps <- c(1:input$K_4, NA)
-    names(comps) <- c(as.character(1:input$K_4), "sum best matching")
-    }else{
-      comps <- c(NA)
-      names(comps) <- c("sum best matching")
-    }
+    names(comps) <- c(as.character(1:input$K_4))
     selectInput(
       'component_4',
       'LMC:',
@@ -94,6 +90,7 @@ server_output_proportion <- function(input, output, server_env) {
       selectize = TRUE,
       selected = 1
     )
+    }
   })
 
   output$refProfileSelector <- renderUI({
@@ -121,9 +118,12 @@ server_output_proportion <- function(input, output, server_env) {
       } else{
         siteannot <- character()
       }
+      if (input$propPlotType!='correlations'){
+        siteannot=c("none", siteannot)
+      }
       selectInput('mdsDataCat_4',
                   'Color samples by:',
-                  c("none", siteannot),
+                  siteannot,
                   selectize = TRUE)
     }
     })

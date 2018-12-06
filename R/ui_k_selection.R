@@ -2,7 +2,7 @@
 k_selec<-function(){
   tabPanel(title="K selection", id="k_select",
                   sidebarPanel(
-                    width = 2,
+                    width = 3,
                     uiOutput("groupSelector"),
                     uiOutput("KvsStat"),
                     uiOutput("minKselector"),

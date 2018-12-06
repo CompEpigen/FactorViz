@@ -34,7 +34,8 @@ server_output_lmc <- function(input, output, server_env) {
         "dendrogram",
         "extremality",
         "heatmap",
-        "similarity graph"
+        "similarity graph",
+        "boxplot"
       )
     if(TRUE_T_FLAG && (!is.null(input$useReferences) && (input$useReferences))){
       p_type<-c(p_type, "scatterplot all",

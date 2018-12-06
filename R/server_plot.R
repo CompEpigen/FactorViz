@@ -202,6 +202,7 @@ server_env$doProportionPlot<-function(){
   else{
     data.ch<-NULL
   }
+  print(data.ch)
   if (input$propPlotType=="correlations"){
     propPlotType="sample characteristics"
   }else{
@@ -219,8 +220,7 @@ server_env$doProportionPlot<-function(){
                   sample.characteristic=data.ch,
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows,
-                  reorder=input$sampleOrder,
-                  mdsDataCat = input$mdsDataCat_4)
+                  reorder=input$sampleOrder)
 })
 }
 

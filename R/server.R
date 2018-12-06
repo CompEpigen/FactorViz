@@ -15,15 +15,31 @@ base_server <- function(input, output, session) {
     filetypes = c('', 'RData')
   )
   server_env$df <- eventReactive(input$load, {
-    path<-server_env$path()
     withProgress(
       message = 'Loading datasets in progress\n',
-      detail = 'This may take a while...',
-      value = 0,
+      detail = 'Loading Data...',
+      value = 0.3,
       {
           hideTabs(input, output)
-          load_data(path)
-          showTabs(input, output)
+          if(!input$multiplepath){
+          load_data(decomp_output=server_env$path())
+          }else{
+            load_data(medecom_set=input$medecom_path, ann_C=input$annC_path, ann_S=input$annS_path, ref_meth=input$ref_meth_path)
+          }
+          incProgress(0.3, detail = "Doing Sanity Checks")
+          server_env$check<-sanity_check()
+          if(server_env$check[[1]]){
+            print(server_env$check[[2]])
+            showTabs(input, output)
+          }
+          else{
+            print(server_env$check[[2]])
+            start_state_initialiser()
+          }
+          incProgress(0.3, detail = "Adding final touches")
+           server_env$Selected$K=NULL
+           server_env$Selected$LAMBDA=NULL
+           server_env$Selected$CG=NULL
       }
     )
   })

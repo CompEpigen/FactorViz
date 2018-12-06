@@ -1,7 +1,7 @@
 proportion<-function(){
                   tabPanel("Proportions", id="Proportions",
                   sidebarPanel(
-                    width = 2,
+                    width = 3,
                     uiOutput("groupSelector_4"),
                     uiOutput("Kselector_4"),
                     uiOutput("lambdaSelector_4"),
@@ -29,9 +29,16 @@ proportion<-function(){
 
                     ),
                     conditionalPanel(' input.propPlotType === "lineplot" ||
-                                       input.propPlotType === "scatterplot" ',
+                                       input.propPlotType === "scatterplot" ||
+                                       input.propPlotType === "correlations" ',
+
                                      uiOutput("componentSelector_4"),
-                                     uiOutput("refProfileSelector")
+
+                                     conditionalPanel(' input.propPlotType === "lineplot" ||
+                                                        input.propPlotType === "scatterplot" ',
+
+                                                      uiOutput("refProfileSelector")
+                                                    )
 
                     ),
                     conditionalPanel('input.propPlotType !== "lineplot" &&

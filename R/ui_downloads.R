@@ -3,7 +3,7 @@ downloads <- function() {
     "Downloads",
     id = "download",
     sidebarPanel(
-      width = 2,
+      width = 3,
       uiOutput("groupSelector_6"),
       uiOutput("Kselector_6"),
       uiOutput("lambdaSelector_6")

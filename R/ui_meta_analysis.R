@@ -4,7 +4,7 @@ meta_analysis <- function() {
     "Meta Analysis",
     id = "met_analysis",
     sidebarPanel(
-      width = 2,
+      width = 3,
       uiOutput("groupSelector_5"),
       uiOutput("lambdaSelector_5"),
       uiOutput("Kselector_5"),

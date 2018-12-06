@@ -7,15 +7,35 @@
 ##########################################  Home tab main panel
 server_output <- function(input, output, server_env) {
   output$files <- renderPrint({
+    if(!input$multiplepath){
       if(server_env$path()==""){
         print("Please Select or provide path to a directory")
       }else{
         path<-server_env$path()
-        pattern<-sub('.*\\/', '', path)
-        path<-sub("/[^/]+$", "", path)
-        list.files(path, pattern=pattern)
+        getFiles(path)
       }
+    }else{
+      files<-list("MeDeCom"=getFiles(input$medecom_path),
+                  "CpG"=getFiles(input$annC_path),
+                  "Sample"=getFiles(input$annS_path),
+                  "RefMeth"=getFiles(input$ref_meth_path)
+                )
+      print("MeDeCom Set:")
+      print(files$MeDeCom)
+      print("--------------------------------------------------------------------------------")
+      print("CpG Annotations:")
+      print(files$CpG)
+      print("--------------------------------------------------------------------------------")
+      print("Sample Annotations:")
+      print(files$Sample)
+      print("--------------------------------------------------------------------------------")
+      print("Reference Methylome:")
+      print(files$RefMeth)
+    }
     })
+    getFiles<-function(path){
+      return(list.files(sub("/[^/]+$", "", path), pattern=sub('.*\\/', '', path)))
+    }
 
   output$AnalysisRunDescriptionHeader <- renderUI({
     server_env$df()
@@ -23,7 +43,7 @@ server_output <- function(input, output, server_env) {
       wellPanel(#strong("Analysis Run:"),
         h4(server_env$getAnalysisName()))
     } else{
-      wellPanel(strong("Please load a dataset"))
+      wellPanel(strong(server_env$check[[2]]))
     }
   })
 

@@ -5,12 +5,24 @@
 \title{startFactorViz
 This function intialises factorviz and start}
 \usage{
-startFactorViz(path = NULL)
+startFactorViz(decomp_output = NULL, medecom_set = NULL,
+  ann_C = NULL, ann_S = NULL, ref_meth = NULL)
 }
 \arguments{
-\item{path}{takes in the directory path to decomp output}
+\item{decomp_output}{takes in the directory path to decomp output}
+
+\item{medecom_set}{takes in the path to medecom set file}
+
+\item{ann_C}{takes in the path to CpG Annotation file}
+
+\item{ann_S}{takes in the path to Sample Annotation file}
+
+\item{ref_meth}{takes in the path to Reference Methylome file}
 }
 \description{
 startFactorViz
 This function intialises factorviz and start
+}
+\details{
+If decomp_output provided all other parameters force set to NULL
 }

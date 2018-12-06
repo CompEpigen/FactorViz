@@ -1,7 +1,7 @@
 # This script contains the code related to K selection tab
 l_selec<-function(){tabPanel("Lambda selection", id="l_selec",
          sidebarPanel(
-           width = 2,
+           width = 3,
            uiOutput("groupSelector_2"),
            uiOutput("Kselector_2"),
            uiOutput("performanceModeSelector"),

@@ -3,7 +3,7 @@ lmc_tab <- function() {
     "LMCs",
     id = "LMC",
     sidebarPanel(
-      width = 2,
+      width = 3,
       uiOutput("groupSelector_3"),
       uiOutput("Kselector_3"),
       uiOutput("refcheck"),
