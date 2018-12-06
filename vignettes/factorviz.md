@@ -1,7 +1,7 @@
 Introduction
 ============
 
-The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://public.genetik.uni-sb.de/medecom/)
+The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](https://github.com/lutsik/medecom/)
 
 Installation
 ============
@@ -89,4 +89,4 @@ After the paths are set click on the `Load Dataset` button to load the dataset i
 </figure>
 </center>
 
-The further section of `K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis` are explained in detail in [MeDeCom](http://public.genetik.uni-sb.de/medecom/) documentation.
+The further section of `K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis` are explained in detail in [MeDeCom](https://github.com/lutsik/medecom/) documentation.
