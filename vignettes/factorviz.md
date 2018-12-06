@@ -79,6 +79,7 @@ With *FactorViz* you can also load the dataset from multiple location by switchi
 <figcaption>Fig 4</figcaption>
 </figure>
 </center>
+
 After the paths are set click on the `Load Dataset` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
 
 <center>
@@ -87,4 +88,5 @@ After the paths are set click on the `Load Dataset` button to load the dataset i
 <figcaption>Fig 5</figcaption>
 </figure>
 </center>
+
 The further section of `K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis` are explained in detail in [MeDeCom](http://public.genetik.uni-sb.de/medecom/) documentation.
