@@ -59,12 +59,13 @@ If paramaters are not provided you can load the file by providing the path to [D
 </figure>
 </center>
 
+
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
 <center>
 <figure>
 <img src="images/choose_directory_3.png" alt="Fig 3" style="width:85.0%" />
-<figcaption>Fig 3</figcaption>
+-><figcaption>Fig 3</figcaption><-
 </figure>
 </center>
 
