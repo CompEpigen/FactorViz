@@ -1,0 +1,9 @@
+Meta
+doc
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.Rproj
+*.Rbuildignore
+.build.timestamp

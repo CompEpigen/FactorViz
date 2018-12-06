@@ -1,47 +1,34 @@
+#' startFactorViz
+#' This function intialises factorviz and start
+#'
+#' @param decomp_output takes in the directory path to decomp output
+#' @param medecom_set takes in the path to medecom set file
+#' @param ann_C takes in the path to CpG Annotation file
+#' @param ann_S takes in the path to Sample Annotation file
+#' @param ref_meth takes in the path to Reference Methylome file
+#' @details
+#' If decomp_output provided all other parameters force set to NULL
+#'
+#' @export
 
-startFactorViz<-function(object, input.data=NULL) {
-	app<-shiny::shinyApp(ui=getFactorVizUI, server=FactorViz_serverFunc,
-			onStart=function(){
-				if(inherits(object, "MeDeComSet")){
-					medecom_object<<-object
-					medecom_ref_object<<-NULL
-					if(is.list(input.data)){
-						input_object<<-input.data
-					}else if(inherits(input.data,"RnBSet")){
-						input_object<<-list(
-								pheno.data=pheno(input.data), 
-								meth.data=meth(input.data),
-								sample.names=samples(input.data)
-						)
-					}
-					repomode<<-FALSE
-					true_T_matrix<<-NULL
-					true_T_matrix_ref<<-NULL
-					true_A_matrix<<-NULL
-					if(inherits(input.data,"RnBSet")){
-						cg_annot_object<<-annotation(input.data)
-						gene_annot_object<<-rnb.annotation2data.frame(rnb.get.annotation(type="genes"))
-						prepared_annotation<<-prepare_feature_annotations(cg_annot_object)
-
-					}else{
-						cg_annot_object<<-NULL
-						gene_annot_object<<-NULL
-						prepared_annotation<-list("cat_list"=NULL, "cat_inf_vs"=NULL, "features"=NULL, settings=NULL)
-					}
-					
-					gene_sets_object<<-NULL
-				}else if(is.character(object)){
-					repo_dir_list<<-object
-					if(is.null(names(repo_dir_list))){
-						names(repo_dir_list)<-sprintf("Repository %d", 1:lenth(repo_dir_list))
-					}
-					repomode<<-TRUE
-				}else{
-					stop("wrong value supplied for object")
-				}
-				
-			})
-	
-	shiny::runApp(app)
-	
+startFactorViz <- function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL, ref_meth=NULL) {
+  require(shiny)
+  require(shinyFiles)
+  require(shinythemes)
+  require(ggplot2)
+  require(gplots)
+  require(RColorBrewer)
+  require(grid)
+  require(gridExtra)
+  require(DT)
+  require(RnBeads)
+  require(MeDeCom)
+  app <- shiny::shinyApp(
+    ui = baseUI,
+    server = base_server,
+    onStart <-function(){
+      onstartLoad(decomp_output=decomp_output, medecom_set=medecom_set, ann_C=ann_C, ann_S=ann_S, ref_meth=ref_meth )
+    }
+  )
+  shiny::runApp(app, port=6578)
 }
