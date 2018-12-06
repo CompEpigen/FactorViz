@@ -6,3 +6,4 @@ doc
 *.Ruserdata
 *.Rproj
 *.Rbuildignore
+.build.timestamp

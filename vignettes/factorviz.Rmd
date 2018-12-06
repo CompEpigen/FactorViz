@@ -15,7 +15,6 @@ vignette: >
   %\VignetteIndexEntry{FactorViz}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio.bib
 ---
 
 ```{r setup, include = FALSE}

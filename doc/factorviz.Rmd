@@ -15,7 +15,6 @@ vignette: >
   %\VignetteIndexEntry{FactorViz}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio.bib
 ---
 
 ```{r setup, include = FALSE}
@@ -59,17 +58,17 @@ If paramaters are not provided you can load the file by providing the path to  [
 
 
 <center>
-![Fig 1a](images/input_directory_1.png){width=70%}
+![Fig 1a](images/input_directory_1.png){width=85%}
 
 
 </center>
 <center>
-![Fig 1b](images/choose_directory_1.png){width=70%}
+![Fig 1b](images/choose_directory_1.png){width=85%}
 
 
 </center>
 <center>
-![Fig 2](images/choose_directory_2.png){width=70%}
+![Fig 2](images/choose_directory_2.png){width=85%}
 
 
 </center>
@@ -79,7 +78,7 @@ If paramaters are not provided you can load the file by providing the path to  [
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
 <center>
-![Fig 3](images/choose_directory_3.png){width=70%}
+![Fig 3](images/choose_directory_3.png){width=85%}
 
 
 </center>
@@ -90,7 +89,7 @@ Once selected you can check the file names of that will be loaded into *FactorVi
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
 
 <center>
-![Fig 4](images/multi_directory_1.png){width=70%}
+![Fig 4](images/multi_directory_1.png){width=85%}
 
 
 </center>
@@ -100,7 +99,7 @@ With *FactorViz* you can also load the dataset from multiple location by switchi
 After the paths are set click on the ```Load Dataset``` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
 
 <center>
-![Fig 5](images/choose_directory_4.png){width=70%}
+![Fig 5](images/choose_directory_4.png){width=85%}
 
 
 </center>
