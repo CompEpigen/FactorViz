@@ -107,7 +107,7 @@ server_output <- function(input, output, server_env) {
     } else{
 
     }
-  }, width = 1000, include.rownames = FALSE)
+  }, width='100%', include.rownames = FALSE, sanitize.text.function=identity)
 
   ##################################### K selection main panel
   output$RMSEvsKplot <- renderPlot({
