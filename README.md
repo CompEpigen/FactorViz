@@ -13,6 +13,6 @@ devtools::install_github("lutsik/FactorViz")
 You can start *FactorViz* by using ```startFactorViz()``` command.
 A more detailed introduction into *FactorViz* can be found in the package vignette
 (https://github.com/lutsik/FactorViz/blob/master/vignettes/factorviz.md).
-i
+
 # Dependencies
 FactorViz depends on [MeDeCom](http://github.com/lutsik/medecom/) and is thoroughly tested with outputs from [DecompPipeline](https://github.com/lutsik/DecompPipeline)
