@@ -65,10 +65,9 @@ Once selected you can check the file names of that will be loaded into *FactorVi
 <center>
 <figure>
 <img src="images/choose_directory_3.png" alt="Fig 3" style="width:85.0%" />
--><figcaption>Fig 3</figcaption><-
 </figure>
 </center>
-
+->Fig 3<-
 ### Using Multiple Files
 
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
