@@ -46,8 +46,6 @@ If paramaters are not provided you can load the file by providing the path to [D
 <img src="images/input_directory_1.png" alt="Fig 1a" style="width:85.0%" />
 <figcaption>Fig 1a</figcaption>
 </figure>
-</center>
-<center>
 <figure>
 <img src="images/choose_directory_1.png" alt="Fig 1b" style="width:85.0%" />
 <figcaption>Fig 1b</figcaption>
@@ -60,6 +58,7 @@ If paramaters are not provided you can load the file by providing the path to [D
 <figcaption>Fig 2</figcaption>
 </figure>
 </center>
+
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
 <center>
@@ -68,6 +67,7 @@ Once selected you can check the file names of that will be loaded into *FactorVi
 <figcaption>Fig 3</figcaption>
 </figure>
 </center>
+
 ### Using Multiple Files
 
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
