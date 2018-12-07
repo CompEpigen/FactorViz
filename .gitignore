@@ -5,3 +5,6 @@
 *.Rproj
 *.Rbuildignore
 .build.timestamp
+.Rproj.user
+.gitignore
+
