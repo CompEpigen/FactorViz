@@ -118,7 +118,7 @@ server_output_proportion <- function(input, output, server_env) {
       } else{
         siteannot <- character()
       }
-      if (input$propPlotType!='correlations'){
+      if (!is.null(input$propPlotType) && input$propPlotType!='correlations'){
         siteannot=c("none", siteannot)
       }
       selectInput('mdsDataCat_4',

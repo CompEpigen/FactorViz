@@ -191,7 +191,7 @@ server_env$doProportionPlot<-function(){
 
   Aref<-server_env$getTrueA()
 
-  if(input$propPlotType == "heatmap" || input$propPlotType == "correlations"){
+  if(!is.null(input$propPlotType) && (input$propPlotType == "heatmap" || input$propPlotType == "correlations")){
     if(input$mdsDataCat_4!="none"){
       pheno.data<-server_env$getPhenoData()
       data.ch<-pheno.data[[input$mdsDataCat_4]]
@@ -202,7 +202,7 @@ server_env$doProportionPlot<-function(){
   else{
     data.ch<-NULL
   }
-
+  if(!is.null(input$propPlotType)){
   if (input$propPlotType=="correlations"){
     propPlotType="sample characteristics"
   }else{
@@ -221,6 +221,7 @@ server_env$doProportionPlot<-function(){
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows,
                   reorder=input$sampleOrder)
+}
 })
 }
 

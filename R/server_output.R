@@ -7,7 +7,7 @@
 ##########################################  Home tab main panel
 server_output <- function(input, output, server_env) {
   output$files <- renderPrint({
-    if(!input$multiplepath){
+    if(!is.null(input$multiplepath) && !input$multiplepath){
       if(server_env$path()==""){
         print("Please Select or provide path to a directory")
       }else{

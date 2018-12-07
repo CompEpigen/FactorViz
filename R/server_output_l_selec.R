@@ -54,11 +54,11 @@ output$includeStats<-renderUI({
         output[[i]]<-checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE)
         i<-i+1
     }
-    if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C")) ||
-    length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C"))<1){
-        output[[i]]<-checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE)
-        i<-i+1
-      }
+    #if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C")) ||
+    #length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C"))<1){
+    #    output[[i]]<-checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE)
+    #    i<-i+1
+    #  }
       if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="maeA")) ||
       length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="maeA"))<1){
           output[[i]]<- checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE)
