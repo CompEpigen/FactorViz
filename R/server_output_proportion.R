@@ -81,7 +81,7 @@ server_output_proportion <- function(input, output, server_env) {
 
   output$componentSelector_4 <- renderUI({
     if(!is.null(input$K_4)){
-    comps <- c(1:input$K_4, NA)
+    comps <- c(1:input$K_4)
     names(comps) <- c(as.character(1:input$K_4))
     selectInput(
       'component_4',
