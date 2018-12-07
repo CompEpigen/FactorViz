@@ -33,9 +33,11 @@ lmc_tab <- function() {
         uiOutput("topSDcgsSelector")
   ),
   conditionalPanel(
-    'input.componentPlotType === "mds plot" ',
+    'input.componentPlotType === "mds plot" &&
+    METH_DATA_FLAG',
+
     selectInput(
-      "mdsInclude",
+      "mdsInclude_3",
       "Include data:",
       c("references" = "ref", "all data" = "data"),
       selected = 2
@@ -44,18 +46,7 @@ lmc_tab <- function() {
   conditionalPanel(
     'input.componentPlotType === "mds plot" &&
     input.mdsInclude === "data"',
-    selectInput(
-      "mdsSampleNames",
-      "Sample names:",
-      c("hide" = "hide", "show" = "show"),
-      selected = 1
-    )
-
-  ),
-  conditionalPanel(
-    'input.componentPlotType === "mds plot" &&
-    input.mdsInclude === "data"',
-    uiOutput("sampleColorSelector")
+    uiOutput("sampleColorSelector_3")
 
   ),
 

@@ -114,9 +114,9 @@ server_env$doComponentPlot<-function(){
   #sample.characteristic
   data.ch<-NULL
   if(type=="MDS"){
-    if(!is.null(input$mdsDataCat) && input$mdsDataCat!="none"){
+    if(!is.null(input$mdsDataCat_3) && input$mdsDataCat_3!="none"){
       pheno.data<-server_env$getPhenoData()
-      data.ch<-pheno.data[[input$mdsDataCat]]
+      data.ch<-pheno.data[[input$mdsDataCat_3]]
     }
   }
   #top.cgs never used ?
@@ -160,13 +160,12 @@ server_env$doComponentPlot<-function(){
            Tref = Tref,
            distance = input$mdsDist ,
            center = input$correlationCentered_3,
-           n.most.var = NA,
+           n.most.var = top.cgs,
            D = D,
            sample.characteristic = data.ch ,
            scatter.matching = scatter.matching,
            scatter.smooth = TRUE,
-           scatter.cg.feature = NULL,
-
+           scatter.cg.feature = NULL
            )
 })
 }

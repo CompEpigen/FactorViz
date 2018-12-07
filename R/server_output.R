@@ -16,6 +16,7 @@ server_output <- function(input, output, server_env) {
         getFiles(path)
       }
     }else{
+      if(!is.null(input$multiplepath)){
       if(input$medecom_path=="Loaded as object"){
         medecom_set=input$medecom_path
       }else{
@@ -54,6 +55,7 @@ server_output <- function(input, output, server_env) {
       print("Reference Methylome:")
       print(files$RefMeth)
     }
+  }
     })
     getFiles<-function(path){
       return(list.files(sub("/[^/]+$", "", path), pattern=sub('.*\\/', '', path)))
