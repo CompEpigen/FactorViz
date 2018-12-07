@@ -113,13 +113,12 @@ server_output_proportion <- function(input, output, server_env) {
   output$sampleColorSelector_4 <- renderUI({
       if(PHENO_DATA_FLAG){
       pd <- server_env$getPhenoData()
+      siteannot <- c("none")
       if (!is.null(pd)) {
-        siteannot <- colnames(pd)
-      } else{
-        siteannot <- character()
+        siteannot <- c(siteannot,colnames(pd))
       }
-      if (!is.null(input$propPlotType) && input$propPlotType!='correlations'){
-        siteannot=c("none", siteannot)
+      if (!is.null(input$propPlotType) && input$propPlotType=='correlations'){
+        siteannot=siteannot[2:length(siteannot)]
       }
       selectInput('mdsDataCat_4',
                   'Color samples by:',

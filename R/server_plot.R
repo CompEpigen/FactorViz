@@ -151,6 +151,7 @@ server_env$doComponentPlot<-function(){
   if(!is.null(input$minGraphSimilarity)){
     min.similarity=input$minGraphSimilarity
   }
+
   MeDeCom::plotLMCs(results,
            type = type,
            K =  K,
@@ -204,6 +205,9 @@ server_env$doProportionPlot<-function(){
   if(!is.null(input$propPlotType)){
   if (input$propPlotType=="correlations"){
     propPlotType="sample characteristics"
+    if(is.null(data.ch)){
+      return(br())
+    }
   }else{
     propPlotType=input$propPlotType
   }
