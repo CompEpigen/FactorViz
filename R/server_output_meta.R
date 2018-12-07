@@ -122,7 +122,13 @@ server_output_meta <- function(input, output, server_env) {
     })
 
   output$assemblySelector <- renderUI({
-      selectInput("assembly", "Genome Assembly:", choices=c("hg38", "hg19", "mm10"), selected=1)
+    result<-server_env$dataset()
+    assembly<-result@parameters$ASSEMBLY
+    assemblies<-list()
+    assemblies[["hg38"]]<-1
+    assemblies[["hg19"]]<-2
+    assemblies[["mm10"]]<-3
+      selectInput("assembly", "Genome Assembly:", choices=names(assemblies), selected=assemblies[[assembly]])
   })
 
 

@@ -1,25 +1,45 @@
 load_data<-function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL, ref_meth=NULL){
 	start_state_initialiser()
 	path_setter(decomp_output=decomp_output, medecom_set=medecom_set, ann_C=ann_C, ann_S=ann_S, ref_meth=ref_meth)
-	if (!is.null(PATH$MEDECOM_SET) && file.exists(PATH$MEDECOM_SET)) {
-		new.envi <- new.env()
-		load(PATH$MEDECOM_SET, envir=new.envi)
-		medecom_object <<- get(ls(envir = new.envi),envir = new.envi)
+	if (!is.null(PATH$MEDECOM_SET)) {
 		MEDSET_FLAG <<- T
+		if (inherits(PATH$MEDECOM_SET, "MeDeComSet")){
+		medecom_object<<-PATH$MEDECOM_SET
+		}else if (file.exists(PATH$MEDECOM_SET)){
+			new.envi <- new.env()
+			load(PATH$MEDECOM_SET, envir=new.envi)
+			medecom_object <<- get(ls(envir = new.envi),envir = new.envi)
+		}else{
+			MEDSET_FLAG <<- F
+		}
 	}
 	#incProgress(1 / 4)
-	if (!is.null(PATH$ANN_C) && file.exists(PATH$ANN_C)) {
-		new.envi <- new.env()
-		load(PATH$ANN_C, envir=new.envi)
-		cg_annot_object <<- get(ls(envir = new.envi),envir = new.envi)
+	if (!is.null(PATH$ANN_C)) {
 		ANN_C_FLAG <<- T
+		if (is.data.frame(PATH$ANN_C)){
+			cg_annot_object	<<-PATH$ANN_C
+		}else if(file.exists(PATH$ANN_C)){
+			new.envi <- new.env()
+			load(PATH$ANN_C, envir=new.envi)
+			cg_annot_object <<- get(ls(envir = new.envi),envir = new.envi)
+		}else{
+			ANN_C_FLAG <<- F
+		}
+
 	}
 	#incProgress(1 / 4)
-	if (!is.null(PATH$ANN_S) && file.exists(PATH$ANN_S)) {
-		new.envi <- new.env()
-		load(PATH$ANN_S, envir=new.envi)
-		input_object$pheno.data <<- get(ls(envir = new.envi),envir = new.envi)
+	if (!is.null(PATH$ANN_S)) {
 		PHENO_DATA_FLAG <<- T
+		if (is.data.frame(PATH$ANN_C)){
+			input_object$pheno.data	<<-PATH$ANN_S
+		}else if(file.exists(PATH$ANN_S)){
+			new.envi <- new.env()
+			load(PATH$ANN_S, envir=new.envi)
+			input_object$pheno.data <<- get(ls(envir = new.envi),envir = new.envi)
+		}else{
+		PHENO_DATA_FLAG <<- F
+		}
+		if(PHENO_DATA_FLAG){
 		if ("sample_id" %in% input_object$pheno.data) {
 			input_object$sample.names <- input_object$pheno.data$sample_id
 		} else{
@@ -27,16 +47,22 @@ load_data<-function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL
 		}
 		SAMPLE_NAME_FLAG <<- T
 	}
+	}
 	#incProgress(1 / 4)
-	if (!is.null(PATH$REF_METH) && file.exists(PATH$REF_METH)) {
-		new.envi <- new.env()
-		load(PATH$REF_METH, envir=new.envi)
-		true_T_matrix <<- get(ls(envir = new.envi),envir = new.envi)
+	if (!is.null(PATH$REF_METH)) {
 		TRUE_T_FLAG <<- T
+		if (is.data.frame(PATH$ANN_C)){
+			true_T_matrix$pheno.data	<<-PATH$REF_METH
+		}else if (file.exists(PATH$REF_METH)){
+			new.envi <- new.env()
+			load(PATH$REF_METH, envir=new.envi)
+			true_T_matrix <<- get(ls(envir = new.envi),envir = new.envi)
+		}else{
+			TRUE_T_FLAG <<- F
+		}
 	}
 	#incProgress(1 / 4)
 	new.envi <- new.env()
-
 	gc()
 }
 
@@ -54,7 +80,6 @@ path_setter<-function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NU
 		if (substr(decomp_output, nchar(decomp_output), nchar(decomp_output))!= .Platform$file.sep){
 			decomp_output=paste0(decomp_output, .Platform$file.sep)
 		}
-		print("Directory Input")
 		PATH$BASE_PATH<<-decomp_output
 		PATH$MEDECOM_SET<<-paste0(decomp_output, "medecom_set.RData")
 		PATH$ANN_C <<- paste0(decomp_output,"ann_C.RData")
@@ -63,10 +88,8 @@ path_setter<-function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NU
 		MULTIFILE<<-FALSE
 	}else{
 		if(!is.null(medecom_set) || !is.null(ann_C) || !is.null(ann_S) || !is.null(ref_meth)){
-			print("Multi File Input")
 			MULTIFILE<<-TRUE
 		}else{
-			print("No Input")
 			MULTIFILE<<-FALSE
 		}
 		PATH$MEDECOM_SET<<-medecom_set

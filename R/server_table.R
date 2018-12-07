@@ -87,6 +87,7 @@ server_env$getGOEnrichmenttable<-eventReactive(input$GOsubmitQuery, {
                                         assembly=input$assembly)
                                   }, error = function(err) {
                                     print(paste("MY_ERROR:  ",err))
+                                    removeModal()
                                   })
     removeModal()
     return(out)
@@ -149,6 +150,7 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
       type="differential"
     }
     loladb_path=NULL
+    print(input$assembly)
     if (input$assembly=="hg38"){
        loladb_path="/home/reaper/epigen/GIT/lola_hg38.RData"
     }else if (input$assembly=="hg19"){
@@ -181,6 +183,7 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
                                       lola.db=lola.db)
                                   }, error = function(err) {
                                     print(paste("MY_ERROR:  ",err))
+                                    removeModal()
                                   })
     removeModal()
     return(out)

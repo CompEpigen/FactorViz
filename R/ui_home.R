@@ -19,14 +19,9 @@ home_tab <- function() {
       ),
       checkboxInput("multiplepath", "Non DeComp-Pipeline Input", value=MULTIFILE),
       conditionalPanel('input.multiplepath',
-      textInput("medecom_path", label="MeDeCom Set", value=PATH$MEDECOM_SET),
-      textInput("annC_path", label="CpG Annotations", value=PATH$ANN_C),
-      textInput("annS_path", label="Sample Annotations", value=PATH$ANN_S),
-      textInput("ref_meth_path", label="Reference Methylome", value=PATH$REF_METH)
-      #textInput("meth_data_path", label="Methylome Data", value=NULL),
+      uiOutput("multipleFiles")
       ),
       actionButton("load", "Load Datasets")
-
     ),
     mainPanel(
       h4("Files in the directory"),

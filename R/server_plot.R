@@ -202,7 +202,7 @@ server_env$doProportionPlot<-function(){
   else{
     data.ch<-NULL
   }
-  print(data.ch)
+
   if (input$propPlotType=="correlations"){
     propPlotType="sample characteristics"
   }else{
@@ -521,12 +521,22 @@ server_env$doMetaPlot<-function(){
     detail = '...',
     value = 0.3,
     {
-  server_env$getLOLAEnrichmenttable()
-  if(!is.null(input$lmc_lola)){
-    if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
-      MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=0.01)
-    }
-}
+      if (input$diffOutputType == "GO Enrichments"){
+        server_env$getGOEnrichmenttable()
+        if(!is.null(input$lmc_go)){
+          if(!is.na(server_env$getGOEnrichmenttable()[[input$lmc_go]])){
+            MeDeCom:::do.go.plot(server_env$getGOEnrichmenttable()[[input$lmc_go]], pvalCut=0.01)
+          }
+      }
+      }else if(input$diffOutputType == "LOLA Enrichments"){
+        server_env$getLOLAEnrichmenttable()
+        if(!is.null(input$lmc_lola)){
+          if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
+            MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=0.01)
+          }
+      }
+      }
+
 })
 }
 server_env$doTraitAssociation<-function(){

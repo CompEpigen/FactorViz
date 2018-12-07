@@ -24,7 +24,29 @@ base_server <- function(input, output, session) {
           if(!input$multiplepath){
           load_data(decomp_output=server_env$path())
           }else{
-            load_data(medecom_set=input$medecom_path, ann_C=input$annC_path, ann_S=input$annS_path, ref_meth=input$ref_meth_path)
+            if(input$medecom_path=="Loaded as object"){
+              medecom_set=PATH$MEDECOM_SET
+            }else{
+              medecom_set=input$medecom_path
+            }
+            if(input$annC_path=="Loaded as object"){
+              annC=PATH$ANN_C
+            }else{
+              annC=input$annC_path
+            }
+
+            if(input$annS_path=="Loaded as object"){
+              annS=PATH$ANN_S
+            }else{
+              annS=input$annS_path
+            }
+
+            if(input$ref_meth_path=="Loaded as object"){
+              ref_meth=PATH$REF_METH
+            }else{
+              ref_meth=input$ref_meth_path
+            }
+            load_data(medecom_set=medecom_set, ann_C=annC, ann_S=annS, ref_meth=ref_meth)
           }
           incProgress(0.3, detail = "Doing Sanity Checks")
           server_env$check<-sanity_check()

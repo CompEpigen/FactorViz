@@ -57,7 +57,7 @@ meta_analysis <- function() {
                        checkboxInput("correlationCentered_5", "Center matrices", value=FALSE)
       ),
       conditionalPanel(' input.analysisType === "Trait Association" ',
-                       selectInput("tatstat", "Type", choices=c("quantitative", "qualitative"), selected=1)
+                       selectInput("tatstat", "Type", choices=c("quantitative", "qualitative", "linear model"), selected=1)
       )
     ),
     mainPanel(uiOutput('metaAnalysisPanel'))
