@@ -168,23 +168,32 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
         lola.db<<-MeDeCom::load.lola.for.medecom(dir.path=tempdir(), assembly=input$assembly)
     }
     print(lola.db)
+    if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
+      lmc=input$lmcs_6_1
+      lmc_ref=input$lmcs_6_2
+      lmcs<-match(c(input$lmcs_6_1,input$lmcs_6_2),Ks)
+      print(lmcs)
+    }
     out<- tryCatch({
       MeDeCom::lmc.lola.enrichment(results,
         annotation.filter=NULL,
         server_env$getCGAnnot(),
-                                        K=K,
-                                        lambda=lambda,
-                                        cg_subset=as.integer(cg_),
-                                        diff.threshold=input$dmr_threshold,
-                                        region.type=input$region_type,
-                                        temp.dir=tempdir(),
-                                        type=type,
-                                        assembly=input$assembly,
-                                      lola.db=lola.db)
-                                  }, error = function(err) {
-                                    print(paste("MY_ERROR:  ",err))
-                                    removeModal()
-                                  })
+        K=K,
+        lambda=lambda,
+        cg_subset=as.integer(cg_),
+        diff.threshold=input$dmr_threshold,
+        region.type=input$region_type,
+        temp.dir=tempdir(),
+        type=type,
+        reference.computation=input$r_compute,
+        comp.lmcs=lmcs,
+        assembly=input$assembly,
+        lola.db=lola.db
+      )
+        }, error = function(err) {
+          print(paste("MY_ERROR:  ",err))
+          removeModal()
+        })
     removeModal()
     return(out)
   })

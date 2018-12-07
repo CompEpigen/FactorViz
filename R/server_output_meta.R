@@ -123,7 +123,10 @@ server_output_meta <- function(input, output, server_env) {
 
   output$assemblySelector <- renderUI({
     result<-server_env$dataset()
+    if(!is.null(result@parameters$ASSEMBLY)){
     assembly<-result@parameters$ASSEMBLY
+    }
+    assembly<-"hg38"
     assemblies<-list()
     assemblies[["hg38"]]<-1
     assemblies[["hg19"]]<-2
@@ -192,4 +195,12 @@ output$analyType<-renderUI({
     }
 
   })
+
+  output$lmcs_selector<-renderUI({
+    Ks <- server_env$dataset()@parameters$Ks
+    list(
+    selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
+    selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
+    )
+    })
 }
