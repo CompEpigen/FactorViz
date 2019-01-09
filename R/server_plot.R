@@ -192,11 +192,15 @@ server_env$doProportionPlot<-function(){
   Aref<-server_env$getTrueA()
 
   if(!is.null(input$propPlotType) && (input$propPlotType == "heatmap" || input$propPlotType == "correlations")){
-    if(input$mdsDataCat_4!="none"){
-      pheno.data<-server_env$getPhenoData()
-      data.ch<-pheno.data[[input$mdsDataCat_4]]
+    if(PHENO_DATA_FLAG){
+      if(input$mdsDataCat_4!="none"){
+        pheno.data<-server_env$getPhenoData()
+        data.ch<-pheno.data[[input$mdsDataCat_4]]
+      }else{
+        data.ch<-NULL
+      }
     }else{
-      data.ch<-NULL
+      data.ch <- NULL
     }
   }
   else{
