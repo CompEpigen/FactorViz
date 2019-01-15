@@ -8,13 +8,18 @@ load_data<-function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL
 		if(any(sapply(medecom_object@outputs,function(x)"Deviance" %in% names(x)))){
 		  DEVIANCE_FLAG <<- T
 		}
+		if(any(sapply(medecom_object@outputs,function(x)"RSS" %in% names(x)))){
+		  RSS_FLAG <<- T
+		}
 		}else if (file.exists(PATH$MEDECOM_SET)){
 			new.envi <- new.env()
 			load(PATH$MEDECOM_SET, envir=new.envi)
 			medecom_object <<- get(ls(envir = new.envi),envir = new.envi)
 			if(any(sapply(medecom_object@outputs,function(x)"Deviance" %in% names(x)))){
-			  print("Deviance is true")
 			  DEVIANCE_FLAG <<- T
+			}
+			if(any(sapply(medecom_object@outputs,function(x)"RSS" %in% names(x)))){
+			  RSS_FLAG <<- T
 			}
 		}else{
 			MEDSET_FLAG <<- F
@@ -124,6 +129,7 @@ start_state_initialiser<-function(){
 	CURRENT_USER <<- Sys.info()[["user"]]
 	MEDSET_FLAG <<- F
 	DEVIANCE_FLAG <<- F
+	RSS_FLAG <<- F
 	ANN_C_FLAG <<- F
 	TRUE_T_FLAG <<- F
 	TRUE_A_FLAG<<-F

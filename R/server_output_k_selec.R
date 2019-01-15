@@ -61,6 +61,9 @@ server_output_k_selec <- function(input, output, server_env) {
     if(DEVIANCE_FLAG){
       p_measure <- c(p_measure,"Deviance"="deviance")
     }
+    if(RSS_FLAG){
+      p_measure <- c(p_measure,"RSS"="rss")
+    }
     selectInput("KvsStat", "Statistic to plot:",
                 p_measure,
                 selected = 2)
