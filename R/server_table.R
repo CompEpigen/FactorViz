@@ -75,12 +75,20 @@ server_env$getGOEnrichmenttable<-eventReactive(input$GOsubmitQuery, {
     if(input$diffTableType=="hypermethylated"){
     type="hyper"
     }
+    if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
+      lmc=input$lmcs_6_1
+      lmc_ref=input$lmcs_6_2
+      lmcs <- as.numeric(c(lmc,lmc_ref))
+      print(lmcs)
+    }
     out<- tryCatch({
       MeDeCom::lmc.go.enrichment(results, anno.data=server_env$getCGAnnot(),
                                         K=K,
                                         lambda=lambda,
                                         cg_subset=as.integer(cg_),
                                         diff.threshold=input$dmr_threshold,
+                                        reference.computation = input$r_compute,
+                                        comp.lmcs = lmcs,
                                         region.type=input$region_type,
                                         temp.dir=tempdir(),
                                         type=type,
@@ -171,7 +179,7 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
     if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
       lmc=input$lmcs_6_1
       lmc_ref=input$lmcs_6_2
-      lmcs<-match(c(input$lmcs_6_1,input$lmcs_6_2),Ks)
+      lmcs <- as.numeric(c(lmc,lmc_ref))
       print(lmcs)
     }
     out<- tryCatch({

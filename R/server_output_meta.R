@@ -197,10 +197,18 @@ output$analyType<-renderUI({
   })
 
   output$lmcs_selector<-renderUI({
-    Ks <- server_env$dataset()@parameters$Ks
+    Ks <- 1:server_env$Selected$K
     list(
     selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
     selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
     )
     })
+  
+  output$lmcs_selector_go<-renderUI({
+    Ks <- 1:server_env$Selected$K
+    list(
+      selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
+      selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
+    )
+  })
 }

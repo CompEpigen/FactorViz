@@ -46,6 +46,10 @@ meta_analysis <- function() {
                        uiOutput("assemblySelector"),
                        numericInput("pValcut", "p-value cutoff", min = 0, max = 1, value=0.01),
                        conditionalPanel('input.diffOutputType === "GO Enrichments" ',
+                        selectInput('r_compute', "Reference Compution:", c("median","mean","lmcs"), selected=1),
+                        conditionalPanel('input.r_compute === "lmcs" ',
+                                         uiOutput('lmcs_selector_go')
+                        ),
                         uiOutput("lmcgoSelector"),
                         actionButton('GOsubmitQuery', "Submit GO query")),
                        conditionalPanel('input.diffOutputType === "LOLA Enrichments" ',
