@@ -81,7 +81,7 @@ server_output_proportion <- function(input, output, server_env) {
 
   output$componentSelector_4 <- renderUI({
     if(!is.null(input$K_4)){
-    comps <- c(1:input$K_4, NA)
+    comps <- c(1:input$K_4)
     names(comps) <- c(as.character(1:input$K_4))
     selectInput(
       'component_4',
@@ -113,13 +113,12 @@ server_output_proportion <- function(input, output, server_env) {
   output$sampleColorSelector_4 <- renderUI({
       if(PHENO_DATA_FLAG){
       pd <- server_env$getPhenoData()
+      siteannot <- c("none")
       if (!is.null(pd)) {
-        siteannot <- colnames(pd)
-      } else{
-        siteannot <- character()
+        siteannot <- c(siteannot,colnames(pd))
       }
-      if (input$propPlotType!='correlations'){
-        siteannot=c("none", siteannot)
+      if (!is.null(input$propPlotType) && input$propPlotType=='correlations'){
+        siteannot=siteannot[2:length(siteannot)]
       }
       selectInput('mdsDataCat_4',
                   'Color samples by:',

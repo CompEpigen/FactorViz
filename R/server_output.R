@@ -7,18 +7,41 @@
 ##########################################  Home tab main panel
 server_output <- function(input, output, server_env) {
   output$files <- renderPrint({
-    if(!input$multiplepath){
+    if(!is.null(input$multiplepath) && !input$multiplepath){
       if(server_env$path()==""){
         print("Please Select or provide path to a directory")
       }else{
         path<-server_env$path()
+        print(path)
         getFiles(path)
       }
     }else{
-      files<-list("MeDeCom"=getFiles(input$medecom_path),
-                  "CpG"=getFiles(input$annC_path),
-                  "Sample"=getFiles(input$annS_path),
-                  "RefMeth"=getFiles(input$ref_meth_path)
+      if(!is.null(input$multiplepath)){
+      if(input$medecom_path=="Loaded as object"){
+        medecom_set=input$medecom_path
+      }else{
+        medecom_set=getFiles(input$medecom_path)
+      }
+      if(input$annC_path=="Loaded as object"){
+        annC=input$annC_path
+      }else{
+        annC=getFiles(input$annC_path)
+      }
+
+      if(input$annS_path=="Loaded as object"){
+        annS=input$annS_path
+      }else{
+        annS=getFiles(input$annS_path)
+      }
+      if(input$ref_meth_path=="Loaded as object"){
+        ref_meth=ref_meth_path
+      }else{
+        ref_meth=getFiles(input$ref_meth_path)
+      }
+      files<-list("MeDeCom"=medecom_set,
+                  "CpG"=annC,
+                  "Sample"=annS,
+                  "RefMeth"=ref_meth
                 )
       print("MeDeCom Set:")
       print(files$MeDeCom)
@@ -32,6 +55,7 @@ server_output <- function(input, output, server_env) {
       print("Reference Methylome:")
       print(files$RefMeth)
     }
+  }
     })
     getFiles<-function(path){
       return(list.files(sub("/[^/]+$", "", path), pattern=sub('.*\\/', '', path)))
@@ -221,7 +245,13 @@ server_output <- function(input, output, server_env) {
       }
       else if((input$analysisType == "Enrichments")){
         if (input$diffOutputType == "GO Enrichments"){
-          DT::dataTableOutput('goEnrichementTable')
+          list(plotOutput("metaPlot"),
+          if(!all(is.na(server_env$getGOEnrichmenttable()[[input$lmc_go]]))){
+            downloadLink("metaPlotPDF", "GO Plot PDF")
+          }else{
+            br()
+          },
+          DT::dataTableOutput('goEnrichementTable'))
         }else if (input$diffOutputType == "LOLA Enrichments") {
           list(plotOutput("metaPlot"),
           if(!all(is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]]))){
@@ -313,6 +343,9 @@ output$metaPlot<-renderPlot({
   ############# Sidebar outputs ###############
   #############################################
 
+  ########################################### Sidebar outputs for Home tab
+  server_output_home(input, output, server_env)
+
   ########################################### Sidebar outputs for K selection tab
   server_output_k_selec(input, output, server_env)
 
@@ -330,6 +363,38 @@ output$metaPlot<-renderPlot({
 
   ################################################Sidebar output Downloads panel
   server_output_downloads(input, output, server_env)
+}
+
+server_output_home<-function(input, output, server_env){
+  output$multipleFiles<-renderUI({
+    if(inherits(PATH$MEDECOM_SET, "MeDeComSet")){
+      medecom<-"Loaded as object"
+    }else{
+      medecom<-PATH$MEDECOM_SET
+    }
+    if(is.data.frame(PATH$ANN_C)){
+      annc <- "Loaded as object"
+    }else{
+      annc<-PATH$ANN_C
+    }
+    if(is.data.frame(PATH$ANN_S)){
+      anns<-"Loaded as object"
+    }else{
+      anns<-PATH$ANN_S
+    }
+    if(is.matrix(PATH$REF_METH) || is.data.frame(PATH$REF_METH)){
+      ref_meth<-"Loaded as object"
+    }else{
+      ref_meth<-PATH$REF_METH
+    }
+
+    out<-list(
+    textInput("medecom_path", label="MeDeCom Set", value=medecom),
+    textInput("annC_path", label="CpG Annotations", value=annc),
+    textInput("annS_path", label="Sample Annotations", value=anns),
+    textInput("ref_meth_path", label="Reference Methylome", value=ref_meth)
+    )
+  })
 }
 
 server_tab_uniformity_keeper<-function(input, output, session, server_env){
@@ -374,4 +439,12 @@ server_tab_uniformity_keeper<-function(input, output, session, server_env){
   observeEvent(server_env$Selected$K, updateSelectInput(session, "K_4", selected=server_env$Selected$K))
   observeEvent(server_env$Selected$K, updateSelectInput(session, "K_5", selected=server_env$Selected$K))
   observeEvent(server_env$Selected$K, updateSelectInput(session, "K_6", selected=server_env$Selected$K))
+  observeEvent(input$dir, {
+    volumes<-c(computer = ("/"),
+               home = paste('/home/', CURRENT_USER, "/", sep = "")
+              )
+    pat<-parseDirPath(volumes,server_env$dir())
+    ret<-paste(pat, "/", sep="")
+    updateTextInput(session, "text_dir", value = ret)
+    })
 }

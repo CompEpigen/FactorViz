@@ -122,7 +122,16 @@ server_output_meta <- function(input, output, server_env) {
     })
 
   output$assemblySelector <- renderUI({
-      selectInput("assembly", "Genome Assembly:", choices=c("hg38", "hg19", "mm10"), selected=1)
+    result<-server_env$dataset()
+    if(!is.null(result@parameters$ASSEMBLY)){
+    assembly<-result@parameters$ASSEMBLY
+    }
+    assembly<-"hg38"
+    assemblies<-list()
+    assemblies[["hg38"]]<-1
+    assemblies[["hg19"]]<-2
+    assemblies[["mm10"]]<-3
+      selectInput("assembly", "Genome Assembly:", choices=names(assemblies), selected=assemblies[[assembly]])
   })
 
 
@@ -185,5 +194,21 @@ output$analyType<-renderUI({
       list(NULL)
     }
 
+  })
+
+  output$lmcs_selector<-renderUI({
+    Ks <- 1:server_env$Selected$K
+    list(
+    selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
+    selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
+    )
+    })
+  
+  output$lmcs_selector_go<-renderUI({
+    Ks <- 1:server_env$Selected$K
+    list(
+      selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
+      selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
+    )
   })
 }

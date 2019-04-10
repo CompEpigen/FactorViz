@@ -41,7 +41,8 @@ output$performanceModeSelector <- renderUI({
 })
 output$includeStats<-renderUI({
   results<-server_env$dataset()
-  out<-c()
+  output<-list()
+  i<-1
   if(!any(sapply(list(input$K_2, input$lambdaMax, input$lambdaMin, input$cg_group_2), is.null))){
     llsubs<-results@parameters$lambdas >= as.numeric(input$lambdaMin) & results@parameters$lambdas <= as.numeric(input$lambdaMax)
     lmbd<-results@parameters$lambdas[llsubs]
@@ -50,18 +51,20 @@ output$includeStats<-renderUI({
     cg_ <- gr_list[gr]
     if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="rmseT")) ||
     length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="rmseT"))<1){
-        out<-c(out, checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE))
+        output[[i]]<-checkboxInput("includeRMSE_T", "Include RMSE of T", value=FALSE)
+        i<-i+1
     }
-    if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C")) ||
-    length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C"))<1){
-        output<-c(out, checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE))
-      }
+    #if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C")) ||
+    #length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="dist2C"))<1){
+    #    output[[i]]<-checkboxInput("includeDist2C_T", "Include MDC of T", value=FALSE)
+    #    i<-i+1
+    #  }
       if (!is.na(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="maeA")) ||
       length(MeDeCom:::getStatistics(results, input$K_2, lmbd, cg_, statistic="maeA"))<1){
-          output<-c(out, checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE))
+          output[[i]]<- checkboxInput("includeMAE_A", "Include MAE of A", value=FALSE)
+          i<i+1
         }
   }
-  out<-list(out)
-  out
+  out<-output
   })
 }

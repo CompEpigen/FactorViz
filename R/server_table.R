@@ -75,18 +75,27 @@ server_env$getGOEnrichmenttable<-eventReactive(input$GOsubmitQuery, {
     if(input$diffTableType=="hypermethylated"){
     type="hyper"
     }
+    if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
+      lmc=input$lmcs_6_1
+      lmc_ref=input$lmcs_6_2
+      lmcs <- as.numeric(c(lmc,lmc_ref))
+      print(lmcs)
+    }
     out<- tryCatch({
       MeDeCom::lmc.go.enrichment(results, anno.data=server_env$getCGAnnot(),
                                         K=K,
                                         lambda=lambda,
                                         cg_subset=as.integer(cg_),
                                         diff.threshold=input$dmr_threshold,
+                                        reference.computation = input$r_compute,
+                                        comp.lmcs = lmcs,
                                         region.type=input$region_type,
                                         temp.dir=tempdir(),
                                         type=type,
                                         assembly=input$assembly)
                                   }, error = function(err) {
                                     print(paste("MY_ERROR:  ",err))
+                                    removeModal()
                                   })
     removeModal()
     return(out)
@@ -149,6 +158,7 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
       type="differential"
     }
     loladb_path=NULL
+    print(input$assembly)
     if (input$assembly=="hg38"){
        loladb_path="/home/reaper/epigen/GIT/lola_hg38.RData"
     }else if (input$assembly=="hg19"){
@@ -166,22 +176,32 @@ server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
         lola.db<<-MeDeCom::load.lola.for.medecom(dir.path=tempdir(), assembly=input$assembly)
     }
     print(lola.db)
+    if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
+      lmc=input$lmcs_6_1
+      lmc_ref=input$lmcs_6_2
+      lmcs <- as.numeric(c(lmc,lmc_ref))
+      print(lmcs)
+    }
     out<- tryCatch({
       MeDeCom::lmc.lola.enrichment(results,
         annotation.filter=NULL,
         server_env$getCGAnnot(),
-                                        K=K,
-                                        lambda=lambda,
-                                        cg_subset=as.integer(cg_),
-                                        diff.threshold=input$dmr_threshold,
-                                        region.type=input$region_type,
-                                        temp.dir=tempdir(),
-                                        type=type,
-                                        assembly=input$assembly,
-                                      lola.db=lola.db)
-                                  }, error = function(err) {
-                                    print(paste("MY_ERROR:  ",err))
-                                  })
+        K=K,
+        lambda=lambda,
+        cg_subset=as.integer(cg_),
+        diff.threshold=input$dmr_threshold,
+        region.type=input$region_type,
+        temp.dir=tempdir(),
+        type=type,
+        reference.computation=input$r_compute,
+        comp.lmcs=lmcs,
+        assembly=input$assembly,
+        lola.db=lola.db
+      )
+        }, error = function(err) {
+          print(paste("MY_ERROR:  ",err))
+          removeModal()
+        })
     removeModal()
     return(out)
   })

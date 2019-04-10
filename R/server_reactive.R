@@ -3,8 +3,8 @@ server_reactive<-function(input, output, server_env){
   server_env$dir <- reactive(input$dir)
   server_env$path <- reactive({
     ret<-""
-    if(!is.null(PATH)){
-      ret<-PATH
+    if(!is.null(PATH$BASE_PATH)){
+      ret<-PATH$BASE_PATH
     }
     if(!is.null(server_env$dir())){
     volumes<-c(

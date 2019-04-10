@@ -91,7 +91,7 @@ server_output_lmc <- function(input, output, server_env) {
 
   })
 
-  output$sampleColorSelector <- renderUI({
+  output$sampleColorSelector_3 <- renderUI({
 
     pd <- server_env$getPhenoData()
     if (!is.null(pd)) {
@@ -99,7 +99,7 @@ server_output_lmc <- function(input, output, server_env) {
     } else{
       siteannot <- character()
     }
-    selectInput('mdsDataCat',
+    selectInput('mdsDataCat_3',
                 'Color samples by:',
                 c("none", siteannot),
                 selectize = TRUE)

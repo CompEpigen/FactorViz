@@ -23,7 +23,8 @@ Depends:
     RnBeads,
     RnBeads.hg19,
     RnBeads.mm10,
-    RnBeads.hg38
+    RnBeads.hg38,
+	igraph
 Suggests:
     R.matlab,
     LOLA,

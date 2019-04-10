@@ -114,9 +114,9 @@ server_env$doComponentPlot<-function(){
   #sample.characteristic
   data.ch<-NULL
   if(type=="MDS"){
-    if(!is.null(input$mdsDataCat) && input$mdsDataCat!="none"){
+    if(!is.null(input$mdsDataCat_3) && input$mdsDataCat_3!="none"){
       pheno.data<-server_env$getPhenoData()
-      data.ch<-pheno.data[[input$mdsDataCat]]
+      data.ch<-pheno.data[[input$mdsDataCat_3]]
     }
   }
   #top.cgs never used ?
@@ -151,6 +151,7 @@ server_env$doComponentPlot<-function(){
   if(!is.null(input$minGraphSimilarity)){
     min.similarity=input$minGraphSimilarity
   }
+
   MeDeCom::plotLMCs(results,
            type = type,
            K =  K,
@@ -160,13 +161,12 @@ server_env$doComponentPlot<-function(){
            Tref = Tref,
            distance = input$mdsDist ,
            center = input$correlationCentered_3,
-           n.most.var = NA,
+           n.most.var = top.cgs,
            D = D,
            sample.characteristic = data.ch ,
            scatter.matching = scatter.matching,
            scatter.smooth = TRUE,
-           scatter.cg.feature = NULL,
-
+           scatter.cg.feature = NULL
            )
 })
 }
@@ -191,20 +191,27 @@ server_env$doProportionPlot<-function(){
 
   Aref<-server_env$getTrueA()
 
-  if(input$propPlotType == "heatmap" || input$propPlotType == "correlations"){
-    if(input$mdsDataCat_4!="none"){
-      pheno.data<-server_env$getPhenoData()
-      data.ch<-pheno.data[[input$mdsDataCat_4]]
+  if(!is.null(input$propPlotType) && (input$propPlotType == "heatmap" || input$propPlotType == "correlations")){
+    if(PHENO_DATA_FLAG){
+      if(input$mdsDataCat_4!="none"){
+        pheno.data<-server_env$getPhenoData()
+        data.ch<-pheno.data[[input$mdsDataCat_4]]
+      }else{
+        data.ch<-NULL
+      }
     }else{
-      data.ch<-NULL
+      data.ch <- NULL
     }
   }
   else{
     data.ch<-NULL
   }
-  print(data.ch)
+  if(!is.null(input$propPlotType)){
   if (input$propPlotType=="correlations"){
     propPlotType="sample characteristics"
+    if(is.null(data.ch)){
+      return(br())
+    }
   }else{
     propPlotType=input$propPlotType
   }
@@ -221,6 +228,7 @@ server_env$doProportionPlot<-function(){
                   heatmap.clusterCols = input$propClusterCols,
                   heatmap.clusterRows = input$propClusterRows,
                   reorder=input$sampleOrder)
+}
 })
 }
 
@@ -521,12 +529,22 @@ server_env$doMetaPlot<-function(){
     detail = '...',
     value = 0.3,
     {
-  server_env$getLOLAEnrichmenttable()
-  if(!is.null(input$lmc_lola)){
-    if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
-      MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=0.01)
-    }
-}
+      if (input$diffOutputType == "GO Enrichments"){
+        server_env$getGOEnrichmenttable()
+        if(!is.null(input$lmc_go)){
+          if(!is.na(server_env$getGOEnrichmenttable()[[input$lmc_go]])){
+            MeDeCom:::do.go.plot(server_env$getGOEnrichmenttable()[[input$lmc_go]], pvalCut=input$pValcut)
+          }
+      }
+      }else if(input$diffOutputType == "LOLA Enrichments"){
+        server_env$getLOLAEnrichmenttable()
+        if(!is.null(input$lmc_lola)){
+          if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
+            MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=input$pValcut)
+          }
+      }
+      }
+
 })
 }
 server_env$doTraitAssociation<-function(){
