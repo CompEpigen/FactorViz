@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-#Introduction
+# Introduction
 The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://public.genetik.uni-sb.de/medecom/)
 ## Installation
 You can install *FactorViz* through GitHub using *devtools*:
@@ -58,17 +58,17 @@ If paramaters are not provided you can load the file by providing the path to  [
 
 
 <center>
-![Fig 1a](images/input_directory_1.png){width=85%}
+![Fig 1a](images/input_directory_1.png)
 
 
 </center>
 <center>
-![Fig 1b](images/choose_directory_1.png){width=85%}
+![Fig 1b](images/choose_directory_1.png)
 
 
 </center>
 <center>
-![Fig 2](images/choose_directory_2.png){width=85%}
+![Fig 2](images/choose_directory_2.png)
 
 
 </center>
@@ -78,7 +78,7 @@ If paramaters are not provided you can load the file by providing the path to  [
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
 <center>
-![Fig 3](images/choose_directory_3.png){width=85%}
+![Fig 3](images/choose_directory_3.png)
 
 
 </center>
@@ -89,7 +89,7 @@ Once selected you can check the file names of that will be loaded into *FactorVi
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
 
 <center>
-![Fig 4](images/multi_directory_1.png){width=85%}
+![Fig 4](images/multi_directory_1.png)
 
 
 </center>
@@ -99,7 +99,7 @@ With *FactorViz* you can also load the dataset from multiple location by switchi
 After the paths are set click on the ```Load Dataset``` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
 
 <center>
-![Fig 5](images/choose_directory_4.png){width=85%}
+![Fig 5](images/choose_directory_4.png)
 
 
 </center>
