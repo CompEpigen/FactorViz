@@ -1,22 +1,3 @@
----
-title: "FactorViz: A Visualization app for methylome decomposition experiments"
-
-author: "Shashwat Sahay, Pavlo Lutsik, Michael Scherer"
-date: "2019-12-12"
-output:
-  rmarkdown::html_document:
-    mathjax: default
-    toc: true
-    number_sections: false
-    fig_width: 5
-    fig_height: 5
-    fig_caption: yes
-vignette: >
-  %\VignetteIndexEntry{FactorViz}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
 
 # Introduction
 The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://public.genetik.uni-sb.de/medecom/)
@@ -53,52 +34,35 @@ If decomp_output is provided all other parameters are force set to NULL
 If paramaters are not provided you can load the file by providing the path to  [DecompPipeline](https://github.com/CompEpigen/DecompPipeline) output directory (Fig 1a) in the user interface or by selecting the directory with the built-in file manager (Fig 1b, Fig 2)
 
 
-<center>
 ![Fig 1a](images/input_directory_1.png)
 
 
-</center>
-<center>
 ![Fig 1b](images/choose_directory_1.png)
 
 
-</center>
-<center>
 ![Fig 2](images/choose_directory_2.png)
 
-
-</center>
 
 
 
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
-<center>
 ![Fig 3](images/choose_directory_3.png)
-
-
-</center>
 
 
 
 ### Using Multiple Files
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
 
-<center>
 ![Fig 4](images/multi_directory_1.png)
-
-
-</center>
 
 
 
 After the paths are set click on the ```Load Dataset``` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
 
-<center>
 ![Fig 5](images/choose_directory_4.png)
 
 
-</center>
 
 
 
