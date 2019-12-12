@@ -7,8 +7,8 @@ Authors@R: c(
    person ( "Shashwat", "Sahay", email="virgo30892@gmail.com", role = c("aut") ),
    person ( "Michael", "Scherer", email="mscherer@mpi-inf.mpg.de", role = c("aut") )
  )
-Date: 2019-12-05
-Version: 2.0.1
+Date: 2019-12-12
+Version: 2.1.0
 Depends:
     R (>= 3.2.0),
     shiny,
