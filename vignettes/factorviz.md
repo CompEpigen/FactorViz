@@ -1,92 +1,105 @@
-Introduction
-============
+---
+title: "FactorViz: A Visualization app for methylome decomposition experiments"
 
-The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](https://github.com/lutsik/medecom/)
+author: "Shashwat Sahay, Pavlo Lutsik, Michael Scherer"
+date: "2019-12-12"
+output:
+  rmarkdown::html_document:
+    mathjax: default
+    toc: true
+    number_sections: false
+    fig_width: 5
+    fig_height: 5
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{FactorViz}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-Installation
-============
 
+#Introduction
+The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://public.genetik.uni-sb.de/medecom/)
+## Installation
 You can install the *FactorViz* through GitHub using *devtools*:
 
-``` r
+
+```r
 install.packages("devtools")
-devtools::install_github("lutsik/FactorViz")
+devtools::install_github("CompEpigen/FactorViz")
 ```
 
-Using FactorViz
-===============
+#Using FactorViz
 
-Default start-up
-----------------
+## Default start-up
+You can start *FactorViz* by using ```startFactorViz()``` command.
 
-You can start *FactorViz* by using `startFactorViz()` command.
+## Parameterized start-up
+You can also initialise *FactorViz* by providing paths to the files or the [DecompPipeline](https://github.com/lutsik/DecompPipeline) output to the ```startFactorViz()``` command. It accepts the following parameters.
 
-Parameterized start-up
-----------------------
+* ```decomp_output```: takes in the directory path to decomp output
+* ```medecom_set```:  takes in the path to medecom set file
+* ```ann_C```: takes in the path to CpG Annotation file
+* ```ann_S```: takes in the path to Sample Annotation file
+* ```ref_meth```: takes in the path to Reference Methylome file
 
-You can also initialise *FactorViz* by providing paths to the files or the [DeCompPipeline](https://github.com/lutsik/DecompPipeline) output to the `startFactorViz()` command. It accepts the following parameters.
+> Note:
+If decomp_output provided all other parameters are force set to NULL
 
--   `decomp_output`: takes in the directory path to decomp output
--   `medecom_set`: takes in the path to medecom set file
--   `ann_C`: takes in the path to CpG Annotation file
--   `ann_S`: takes in the path to Sample Annotation file
--   `ref_meth`: takes in the path to Reference Methylome file
 
-> Note: If decomp\_output provided all other parameters are force set to NULL
 
-Loading Data-sets
------------------
-
+## Loading Data-sets
 ### Using DeCompPipeline Output
+If paramaters are not provided you can load the file by providing the path to  [DeCompPipeline](https://github.com/lutsik/DecompPipeline) output directory (Fig 1a) in the user interface or by selecting the directory with the built-in file manager (Fig 1b, Fig 2)
 
-If paramaters are not provided you can load the file by providing the path to [DeCompPipeline](https://github.com/lutsik/DecompPipeline) output directory (Fig 1a) in the user interface or by selecting the directory with the built-in file manager (Fig 1b, Fig 2)
-
-<center>
-<figure>
-<img src="images/input_directory_1.png" alt="Fig 1a" style="width:85.0%" />
-<figcaption>Fig 1a</figcaption>
-</figure>
-<figure>
-<img src="images/choose_directory_1.png" alt="Fig 1b" style="width:85.0%" />
-<figcaption>Fig 1b</figcaption>
-</figure>
-</center>
 
 <center>
-<figure>
-<img src="images/choose_directory_2.png" alt="Fig 2" style="width:85.0%" />
-<figcaption>Fig 2</figcaption>
-</figure>
+![Fig 1a](images/input_directory_1.png){width=85%}
+
+
 </center>
+<center>
+![Fig 1b](images/choose_directory_1.png){width=85%}
+
+
+</center>
+<center>
+![Fig 2](images/choose_directory_2.png){width=85%}
+
+
+</center>
+
 
 
 Once selected you can check the file names of that will be loaded into *FactorViz* in the UI (Fig 3).
 
 <center>
-<figure>
-<img src="images/choose_directory_3.png" alt="Fig 3" style="width:85.0%" />
-<figcaption>Fig 3</figcaption>
-</figure>
+![Fig 3](images/choose_directory_3.png){width=85%}
+
+
 </center>
 
-### Using Multiple Files
 
+
+### Using Multiple Files
 With *FactorViz* you can also load the dataset from multiple location by switching the Non DeCompPipeline checkbox (Fig 4)
 
 <center>
-<figure>
-<img src="images/multi_directory_1.png" alt="Fig 4" style="width:85.0%" />
-<figcaption>Fig 4</figcaption>
-</figure>
+![Fig 4](images/multi_directory_1.png){width=85%}
+
+
 </center>
 
-After the paths are set click on the `Load Dataset` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
+
+
+After the paths are set click on the ```Load Dataset``` button to load the dataset into *FactorViz* to carry out further analysis (Fig 5)
 
 <center>
-<figure>
-<img src="images/choose_directory_4.png" alt="Fig 5" style="width:85.0%" />
-<figcaption>Fig 5</figcaption>
-</figure>
+![Fig 5](images/choose_directory_4.png){width=85%}
+
+
 </center>
 
-The further section of `K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis` are explained in detail in [MeDeCom](https://github.com/lutsik/medecom/) documentation.
+
+
+The further section of ```K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis``` are explained in detail in [MeDeCom](http://public.genetik.uni-sb.de/medecom/) documentation.

@@ -30,7 +30,7 @@ You can install the *FactorViz* through GitHub using *devtools*:
 
 ```{r, eval=F}
 install.packages("devtools")
-devtools::install_github("lutsik/FactorViz")
+devtools::install_github("CompEpigen/FactorViz")
 ```
 
 #Using FactorViz
@@ -39,7 +39,7 @@ devtools::install_github("lutsik/FactorViz")
 You can start *FactorViz* by using ```startFactorViz()``` command.
 
 ## Parameterized start-up
-You can also initialise *FactorViz* by providing paths to the files or the [DeCompPipeline](https://github.com/lutsik/DecompPipeline) output to the ```startFactorViz()``` command. It accepts the following parameters.
+You can also initialise *FactorViz* by providing paths to the files or the [DecompPipeline](https://github.com/lutsik/DecompPipeline) output to the ```startFactorViz()``` command. It accepts the following parameters.
 
 * ```decomp_output```: takes in the directory path to decomp output
 * ```medecom_set```:  takes in the path to medecom set file
