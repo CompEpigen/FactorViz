@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 #Introduction
 The package provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://public.genetik.uni-sb.de/medecom/)
 ## Installation
-You can install the *FactorViz* through GitHub using *devtools*:
+You can install *FactorViz* through GitHub using *devtools*:
 
 ```{r, eval=F}
 install.packages("devtools")
@@ -39,22 +39,22 @@ devtools::install_github("CompEpigen/FactorViz")
 You can start *FactorViz* by using ```startFactorViz()``` command.
 
 ## Parameterized start-up
-You can also initialise *FactorViz* by providing paths to the files or the [DecompPipeline](https://github.com/lutsik/DecompPipeline) output to the ```startFactorViz()``` command. It accepts the following parameters.
+You can also initialise *FactorViz* by providing paths to the files or the [DecompPipeline](https://github.com/CompEpigen/DecompPipeline) output to the ```startFactorViz()``` command. It accepts the following parameters.
 
-* ```decomp_output```: takes in the directory path to decomp output
+* ```decomp_output```: takes in the directory path to DecompPipeline output
 * ```medecom_set```:  takes in the path to medecom set file
 * ```ann_C```: takes in the path to CpG Annotation file
 * ```ann_S```: takes in the path to Sample Annotation file
 * ```ref_meth```: takes in the path to Reference Methylome file
 
 > Note:
-If decomp_output provided all other parameters are force set to NULL
+If decomp_output is provided all other parameters are force set to NULL
 
 
 
 ## Loading Data-sets
-### Using DeCompPipeline Output
-If paramaters are not provided you can load the file by providing the path to  [DeCompPipeline](https://github.com/lutsik/DecompPipeline) output directory (Fig 1a) in the user interface or by selecting the directory with the built-in file manager (Fig 1b, Fig 2)
+### Using DecompPipeline Output
+If paramaters are not provided you can load the file by providing the path to  [DecompPipeline](https://github.com/CompEpigen/DecompPipeline) output directory (Fig 1a) in the user interface or by selecting the directory with the built-in file manager (Fig 1b, Fig 2)
 
 
 <center>
@@ -106,4 +106,4 @@ After the paths are set click on the ```Load Dataset``` button to load the datas
 
 
 
-The further section of ```K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis``` are explained in detail in [MeDeCom](http://public.genetik.uni-sb.de/medecom/) documentation.
+The further section of ```K Selection, Lambda Selection, LMC, Proportions and Meta-Analysis``` are explained in detail in [MeDeCom](https://github.com/lutsik/MeDeCom) documentation.
