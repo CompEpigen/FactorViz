@@ -11,13 +11,13 @@ startFactorViz(decomp_output = NULL, medecom_set = NULL,
 \arguments{
 \item{decomp_output}{takes in the directory path to decomp output}
 
-\item{medecom_set}{takes in the path to medecom set file}
+\item{medecom_set}{takes in the path to medecom set file or the MeDeCom Set object}
 
-\item{ann_C}{takes in the path to CpG Annotation file}
+\item{ann_C}{takes in the path to CpG Annotation file or the data.frame of CpG Annotations}
 
-\item{ann_S}{takes in the path to Sample Annotation file}
+\item{ann_S}{takes in the path to Sample Annotation file or the data.frame of Sample Annotations}
 
-\item{ref_meth}{takes in the path to Reference Methylome file}
+\item{ref_meth}{takes in the path to Reference Methylome file or the data.frame of Reference Methylome}
 }
 \description{
 startFactorViz
