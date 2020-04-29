@@ -11,7 +11,7 @@
 #'
 #' @export
 
-startFactorViz <- function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL, ref_meth=NULL) {
+startFactorViz <- function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann_S=NULL, ref_meth=NULL, port=6578) {
   require(shiny)
   require(shinyFiles)
   require(shinythemes)
@@ -30,5 +30,5 @@ startFactorViz <- function(decomp_output=NULL, medecom_set=NULL, ann_C=NULL, ann
       onstartLoad(decomp_output=decomp_output, medecom_set=medecom_set, ann_C=ann_C, ann_S=ann_S, ref_meth=ref_meth )
     }
   )
-  shiny::runApp(app, port=6578)
+  shiny::runApp(app, port=port)
 }
