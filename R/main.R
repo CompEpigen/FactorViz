@@ -6,6 +6,7 @@
 #' @param ann_C takes in the path to CpG Annotation file or the data.frame of CpG Annotations
 #' @param ann_S takes in the path to Sample Annotation file or the data.frame of Sample Annotations
 #' @param ref_meth takes in the path to Reference Methylome file or the data.frame of Reference Methylome
+#' @param port The port to be used for starting the interface in a webbrowser. If multiple parallel sessions are to be started, be sure to specify different ports.
 #' @details
 #' If decomp_output provided all other parameters force set to NULL
 #'

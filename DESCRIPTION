@@ -7,7 +7,7 @@ Authors@R: c(
    person ( "Shashwat", "Sahay", email="virgo30892@gmail.com", role = c("aut") ),
    person ( "Michael", "Scherer", email="mscherer@mpi-inf.mpg.de", role = c("aut") )
  )
-Date: 2019-12-12
+Date: 2020-04-30
 Version: 2.1.0
 Depends:
     R (>= 3.2.0),
@@ -33,5 +33,5 @@ Suggests:
     knitr,
     rmarkdown
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr
