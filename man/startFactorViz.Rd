@@ -5,8 +5,14 @@
 \title{startFactorViz
 This function intialises factorviz and start}
 \usage{
-startFactorViz(decomp_output = NULL, medecom_set = NULL,
-  ann_C = NULL, ann_S = NULL, ref_meth = NULL)
+startFactorViz(
+  decomp_output = NULL,
+  medecom_set = NULL,
+  ann_C = NULL,
+  ann_S = NULL,
+  ref_meth = NULL,
+  port = 6578
+)
 }
 \arguments{
 \item{decomp_output}{takes in the directory path to decomp output}
@@ -18,6 +24,8 @@ startFactorViz(decomp_output = NULL, medecom_set = NULL,
 \item{ann_S}{takes in the path to Sample Annotation file or the data.frame of Sample Annotations}
 
 \item{ref_meth}{takes in the path to Reference Methylome file or the data.frame of Reference Methylome}
+
+\item{port}{The port to be used for starting the interface in a webbrowser. If multiple parallel sessions are to be started, be sure to specify different ports.}
 }
 \description{
 startFactorViz
