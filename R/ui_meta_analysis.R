@@ -33,7 +33,7 @@ meta_analysis <- function() {
       conditionalPanel(' input.analysisType === "differential methylation" ||
                         input.analysisType === "Enrichments"',
                         conditionalPanel(' input.analysisType === "Enrichments" ',
-                        selectInput('diffOutputType', "Output type:", c("GO Enrichments", "LOLA Enrichments"), selected=1)),
+                        selectInput('diffOutputType', "Output type:", c("GO Enrichments", "LOLA Enrichments", "Annotation Enrichments"), selected=1)),
                        uiOutput("diffTabT"),
                        sliderInput('dmr_threshold', 'Threshold', min=0.0, max=1.0, step=0.01, value=1.0)
       ),
@@ -46,21 +46,34 @@ meta_analysis <- function() {
                        uiOutput("assemblySelector"),
                        numericInput("pValcut", "p-value cutoff", min = 0, max = 1, value=0.01),
                        conditionalPanel('input.diffOutputType === "GO Enrichments" ',
-                        selectInput('r_compute', "Reference Compution:", c("median","mean","lmcs"), selected=1),
+                        selectInput('r_compute', "Reference Computation:", c("median","mean","lmcs"), selected=1),
                         conditionalPanel('input.r_compute === "lmcs" ',
                                          uiOutput('lmcs_selector_go')
                         ),
                         uiOutput("lmcgoSelector"),
-                        actionButton('GOsubmitQuery', "Submit GO query")),
+                        actionButton('GOsubmitQuery', "Submit GO query")
+                       ),
                        conditionalPanel('input.diffOutputType === "LOLA Enrichments" ',
-                        selectInput('r_compute', "Reference Compution:", c("median","mean","lmcs"), selected=1),
+                        selectInput('r_compute', "Reference Computation:", c("median","mean","lmcs"), selected=1),
                         conditionalPanel('input.r_compute === "lmcs" ',
                           uiOutput('lmcs_selector')
                         ),
-                       uiOutput("lmclolaSelector"),
-                         actionButton('LOLAsubmitQuery', "Submit LOLA query"))
-
-      ),
+                        uiOutput("lmclolaSelector"),
+                         actionButton('LOLAsubmitQuery', "Submit LOLA query")
+                       ),
+	),
+	conditionalPanel(' input.analysisType === "Enrichments" &&
+		input.diffOutputType === "Annotation Enrichments" ',
+                numericInput("pValcut", "p-value cutoff", min = 0, max = 1, value=0.01),
+#		uiOutput("assemblySelector")
+		selectInput("assembly","Assembly",c("hg19","hg38","mm10"),selected=1),
+		selectInput('r_compute', "Reference Computation:", c("median","mean","lmcs"), selected=1),
+		conditionalPanel('input.r_compute === "lmcs" ',
+                          uiOutput('lmcs_selector_annotation')
+                        ),
+                uiOutput("lmcannotationSelector"),
+                actionButton('AnnotationsubmitQuery', "Submit Annotation query")
+        ),
       conditionalPanel(' input.analysisType === "compare LMCs" &&
                        input.PlotType !== "heatmap"  ',
                        checkboxInput("correlationCentered_5", "Center matrices", value=FALSE)

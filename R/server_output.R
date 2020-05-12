@@ -262,7 +262,16 @@ server_output <- function(input, output, server_env) {
           DT::dataTableOutput('lolaEnrichementTable')
           )
 
-         }else{
+         }else if (input$diffOutputType == "Annotation Enrichments") {
+          list(plotOutput("metaPlot"),
+          if(!all(is.na(server_env$getAnnotationEnrichmenttable()[[input$lmc_annotation]]))){
+            downloadLink("metaPlotPDF", "Annotation Plot PDF")
+          }else{
+            br()
+          },
+          DT::dataTableOutput('annotationEnrichementTable')
+          )
+	}else{
            br()
          }
       } else if(input$analysisType=="Trait Association"){

@@ -136,6 +136,11 @@ server_env$lmcgoSelect<-reactive({
     selectInput('lmc_lola', 'LMC:', names(server_env$getLOLAEnrichmenttable()), selectize =
                   TRUE)
     })
+  server_env$lmcannotationSelect<-reactive({
+    server_env$getAnnotationEnrichmenttable()
+    selectInput('lmc_annotation', 'LMC:', names(server_env$getAnnotationEnrichmenttable()), selectize =
+                  TRUE)
+    })
 
 
 server_env$getLOLAEnrichmenttable<-eventReactive(input$LOLAsubmitQuery, {
@@ -225,6 +230,74 @@ output$lolaEnrichementTable<-DT::renderDataTable({
     numVars<-names(result)
     selected<-c('dbSet','collection','pValueLog', 'oddsRatio', 'description', 'cellType', 'qValue')
     result$description <- gsub(x = result$description, pattern = ";", replace = ", ")
+    result<-result[, selected]
+    }
+    return(result)
+  }else{
+    return(data.frame())
+  }
+})
+
+server_env$getAnnotationEnrichmenttable<-eventReactive(input$AnnotationsubmitQuery, {
+    showModal(modalDialog("Performing Annotation Enrichments, This may take upto 15 mins depending on the threshold
+                            and number of LMC's", footer=NULL))
+    results<-server_env$dataset()
+    gr_list <- results@parameters$cg_subsets
+    gr<-as.integer(input$cg_group_5)
+    cg_ <- gr_list[gr]
+    ll<-as.integer(input$lambda_5)
+    lambdas <- results@parameters$lambdas
+    lambda <- lambdas[ll]
+    K<-input$K_5
+    #finds out the index of k in Ks
+    Ks<-results@parameters$Ks
+    type="hypo"
+    if(input$diffTableType=="hypermethylated"){
+    type="hyper"
+    }else if(input$diffTableType=="differential"){
+      type="differential"
+    }
+   if(!is.null(input$r_compute) && input$r_compute=="lmcs"){
+      lmc=input$lmcs_6_1
+      lmc_ref=input$lmcs_6_2
+      lmcs <- as.numeric(c(lmc,lmc_ref))
+      print(lmcs)
+    }
+    out<- tryCatch({
+      MeDeCom::lmc.annotation.enrichment(medecom.result=results,
+        annotation.filter=NULL,
+        anno.data=server_env$getCGAnnot(),
+        K=K,
+        lambda=lambda,
+        cg_subset=as.integer(cg_),
+        diff.threshold=input$dmr_threshold,
+        type=type,
+        reference.computation=input$r_compute,
+        comp.lmcs=lmcs,
+        assembly=input$assembly
+      )
+        }, error = function(err) {
+          print(paste("MY_ERROR:  ",err))
+          removeModal()
+        })
+    removeModal()
+    return(out)
+  })
+output$annotationEnrichementTable<-DT::renderDataTable({
+  server_env$getAnnotationEnrichmenttable()
+  if(!is.null(input$lmc_annotation)){
+    result<-server_env$getAnnotationEnrichmenttable()[[input$lmc_annotation]]
+    if(is.na(result)){
+      result<-data.frame(
+        annotation = character(),
+        p.value = numeric(),
+        OddsRatio=numeric()
+      )
+    }else{
+    numVars<-sapply(result, is.numeric)
+    result[numVars] <- lapply(result[numVars], round, digits = 2)
+    numVars<-names(result)
+    selected<-c('annotation','p.value', 'OddsRatio')
     result<-result[, selected]
     }
     return(result)

@@ -535,16 +535,22 @@ server_env$doMetaPlot<-function(){
           if(!is.na(server_env$getGOEnrichmenttable()[[input$lmc_go]])){
             MeDeCom:::do.go.plot(server_env$getGOEnrichmenttable()[[input$lmc_go]], pvalCut=input$pValcut)
           }
-      }
+        }
       }else if(input$diffOutputType == "LOLA Enrichments"){
         server_env$getLOLAEnrichmenttable()
         if(!is.null(input$lmc_lola)){
           if(!is.na(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]])){
             MeDeCom:::do.lola.plot(server_env$getLOLAEnrichmenttable()[[input$lmc_lola]],lola.db,pvalCut=input$pValcut)
           }
+        }
+      }else if(input$diffOutputType == "Annotation Enrichments"){
+        server_env$getAnnotationEnrichmenttable()
+        if(!is.null(input$lmc_annotation)){
+          if(!is.na(server_env$getAnnotationEnrichmenttable()[[input$lmc_annotation]])){
+            MeDeCom:::do.annotation.plot(server_env$getAnnotationEnrichmenttable()[[input$lmc_annotation]],pvalCut=input$pValcut)
+          }
+        }
       }
-      }
-
 })
 }
 server_env$doTraitAssociation<-function(){

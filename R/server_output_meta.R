@@ -122,10 +122,10 @@ server_output_meta <- function(input, output, server_env) {
     })
 
   output$assemblySelector <- renderUI({
-    result<-server_env$dataset()
-    if(!is.null(result@parameters$ASSEMBLY)){
-    assembly<-result@parameters$ASSEMBLY
-    }
+#    result<-server_env$dataset()
+#    if(!is.null(result@parameters$ASSEMBLY)){
+#    assembly<-result@parameters$ASSEMBLY
+#    }
     assembly<-"hg38"
     assemblies<-list()
     assemblies[["hg38"]]<-1
@@ -145,6 +145,12 @@ output$lmclolaSelector<-renderUI({
   server_env$getLOLAEnrichmenttable()
   server_env$lmclolaSelect()
 })
+
+output$lmcannotationSelector<-renderUI({
+  server_env$getAnnotationEnrichmenttable()
+  server_env$lmcannotationSelect()
+})
+
 output$analyType<-renderUI({
   atype<-c()
   if(!is.null(medecom_ref_object)){
@@ -205,6 +211,14 @@ output$analyType<-renderUI({
     })
   
   output$lmcs_selector_go<-renderUI({
+    Ks <- 1:server_env$Selected$K
+    list(
+      selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
+      selectInput("lmcs_6_2", "Select LMC to compare", Ks, multiple = F, selected=Ks[[2]])
+    )
+  })
+
+  output$lmcs_selector_annotation<-renderUI({
     Ks <- 1:server_env$Selected$K
     list(
       selectInput("lmcs_6_1", "Select LMC to compare", Ks, multiple = F, selected=Ks[[1]]),
