@@ -1,5 +1,5 @@
 # FactorViz 2.0
-*FactorViz* provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://github.com/lutsik/medecom/) or similar deconvolution tools. It is the interpretation tool used in a recently published [protocol](https://doi.org/10.1101/853150) to perform reference free deconvolution of complex DNA methylation data.
+*FactorViz* provides an interactive visualization and reporting environment for exploring the results of the methylome decomposition experiments carried out by [MeDeCom](http://github.com/lutsik/medecom/) or similar deconvolution tools. It is the interpretation tool used in a recently published [protocol](https://www.nature.com/articles/s41596-020-0369-6) to perform reference free deconvolution of complex DNA methylation data.
 
 # Installation
 You can install the *FactorViz* through GitHub using *devtools*:
@@ -35,3 +35,7 @@ A more detailed introduction into *FactorViz* can be found in the package [vigne
 
 # Dependencies
 FactorViz depends on [MeDeCom](http://github.com/lutsik/medecom/) and is thoroughly tested with outputs from [DecompPipeline](https://github.com/CompEpigen/DecompPipeline).
+
+# Citation
+If you use *FactorViz*, please cite:
+Scherer, M., Nazarov, P. V., Toth, R., Sahay, S., Kaoma, T., Maurer, V., Vedeneev, N., Plass, C., Lengauer, T., Walter, J., & Lutsik, P. (2020). Reference-free deconvolution, visualization and interpretation of complex DNA methylation data using DecompPipeline, MeDeCom and FactorViz. Nature Protocols, 15(10), 3240–3263. https://doi.org/10.1038/s41596-020-0369-6
